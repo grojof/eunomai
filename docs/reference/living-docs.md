@@ -21,6 +21,13 @@ main cause of confusing docs):
 When a README section outgrows a couple of paragraphs, it becomes a page in the matching folder and the
 README keeps a link. `decisions/` is excluded from the index.
 
+## Diagrams (Mermaid + C4)
+
+Use [Mermaid](https://mermaid.js.org/) (GitHub-native) and **match the diagram type to the story**, one idea
+per diagram: **flowchart** for a process/decision, **sequence** for interactions over time, **C4** for
+architecture (Context → Container → Component), **class/erDiagram** for code/data structure, **stateDiagram**
+for lifecycles. Add a diagram only when it's clearer than prose — not as decoration.
+
 ## Keeping it fresh
 
 Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check):

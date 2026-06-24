@@ -71,6 +71,14 @@ rules here, not there.
   **`node projection/dist/cli.cjs provenance-check`** — read-only; scans `.claude/skills/` + `skills/`, fails
   on any skill not covered by the registry, lists trust gaps. Part of the gate.
 
+## Base skills
+- A tiny, **standards-anchored** set shipped in the base — today **`eunomai-secure-coding`** (OWASP Top 10 +
+  CWE; proactive, defers diff audit to `/security-review`, complements safe-controls) and
+  **`eunomai-dependency-upgrade`** (lockfile · SCA/CVE · changelog · licenses; OWASP A03:2025 + SLSA).
+- **Admission filter:** a skill is base-eligible only if **universal · non-prescriptive · standards-anchored ·
+  low-maintenance**. Opinionated/company-policy or domain-only practices stay out — they come via
+  `skill-finder` + project rules. The base set stays small and undisputed; breadth lives in the cited standards.
+
 ## Connector / bootstrap
 - `eunomai-onboard` is the **cold-start** orchestrator: analyze a new/existing project → establish docs
   (living-docs standard) → seed conventions (lean `AGENTS.md`, `openspec/config.yaml`, permissions, hooks) →

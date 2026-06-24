@@ -19,6 +19,19 @@ has one purpose. Place every page in the folder that matches its kind:
 - `explanation/` — **explanation**: the why, concepts, charter.
 - `decisions/` — ADRs (dev-facing, excluded from the README index).
 
+## Diagrams (Mermaid + C4)
+
+Use [**Mermaid**](https://mermaid.js.org/) for diagrams (GitHub renders it natively). **Match the diagram type
+to the story**, and keep each one simple (one idea per diagram):
+
+- **flowchart** — a process or decision logic.
+- **sequence** — interactions between components over time (API calls, message flow).
+- **C4** — software **architecture**, at the right zoom: Context → Container → Component (don't go to Code).
+- **class / erDiagram** — code or data structure.
+- **stateDiagram** — status changes / lifecycles.
+
+Reach for a diagram when prose would be harder to follow than a picture — not as decoration.
+
 ## When to use
 
 - The README summary or index has drifted from reality.

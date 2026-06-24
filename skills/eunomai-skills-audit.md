@@ -19,6 +19,18 @@ skills:
     verdict: authored
     rubric: Authored in-repo (connector/bootstrap axis); origin trusted (us), no third-party code.
     gaps: []
+  - name: eunomai-secure-coding
+    origin: authored
+    ref: authored
+    verdict: authored
+    rubric: Authored in-repo (base skill); universal secure-coding directives anchored to OWASP/CWE, no third-party code.
+    gaps: []
+  - name: eunomai-dependency-upgrade
+    origin: authored
+    ref: authored
+    verdict: authored
+    rubric: Authored in-repo (base skill); universal dependency hygiene anchored to OWASP A03:2025/SLSA, no third-party code.
+    gaps: []
 ---
 
 # eunomai skills audit
