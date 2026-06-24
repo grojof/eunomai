@@ -6,17 +6,18 @@ TBD - created by archiving change living-docs. Update Purpose after archive.
 ### Requirement: Project-docs structure standard
 
 The root `README.md` SHALL be a lean front door — a short project summary plus an index of links into deeper
-documentation. Detailed project documentation SHALL live under `docs/`, organized by topic, and SHALL be
-reachable from the README index. The README SHALL NOT inline long-form content that belongs in a `docs/`
-topic page.
+documentation. Detailed project documentation SHALL live under `docs/`, **organized by Diátaxis type**:
+`guides/` (how-to, including getting-started), `reference/` (technical facts — one page per capability),
+`explanation/` (the why / concepts), and `decisions/` (ADRs). Every in-scope page SHALL be reachable from the
+README index, and the README SHALL NOT inline long-form content that belongs in a `docs/` page.
 
 #### Scenario: A reader opens the README
 - **WHEN** a reader opens `README.md`
-- **THEN** they get a concise summary of the project and a navigable index of links to `docs/` topic pages
+- **THEN** they get a concise summary of the project and a navigable index of links to the `docs/` pages
 
-#### Scenario: Deeper documentation is needed
-- **WHEN** a topic needs long-form documentation
-- **THEN** it is authored as a page under `docs/` and linked from the README index, not inlined into the README
+#### Scenario: A new page is placed by type
+- **WHEN** new long-form documentation is authored
+- **THEN** it goes under the matching Diátaxis folder (`guides/`, `reference/`, or `explanation/`) and is linked from the README index, not inlined
 
 ### Requirement: On-demand docs refresh skill
 
@@ -54,10 +55,10 @@ README index. The check SHALL exit non-zero on any divergence, report what diver
 ### Requirement: Dev-docs excluded from scope
 
 The standard and the integrity check SHALL treat dev-docs as out of scope: pages under `docs/decisions/`
-(ADRs) and `docs/development/` (status/handoff) SHALL NOT be required to appear in the README index.
+(ADRs) SHALL NOT be required to appear in the README index.
 
 #### Scenario: A dev-doc is not indexed
-- **WHEN** a page exists under `docs/decisions/` or `docs/development/` and is not linked from the README
+- **WHEN** an ADR exists under `docs/decisions/` and is not linked from the README
 - **THEN** the integrity check does not flag it
 
 ### Requirement: eunomai dogfoods the standard
