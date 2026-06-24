@@ -23,11 +23,13 @@ rules here, not there.
   (`CLAUDE.md`, `.github/copilot-instructions.md`) are **committed artifacts**.
 
 ## Structure
-- `.claude-plugin/plugin.json` + `skills/` + `hooks/` (+ `agents/`) — the Claude Code plugin (the deliverable).
+- `.claude-plugin/` (`plugin.json` + `marketplace.json`) + `skills/` + `hooks/` (+ `agents/`) — the Claude
+  Code plugin (the deliverable; installable via the marketplace).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
-- `docs/` — project-docs (`VISION.md`, `safe-controls.md`, `living-docs.md`, `skill-finder.md`) indexed from
-  the lean root `README.md`; dev-docs in `decisions/` (ADRs) + `development/` (status/handoff).
+- `docs/` — project-docs (`usage.md`, `VISION.md`, `safe-controls.md`, `living-docs.md`, `skill-finder.md`,
+  `onboard.md`) indexed from the lean root `README.md`; dev-docs in `decisions/` (ADRs) + `development/`.
+- **Using/installing eunomai:** see `docs/usage.md` (install as a plugin + apply to a project).
 
 ## Workflow
 - **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial

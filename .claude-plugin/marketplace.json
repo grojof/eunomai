@@ -1,0 +1,13 @@
+{
+  "name": "eunomai",
+  "owner": {
+    "name": "Guillermo Rojo"
+  },
+  "plugins": [
+    {
+      "name": "eunomai",
+      "source": ".",
+      "description": "A Claude-first AI workspace: SDD/SPDD, living docs, safe controls, and trust-gated skills — built on existing tools, not reinventing them."
+    }
+  ]
+}

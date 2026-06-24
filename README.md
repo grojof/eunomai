@@ -14,6 +14,18 @@ Code's native extensibility and on [`rulesync`](https://github.com/dyoshikawa/ru
 works as a **one-shot connector / bootstrap** — it seeds a project with these conventions and steps aside;
 **dispensable**, because everything lives in the generated output (zero lock-in).
 
+## Getting started
+
+New here? **→ [docs/usage.md](docs/usage.md)** walks you from install to applying eunomai to a project. In short:
+
+```text
+npm i -g @fission-ai/openspec        # the SDD engine (reused, installed separately)
+/plugin marketplace add /path/to/eunomai
+/plugin install eunomai@eunomai
+/reload-plugins
+/eunomai:eunomai-onboard             # apply eunomai to a new or existing project
+```
+
 ## The four pillars
 
 1. **SDD/SPDD** — the spec-driven flow (explore → propose → apply → archive), on **OpenSpec**.
@@ -31,12 +43,14 @@ new or existing project, then steps aside.
 ```
 eunomai/
   .claude-plugin/plugin.json   ← the Claude Code plugin manifest
+  .claude-plugin/marketplace.json ← makes eunomai installable as a plugin
   skills/                      ← the pillars, as Agent Skills (built incrementally)
   hooks/                       ← safe-controls: PreToolUse guard (deny/ask) + tests
   agents/                      ← (added as pillars land)
   projection/                  ← Copilot best-effort: AGENTS.md → tools via rulesync (+ drift check)
   openspec/                    ← SDD engine (OpenSpec): changes · specs · archive · config.yaml (eunomai layer)
   AGENTS.md                    ← the workspace's own authored source of truth
+  docs/usage.md                ← how to install and use eunomai (start here)
   docs/VISION.md               ← the charter
   docs/safe-controls.md        ← the hooks + recommended permissions baseline
   docs/living-docs.md          ← the project-docs standard + docs-check
@@ -47,6 +61,7 @@ eunomai/
 
 ## Start here
 
+- **[docs/usage.md](docs/usage.md)** — install + apply eunomai to a project + the daily workflow.
 - **[docs/VISION.md](docs/VISION.md)** — the charter: what eunomai is, principles, pillars, architecture.
 - **SDD/SPDD** runs on [OpenSpec](https://github.com/Fission-AI/OpenSpec) (`/opsx:*`; artifacts in
   `openspec/`); see **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** for why.
