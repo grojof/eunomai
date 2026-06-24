@@ -33,7 +33,9 @@ charter. (History/why in project memory: `eunomai-pivot`.)
 - `.claude-plugin/` (`plugin.json` + `marketplace.json`) + `skills/` + `hooks/` — the plugin (installable).
 - `hooks/` — `guard.mjs` (runner) + `decide.mjs` (pure logic) + `decide.test.mjs`; wired in `hooks.json`.
 - `.claude/settings.json` — wires the safe-controls hooks for this repo (dogfooding).
-- `projection/` — Node/TS tooling: `compile` (+ `--check`), `docs-check`, **`provenance-check`**; gate **22/22**.
+- `projection/` — Node/TS tooling: `compile` (+ `--check`), `docs-check`, `provenance-check`; gate **22/22**.
+  Ships as a **self-contained CJS bundle** `dist/cli.cjs` (tsup `cjs` + `noExternal`, committed) — runs with no
+  `node_modules`. Skills invoke it via `${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs`.
 - `skills/` — `eunomai-living-docs` + `eunomai-skill-finder` + `eunomai-onboard`; each with `SKILL.md` + `PROVENANCE.md`.
 - `openspec/` — SDD engine home (changes · specs · archive · `config.yaml` = eunomai layer).
 - `docs/usage.md` (install + use) · `docs/VISION.md` (charter) · `docs/safe-controls.md` · `docs/living-docs.md` · `docs/skill-finder.md` · `docs/onboard.md` · `docs/decisions/` (ADRs) · `docs/development/status/` (this).
@@ -49,19 +51,19 @@ charter. (History/why in project memory: `eunomai-pivot`.)
 
 ## Status & next steps
 
-- Repo: clean history through `35aadd0`. Highlights: `312519f` (onboard) → `b6eac18` (archive)
-  → `b239b21` (distribution: marketplace.json + usage guide) → `35aadd0` (archive + sync spec).
+- Repo: clean history through `473217f`. Highlights: `b239b21` (distribution: marketplace.json + usage guide)
+  → `25474fd` (self-contained CLI bundle ships) → `473217f` (archive + sync spec).
 - OpenSpec CLI installed globally (`@fission-ai/openspec`); `/opsx:*` flow works.
-- **MODEL COMPLETE + INSTALLABLE.** All 4 pillars + the connector axis shipped & dogfooded; eunomai is now an
-  installable Claude Code plugin (`.claude-plugin/marketplace.json`) with a coherent usage guide
-  (`docs/usage.md`). Specs in `openspec/specs/` (safe-controls, living-docs, skill-finder, onboard,
-  distribution). Repo passes all three checks (hooks, `docs-check`, `provenance-check`).
+- **MODEL COMPLETE + INSTALLABLE + SELF-CONTAINED.** All 4 pillars + the connector axis shipped & dogfooded;
+  eunomai is an installable Claude Code plugin (`.claude-plugin/marketplace.json`) with a coherent usage guide
+  (`docs/usage.md`); **everything needed ships** — skills + hooks + the CLI (self-contained `cli.cjs`, no build
+  step). Specs in `openspec/specs/` (safe-controls, living-docs, skill-finder, onboard, distribution). Repo
+  passes all three checks (hooks, `docs-check`, `provenance-check`).
 - **Next — test it for real:** `/plugin marketplace add <repo>` → `/plugin install eunomai@eunomai` →
-  `/reload-plugins`; verify skills/hooks fire as an installed plugin; then run `/eunomai:eunomai-onboard` on a
-  real foreign project (e.g. a TypeScript repo). **Follow-ups:** ship the projection CLI checks with the
-  plugin (commit `dist/` or publish the package) so `docs-check`/`provenance-check` run without building from
-  source; later, a git/remote marketplace. Gate: reproject + `docs-check` + `provenance-check` (+ projection
-  typecheck/lint/test when code changes).
+  `/reload-plugins`; verify skills/hooks/CLI fire as an installed plugin; then run `/eunomai:eunomai-onboard`
+  on a real foreign project (e.g. a TypeScript repo). **Remaining follow-up:** a git/remote marketplace (so
+  install isn't from a local path). Gate: reproject + `docs-check` + `provenance-check` (+ projection
+  typecheck/lint/test when code changes), all via `node projection/dist/cli.cjs`.
 
 ## How to continue (new session in this repo)
 
