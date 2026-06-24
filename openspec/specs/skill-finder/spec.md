@@ -59,55 +59,59 @@ description/triggers and scope) to the project.
 ### Requirement: On-demand audit of existing skills
 
 The finder SHALL, when asked, audit existing or named candidate skills against the gate, scoped to what is
-requested, and generate or update their provenance record. It SHALL NOT run as a background or continuous
-process.
+requested, and write or update their entries in the **`eunomai-skills-audit.md` registry**. It SHALL NOT run
+as a background or continuous process.
 
-#### Scenario: Auditing a skill with no provenance
-- **WHEN** the finder is asked to audit a skill that lacks a provenance record
-- **THEN** it evaluates the skill against the gate and generates a provenance record
+#### Scenario: Auditing a skill with no registry entry
+- **WHEN** the finder is asked to audit a skill that is not yet in the registry
+- **THEN** it evaluates the skill against the gate and adds its entry (with the real ref or an honest gap)
 
 #### Scenario: Audit stays scoped
 - **WHEN** the finder is asked to audit a specific skill
 - **THEN** it limits its work to that request and does not start a project-wide background sweep
 
-### Requirement: Per-skill provenance record
-
-Every skill under `skills/` SHALL have a provenance record (a sidecar in the skill directory) capturing at
-least: origin, version/SHA (or `authored`), date, verdict, and rubric notes. eunomai's own authored skills
-SHALL use origin `authored`.
-
-#### Scenario: Record written on adoption or creation
-- **WHEN** a skill is adopted or created
-- **THEN** a provenance record with the required fields is written alongside it
-
-#### Scenario: Authored skills are uniform
-- **WHEN** the skill is one of eunomai's own authored skills
-- **THEN** its provenance record uses origin `authored`
-
 ### Requirement: provenance-check (read-only)
 
-The plugin SHALL provide a read-only `provenance-check` that verifies every skill under `skills/` has a
-provenance record with the required fields. It SHALL exit non-zero on any missing or invalid record, make no
-changes, and run as part of the gate.
+The plugin SHALL provide a read-only `provenance-check` that scans the skill roots (`.claude/skills/` **and**
+`skills/`), verifies the `eunomai-skills-audit.md` registry **covers every skill** found, and validates each
+entry's required fields. It SHALL exit non-zero on any uncovered or invalid skill, **report** any trust gaps
+(e.g. `unpinned` / placeholder refs) it finds, make no changes, and run as part of the gate.
 
-#### Scenario: A skill is missing provenance
-- **WHEN** a skill under `skills/` has no provenance record
+#### Scenario: A skill under .claude/skills is not covered
+- **WHEN** a skill exists under `.claude/skills/` (or `skills/`) with no entry in the registry
+- **THEN** the check reports the uncovered skill and exits non-zero
+
+#### Scenario: An entry is invalid
+- **WHEN** a registry entry is missing a required field
 - **THEN** the check reports it and exits non-zero
 
-#### Scenario: A record is incomplete
-- **WHEN** a provenance record is missing a required field
-- **THEN** the check reports it and exits non-zero
-
-#### Scenario: All skills covered
-- **WHEN** every skill under `skills/` has a valid provenance record
-- **THEN** the check exits zero and writes nothing
+#### Scenario: Covered, with gaps surfaced
+- **WHEN** every skill is covered but some entries carry gaps (e.g. `unpinned`)
+- **THEN** the check lists those gaps for action and (absent uncovered/invalid skills) exits zero, writing nothing
 
 ### Requirement: eunomai dogfoods provenance
 
-eunomai's own skills SHALL carry provenance records, and `provenance-check` SHALL pass on this repository as
-part of the gate.
+eunomai's own skills SHALL be covered by a single `skills/eunomai-skills-audit.md` registry (origin
+`authored`), and `provenance-check` SHALL pass on this repository as part of the gate.
 
 #### Scenario: Check runs on the eunomai repo
 - **WHEN** `provenance-check` runs against this repository
-- **THEN** it exits zero
+- **THEN** it exits zero with every `skills/` entry covered by the registry
+
+### Requirement: Consolidated skills-audit registry
+
+The finder SHALL record provenance in a **single** `eunomai-skills-audit.md` at the skills root —
+`.claude/skills/` in a consumer project, `skills/` in the eunomai plugin — NOT in per-skill sidecars. Skill
+folders SHALL contain only the skill's own files. The registry SHALL list, per skill: `name`, `origin`, `ref`
+(a real commit SHA / version, or `authored`), `verdict`, `rubric`, and `gaps`; plus a short run narrative.
+
+#### Scenario: Adoption writes a registry entry, not a sidecar
+- **WHEN** a skill is adopted or created
+- **THEN** its entry is written/updated in `eunomai-skills-audit.md`, and **no** `PROVENANCE.md` is added to
+  the skill folder
+
+#### Scenario: Vendored skills record the real SHA, gaps are honest
+- **WHEN** a skill is vendored from a repository
+- **THEN** the entry records the actual commit SHA; if a SHA is genuinely unavailable, `ref` is `unpinned` and
+  `gaps` includes `unpinned` — never a rationalized "veto OK"
 
