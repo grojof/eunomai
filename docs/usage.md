@@ -14,13 +14,19 @@ per-pillar pages (`safe-controls.md`, `living-docs.md`, `skill-finder.md`, `onbo
 
 ## Install eunomai as a plugin
 
-eunomai is a Claude Code plugin published through a marketplace. To install from a **local clone** (the path
-that works today; a git/remote marketplace comes later):
+eunomai is a Claude Code plugin published through a marketplace. Install it from the **git repository**
+(you need access to the private repo):
 
 ```text
-/plugin marketplace add /path/to/eunomai      # this repo (contains .claude-plugin/marketplace.json)
+/plugin marketplace add grojof/eunomai        # the marketplace (contains .claude-plugin/marketplace.json)
 /plugin install eunomai@eunomai               # plugin@marketplace
 /reload-plugins                               # activate without restarting
+```
+
+Or, for local development, from a **clone** — point at the directory instead:
+
+```text
+/plugin marketplace add /path/to/eunomai
 ```
 
 This makes available, in the target project:

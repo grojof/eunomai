@@ -20,7 +20,7 @@ New here? **→ [docs/usage.md](docs/usage.md)** walks you from install to apply
 
 ```text
 npm i -g @fission-ai/openspec        # the SDD engine (reused, installed separately)
-/plugin marketplace add /path/to/eunomai
+/plugin marketplace add grojof/eunomai
 /plugin install eunomai@eunomai
 /reload-plugins
 /eunomai:eunomai-onboard             # apply eunomai to a new or existing project
