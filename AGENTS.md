@@ -65,3 +65,12 @@ rules here, not there.
 - Every skill under `skills/` carries a `PROVENANCE.md` sidecar (own skills: `origin: authored`).
   **`node projection/dist/cli.js provenance-check`** — read-only; exit 1 if any skill lacks a valid record.
   Part of the gate.
+
+## Connector / bootstrap
+- `eunomai-onboard` is the **cold-start** orchestrator: analyze a new/existing project → establish docs
+  (living-docs standard) → seed conventions (lean `AGENTS.md`, `openspec/config.yaml`, permissions, hooks) →
+  audit skills via skill-finder → drive `docs-check` + `provenance-check` green → step aside. See
+  `docs/onboard.md`.
+- **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
+  dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"
+  means the existing checks pass. The seed is derived from eunomai's own live conventions, not template copies.

@@ -23,6 +23,9 @@ works as a **one-shot connector / bootstrap** — it seeds a project with these 
 4. **Skills** — our own skills only (today `eunomai-skill-finder`, a trust gate by criteria); third-party
    skills are brought by the user/org and secured via project rules.
 
+Plus the **connector / bootstrap** axis (`eunomai-onboard`): the one-shot cold-start that applies eunomai to a
+new or existing project, then steps aside.
+
 ## Layout
 
 ```
@@ -38,6 +41,7 @@ eunomai/
   docs/safe-controls.md        ← the hooks + recommended permissions baseline
   docs/living-docs.md          ← the project-docs standard + docs-check
   docs/skill-finder.md         ← the skill trust gate + provenance-check
+  docs/onboard.md              ← the connector/bootstrap (cold-start)
   docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
@@ -50,6 +54,7 @@ eunomai/
 - **[docs/safe-controls.md](docs/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
 - **[docs/living-docs.md](docs/living-docs.md)** — the project-docs structure standard + `docs-check`.
 - **[docs/skill-finder.md](docs/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
+- **[docs/onboard.md](docs/onboard.md)** — the connector/bootstrap that applies eunomai to a project.
 
 ## One principle above all
 
