@@ -9,10 +9,14 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 ## What eunomai is (and isn't)
 
 - **Is:** a curated Claude Code plugin (skills + commands + hooks + subagents) empowering four pillars, plus
-  a thin `AGENTS.md` → Copilot projection for best-effort parity.
+  a thin `AGENTS.md` → Copilot projection for best-effort parity. It works as a **one-shot connector /
+  bootstrap**: it seeds a project with conventions (OpenSpec config + lean `AGENTS.md`/`CLAUDE.md` + skills
+  + rules) and then **steps aside** — dispensable, because everything lives in the generated output (zero
+  lock-in).
 - **Is not:** a cross-tool *governance control plane* (abandoned 2026-06-24 — irreducible gaps + high
-  maintenance); a rule-sync engine (we consume **rulesync**); an SDD framework (we use the methodology as
-  plain Markdown).
+  maintenance); a **continuous cross-project sync / conformance engine** (that *is* the abandoned tower — the
+  bootstrap is one-shot, seed-and-step-aside); a rule-sync engine (we consume **rulesync**); an SDD framework
+  (we use **OpenSpec**).
 
 ## Principles
 
@@ -22,18 +26,28 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 3. **Low maintenance over reach.** Useful to us beats winning a market; fine if superseded one day.
 4. **Trust-gated skills.** Adopt only skills that pass a criteria gate (usage, authorship, origin, quality);
    else create; always improve.
-5. **Spec-first** for non-trivial change (SDD as Markdown, in `docs/specs/`).
+5. **Spec-first** for non-trivial change (SDD on **OpenSpec**, in `openspec/`).
 
 ## The four pillars (as plugin skills/commands)
 
-1. **SDD/SPDD** — the spec-driven flow (explore → propose → clarify → spec → design → tasks → apply →
-   verify → archive).
-2. **Living docs** — kept always-fresh, split into two domains:
-   - **dev-docs** — SDD artifacts, project-state, architecture (the *how* the project is built).
-   - **project-docs** — README, usage guides, domain/glossary (the *what* the project is).
+1. **SDD/SPDD** — the spec-driven flow (explore → propose → apply → archive), running on **OpenSpec** with
+   eunomai's tailoring in `openspec/config.yaml`.
+2. **Living docs** — kept always-fresh **project documentation** (dev-docs/SDD artifacts now belong to
+   OpenSpec, not here):
+   - a **lean root `README.md`** as index + summary + links (the front door),
+   - extending into **`docs/`** for deeper docs, by topic, only when needed.
 3. **Safe controls** — hooks (`PreToolUse` deny / ask) + settings permissions; commit-policy guardrails.
-4. **Skills** — **`eunomai-skill-finder`** (a trust gate) **fused with skill-creator**: find a trustworthy
-   skill → adopt; else create; always improve.
+4. **Skills** — **our own skills only** — today **`eunomai-skill-finder`**, a trust gate by *criteria* fused
+   with skill-creator (find a trustworthy skill → adopt; else create; always improve). Third-party skills of
+   any origin are brought by the user/org and secured via the project's **rules**, not bundled here.
+
+## Connector / bootstrap (how the pillars travel)
+
+eunomai is also the **one-shot connector** that distributes a team's or individual's **templates** (OpenSpec
+config + lean `AGENTS.md`/`CLAUDE.md` that reference per-project MDs) + skills + rules into new or existing
+projects, then **steps aside**. It is the starting point, not a dependency: everything lives in the generated
+output, so removing eunomai leaves a working project (zero lock-in). Deliberately **not** a continuous sync
+engine — seed-and-step-aside, never re-govern N projects over time.
 
 ## Architecture
 
@@ -54,5 +68,5 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 
 ## Status
 
-Clean restart **2026-06-24**. The Copilot projection tool (`projection/`) is implemented and verified. The
-four pillars are built incrementally as plugin skills via the SDD flow.
+Clean restart **2026-06-24**. The Copilot projection tool (`projection/`) is implemented and verified. SDD
+(pillar 1) is adopted on OpenSpec; the rest are built incrementally as plugin skills via the SDD flow.

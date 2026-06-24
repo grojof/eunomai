@@ -10,16 +10,18 @@ the `·ai` suffix.
 
 A curated Claude Code plugin (skills · commands · hooks · subagents) empowering four pillars, plus a thin
 `AGENTS.md` → Copilot projection for best-effort parity. It **does not** reinvent: it stands on Claude
-Code's native extensibility and on [`rulesync`](https://github.com/dyoshikawa/rulesync) for projection.
+Code's native extensibility and on [`rulesync`](https://github.com/dyoshikawa/rulesync) for projection. It
+works as a **one-shot connector / bootstrap** — it seeds a project with these conventions and steps aside;
+**dispensable**, because everything lives in the generated output (zero lock-in).
 
 ## The four pillars
 
-1. **SDD/SPDD** — the spec-driven flow (explore → … → archive).
-2. **Living docs** — always-fresh, split into **dev-docs** (SDD/status/architecture) and **project-docs**
-   (README/usage/domain).
+1. **SDD/SPDD** — the spec-driven flow (explore → propose → apply → archive), on **OpenSpec**.
+2. **Living docs** — always-fresh **project docs**: a lean README (index + summary + links) extending into
+   `docs/` by topic, only when needed.
 3. **Safe controls** — hooks (`PreToolUse` deny/ask) + permissions; commit-policy guardrails.
-4. **Skills** — `eunomai-skill-finder` (trust gate) fused with skill-creator: adopt-or-create, always
-   improve.
+4. **Skills** — our own skills only (today `eunomai-skill-finder`, a trust gate by criteria); third-party
+   skills are brought by the user/org and secured via project rules.
 
 ## Layout
 

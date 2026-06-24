@@ -1,7 +1,7 @@
 # eunomai — Project State
 
-> Living snapshot for fast context (cold-start handoff). Updated 2026-06-24. This file is a manual seed of
-> the future `eunomai-dev-docs` living-docs pillar.
+> Living snapshot for fast context (cold-start handoff). Updated 2026-06-24. This is dev-docs — repo /
+> OpenSpec material, **not** part of the living-docs pillar (which is project-docs only; see refined model).
 
 ## What eunomai is
 
@@ -9,13 +9,17 @@ A focused, **Claude-first AI workspace**, packaged as a **Claude Code plugin**, 
 not reinventing them. Copilot is best-effort via `AGENTS.md` projection. See `docs/VISION.md` for the
 charter. (History/why in project memory: `eunomai-pivot`.)
 
-## Four pillars (built incrementally as plugin skills)
+## Pillars + the connector axis (built incrementally)
 
 1. **SDD/SPDD** — ✅ adopted **OpenSpec** (engine) + eunomai layer in `openspec/config.yaml`. Use
    `/opsx:explore → /opsx:propose <name> → /opsx:apply → /opsx:archive`.
-2. **Living docs** — planned; split into `eunomai-dev-docs` (this file's domain) + `eunomai-project-docs`.
-3. **Safe controls** — planned (Claude hooks: `PreToolUse` deny/ask + permissions; commit guardrails).
-4. **Skills** — planned: `eunomai-skill-finder` (trust gate) fused with skill-creator.
+2. **Living docs** — planned. **Project-docs only**: a lean root README (index + summary + links) → `docs/`
+   by topic when needed. (SDD/dev-docs belong to OpenSpec/repo; not a sub-pillar.)
+3. **Safe controls** — propose-ready (Claude hooks: `PreToolUse` deny/ask + permissions; commit guardrails).
+4. **Skills** — planned: **our own skills only** (today `eunomai-skill-finder`, a trust gate by criteria);
+   third-party skills come from the user/org, secured via project rules.
+- **Connector / bootstrap** — one-shot seeding of projects with templates + skills + rules, then steps aside
+  (dispensable; zero lock-in). **Not** a continuous cross-project sync engine.
 
 ## Architecture / layout
 
@@ -35,10 +39,13 @@ charter. (History/why in project memory: `eunomai-pivot`.)
 
 ## Status & next steps
 
-- Repo: clean history; commits `e3b38ed` (init) → `f69ce9e` (adopt OpenSpec).
-- **Next:** build the next pillar via OpenSpec — candidates: **safe controls** (fast, high value, validates
-  hooks) or **living docs**. Start with `/opsx:propose <pillar>`.
-- Keep OpenSpec current: `openspec update`. Keep rulesync projection in sync: `node projection/dist/cli.js compile`.
+- Repo: clean history; `e3b38ed` (init) → `f69ce9e` (adopt OpenSpec) → `248c10a` (PROJECT-STATE) →
+  `161339f` (config YAML fix) → `3849f3d` (propose safe-controls).
+- OpenSpec CLI installed globally (`@fission-ai/openspec`); `/opsx:*` flow works.
+- **Safe controls**: proposal complete + validated (`openspec/changes/safe-controls/`), not yet applied.
+- Vision refined 2026-06-24: living-docs = project-docs only; skills = own only; connector/bootstrap axis.
+- **Next:** either `/opsx:apply` safe-controls, or design **living docs** as an OpenSpec change (and dogfood
+  it on this repo). Keep OpenSpec current with `openspec update`; reproject with `node projection/dist/cli.js compile`.
 
 ## How to continue (new session in this repo)
 
