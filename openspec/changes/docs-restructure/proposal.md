@@ -34,6 +34,8 @@ low-maintenance.
 - `living-docs`: the project-docs structure standard becomes **Diátaxis-organized** (guides / reference /
   explanation / decisions), and the dev-doc denylist narrows to `docs/decisions/` (the `docs/development/`
   folder is removed).
+- `distribution`: the usage guide moves from `docs/usage.md` to `docs/guides/getting-started.md` (the
+  requirements that name the path are updated).
 
 ## Impact
 

@@ -10,4 +10,4 @@ modifications: none
 # Provenance — eunomai-onboard
 
 Authored in this repository as the **connector / bootstrap** axis. One of eunomai's own skills, origin
-`authored`. See `docs/onboard.md`.
+`authored`. See `docs/reference/onboard.md`.

@@ -10,4 +10,4 @@ modifications: none
 # Provenance — eunomai-living-docs
 
 Authored in this repository as part of the **living-docs** pillar. One of eunomai's own skills, origin
-`authored`. See `docs/living-docs.md`.
+`authored`. See `docs/reference/living-docs.md`.

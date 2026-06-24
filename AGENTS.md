@@ -2,7 +2,7 @@
 
 A focused, **Claude-first AI workspace**, packaged as a Claude Code plugin, built on existing tools (Claude
 Code native + rulesync) — not reinventing them. Four pillars: SDD/SPDD, living docs, safe controls, and
-trust-gated skills. See `docs/VISION.md` for the charter.
+trust-gated skills. See `docs/explanation/vision.md` for the charter.
 
 This file is the **single source of truth** for AI agents working *on* eunomai. The tool-specific files
 (`CLAUDE.md`, `.github/copilot-instructions.md`) are **generated** from it by the `projection/` tool — edit
@@ -27,9 +27,10 @@ rules here, not there.
   Code plugin (the deliverable; installable via the marketplace).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
-- `docs/` — project-docs (`usage.md`, `VISION.md`, `safe-controls.md`, `living-docs.md`, `skill-finder.md`,
-  `onboard.md`) indexed from the lean root `README.md`; dev-docs in `decisions/` (ADRs) + `development/`.
-- **Using/installing eunomai:** see `docs/usage.md` (install as a plugin + apply to a project).
+- `docs/` — project-docs, **Diátaxis-organized**: `guides/` (how-to), `reference/` (per-pillar facts),
+  `explanation/` (the why), `decisions/` (ADRs). All in-scope pages are indexed from the lean root
+  `README.md`; `decisions/` is dev-facing and excluded from the index.
+- **Using/installing eunomai:** see `docs/guides/getting-started.md` (install as a plugin + apply to a project).
 
 ## Workflow
 - **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial
@@ -47,12 +48,12 @@ rules here, not there.
 - **Ask-by-default, fail-open** — only the trailer rule is a hard deny; a hook error never blocks work. It
   is a floor-raiser, not a security boundary. Claude-only (Copilot has no hook API).
 - Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
-  `docs/safe-controls.md`.
+  `docs/reference/safe-controls.md`.
 
 ## Living docs
-- **Project-docs only** (root `README.md` + `docs/` topic pages); dev-docs (`decisions/`, `development/`) are
-  out of scope and follow the SDD/handoff flow. The README is a lean index + summary + links; depth lives in
-  `docs/`, each page linked from the README. See `docs/living-docs.md`.
+- **Project-docs only**, organized by **Diátaxis** (`guides/` · `reference/` · `explanation/`); `decisions/`
+  (ADRs) is dev-facing and out of the index. The README is a lean index + summary + links; depth lives under
+  `docs/`, each in-scope page linked from the README. See `docs/reference/living-docs.md`.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
 - **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves and
   every in-scope page is indexed (exit 1 on drift). Part of the gate; enforces structure, not prose.
@@ -60,7 +61,7 @@ rules here, not there.
 ## Skills
 - **Own skills only.** `eunomai-skill-finder` is the trust-gated steward: discover → gate → adopt / improve /
   create (authoring delegated to Anthropic's **skill-creator**) → fit pass; plus on-demand, scoped **audit**.
-  See `docs/skill-finder.md`.
+  See `docs/reference/skill-finder.md`.
 - **Gate = security/provenance veto + weighed judgment** (authorship · usage · quality). One hard bar
   (reject), the rest judgment. Best-effort floor-raiser, **not** a guarantee — safe-controls is the runtime
   backstop. No registry; org-trusted sources live in the project's rules.
@@ -72,7 +73,7 @@ rules here, not there.
 - `eunomai-onboard` is the **cold-start** orchestrator: analyze a new/existing project → establish docs
   (living-docs standard) → seed conventions (lean `AGENTS.md`, `openspec/config.yaml`, permissions, hooks) →
   audit skills via skill-finder → drive `docs-check` + `provenance-check` green → step aside. See
-  `docs/onboard.md`.
+  `docs/reference/onboard.md`.
 - **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
   dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"
   means the existing checks pass. The seed is derived from eunomai's own live conventions, not template copies.

@@ -16,7 +16,7 @@ works as a **one-shot connector / bootstrap** — it seeds a project with these 
 
 ## Getting started
 
-New here? **→ [docs/usage.md](docs/usage.md)** walks you from install to applying eunomai to a project. In short:
+New here? **→ [docs/guides/getting-started.md](docs/guides/getting-started.md)** walks you from install to applying eunomai to a project. In short:
 
 ```text
 npm i -g @fission-ai/openspec        # the SDD engine (reused, installed separately)
@@ -50,26 +50,24 @@ eunomai/
   projection/                  ← Copilot best-effort: AGENTS.md → tools via rulesync (+ drift check)
   openspec/                    ← SDD engine (OpenSpec): changes · specs · archive · config.yaml (eunomai layer)
   AGENTS.md                    ← the workspace's own authored source of truth
-  docs/usage.md                ← how to install and use eunomai (start here)
-  docs/VISION.md               ← the charter
-  docs/safe-controls.md        ← the hooks + recommended permissions baseline
-  docs/living-docs.md          ← the project-docs standard + docs-check
-  docs/skill-finder.md         ← the skill trust gate + provenance-check
-  docs/onboard.md              ← the connector/bootstrap (cold-start)
-  docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
+  docs/                        ← project docs, organized by Diátaxis:
+    guides/                    ←   how-to (getting-started)
+    reference/                 ←   per-pillar facts (safe-controls, living-docs, skill-finder, onboard)
+    explanation/               ←   the why (vision)
+    decisions/                 ←   ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
 ## Start here
 
-- **[docs/usage.md](docs/usage.md)** — install + apply eunomai to a project + the daily workflow.
-- **[docs/VISION.md](docs/VISION.md)** — the charter: what eunomai is, principles, pillars, architecture.
-- **SDD/SPDD** runs on [OpenSpec](https://github.com/Fission-AI/OpenSpec) (`/opsx:*`; artifacts in
-  `openspec/`); see **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** for why.
+- **Guide** → **[docs/guides/getting-started.md](docs/guides/getting-started.md)** — install + apply eunomai to a project + the daily workflow.
+- **Explanation** → **[docs/explanation/vision.md](docs/explanation/vision.md)** — the charter: what eunomai is, principles, pillars, architecture.
+- **Reference** — one page per pillar:
+  - **[docs/reference/safe-controls.md](docs/reference/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
+  - **[docs/reference/living-docs.md](docs/reference/living-docs.md)** — the project-docs structure standard + `docs-check`.
+  - **[docs/reference/skill-finder.md](docs/reference/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
+  - **[docs/reference/onboard.md](docs/reference/onboard.md)** — the connector/bootstrap that applies eunomai to a project.
+- **Decisions** → **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** — ADRs (e.g. why SDD runs on OpenSpec).
 - **[projection/](projection/)** — the Copilot projection tool (`compile` + `compile --check`).
-- **[docs/safe-controls.md](docs/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
-- **[docs/living-docs.md](docs/living-docs.md)** — the project-docs structure standard + `docs-check`.
-- **[docs/skill-finder.md](docs/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
-- **[docs/onboard.md](docs/onboard.md)** — the connector/bootstrap that applies eunomai to a project.
 
 ## One principle above all
 

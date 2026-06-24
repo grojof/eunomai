@@ -4,7 +4,7 @@ import { join, relative, resolve } from "node:path";
 const DOCS_DIR = "docs";
 
 /** Dev-docs directories excluded from the project-docs standard (out of scope). */
-const DEV_DOC_DIRS = ["docs/decisions", "docs/development"];
+const DEV_DOC_DIRS = ["docs/decisions"];
 
 /** Raised when the docs structure cannot be checked (e.g. no README). */
 export class DocsError extends Error {}
@@ -66,7 +66,7 @@ function inScopePages(cwd: string): string[] {
 /**
  * Read-only README↔docs/ integrity check. Verifies every README link into docs/
  * resolves, and every in-scope docs/ page is referenced by the README index.
- * Writes nothing. Dev-docs (docs/decisions, docs/development) are out of scope.
+ * Writes nothing. Dev-docs (docs/decisions — ADRs) are out of scope.
  */
 export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
   const readmePath = resolve(cwd, "README.md");

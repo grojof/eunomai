@@ -77943,7 +77943,7 @@ function loadConfig(cwd = process.cwd()) {
 var import_node_fs6 = require("fs");
 var import_node_path8 = require("path");
 var DOCS_DIR = "docs";
-var DEV_DOC_DIRS = ["docs/decisions", "docs/development"];
+var DEV_DOC_DIRS = ["docs/decisions"];
 var DocsError = class extends Error {
 };
 var MD_LINK = /\[[^\]]*\]\(([^)]+)\)/g;

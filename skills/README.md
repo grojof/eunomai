@@ -1,17 +1,13 @@
 # Skills
 
-The eunomai pillars ship as **Agent Skills** in this directory (each a `<name>/SKILL.md` folder, loaded by
-the plugin and namespaced as `/eunomai:<name>`). Built incrementally via the SDD flow in `../docs/specs/`.
+eunomai's own **Agent Skills** live here — each a `<name>/SKILL.md` folder (plus a `PROVENANCE.md` sidecar,
+`origin: authored`), loaded by the plugin and namespaced as `/eunomai:<name>`.
 
-## Planned (the four pillars)
+| Skill | Purpose |
+|---|---|
+| `eunomai-living-docs` | Refresh project docs toward the Diátaxis standard (living-docs pillar). |
+| `eunomai-skill-finder` | Trust-gated discover / adopt / create / audit of skills (skills pillar). |
+| `eunomai-onboard` | Cold-start: apply eunomai to a new or existing project (connector / bootstrap). |
 
-| Skill(s) | Pillar | Status |
-|---|---|---|
-| `eunomai-sdd-*` | SDD/SPDD spec-driven flow | planned |
-| `eunomai-dev-docs` | Living docs — development (SDD, status, architecture) | planned |
-| `eunomai-project-docs` | Living docs — project/product (README, usage, domain) | planned |
-| `eunomai-safe-controls` | Safe controls (hooks + permissions guardrails) | planned |
-| `eunomai-skill-finder` | Trust-gated skill discovery, fused with skill-creator | planned |
-
-> Each pillar gets its own SDD change before implementation. Keep skills small, single-purpose, and loaded
-> by trigger.
+> **Safe controls** ships as `PreToolUse` hooks (`../hooks/`), and **SDD** runs on OpenSpec — neither is a
+> skill. Skills are small, single-purpose, loaded by trigger, and built via the SDD flow in `../openspec/`.

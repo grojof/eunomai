@@ -10,4 +10,4 @@ modifications: none
 # Provenance — eunomai-skill-finder
 
 Authored in this repository as part of the **skill-finder** pillar. It is one of eunomai's own skills, so its
-origin is `authored` (no third-party sourcing or adaptation). See `docs/skill-finder.md`.
+origin is `authored` (no third-party sourcing or adaptation). See `docs/reference/skill-finder.md`.

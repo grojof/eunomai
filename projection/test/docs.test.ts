@@ -43,11 +43,10 @@ describe("checkDocs", () => {
     expect(r.orphaned).toEqual(["docs/extra.md"]);
   });
 
-  it("does not flag dev-docs (docs/decisions, docs/development) when unindexed", () => {
-    write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
-    write("docs/guide.md", "# Guide\n");
+  it("does not flag dev-docs (docs/decisions, ADRs) when unindexed", () => {
+    write("README.md", "# P\n\n- [Guide](docs/guides/getting-started.md)\n");
+    write("docs/guides/getting-started.md", "# Guide\n");
     write("docs/decisions/0001-x/DECISION.md", "# ADR\n");
-    write("docs/development/status/STATE.md", "# State\n");
     const r = checkDocs(dir);
     expect(r.broken).toEqual([]);
     expect(r.orphaned).toEqual([]);

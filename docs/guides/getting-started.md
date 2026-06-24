@@ -1,7 +1,7 @@
 # Using eunomai
 
 How to install eunomai and apply it to a new or existing project, end to end. This is the spine; the
-per-pillar pages (`safe-controls.md`, `living-docs.md`, `skill-finder.md`, `onboard.md`) are the reference.
+per-pillar pages under [`../reference/`](../reference/) are the reference.
 
 ## Prerequisites
 
@@ -62,13 +62,13 @@ It will, with you in control:
 ## Day-to-day workflow
 
 - **Spec-driven change (SDD):** `/opsx:explore` → `/opsx:propose <name>` → `/opsx:apply` → `/opsx:archive`
-  (artifacts in `openspec/`). See [docs/decisions/0001-adopt-openspec](decisions/0001-adopt-openspec/).
+  (artifacts in `openspec/`). See [the ADR](../decisions/0001-adopt-openspec/).
 - **Safe controls:** the hooks fire automatically — commit-trailer **deny**, and **ask** before
-  force-push / `rm -rf` / version bumps / secret access. See [safe-controls.md](safe-controls.md).
+  force-push / `rm -rf` / version bumps / secret access. See [safe-controls.md](../reference/safe-controls.md).
 - **Living docs:** invoke `eunomai-living-docs` to refresh project docs; keep the README index honest. See
-  [living-docs.md](living-docs.md).
+  [living-docs.md](../reference/living-docs.md).
 - **Skills:** use `eunomai-skill-finder` to adopt/create/audit skills behind the trust gate. See
-  [skill-finder.md](skill-finder.md).
+  [skill-finder.md](../reference/skill-finder.md).
 - **Checks:** `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` and `… provenance-check` are
   read-only and belong in your gate.
 

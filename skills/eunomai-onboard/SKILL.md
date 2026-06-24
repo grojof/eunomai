@@ -27,7 +27,7 @@ everything it seeds lives in the project's own files (zero lock-in).
    drop verbatim):
    - a lean `AGENTS.md` (authored source → projected),
    - an `openspec/config.yaml` layer (run `openspec update`),
-   - the **permissions baseline** (`docs/safe-controls.md`),
+   - the **permissions baseline** (`docs/reference/safe-controls.md`),
    - **hooks wiring** — if the project installs the eunomai *plugin*, hooks come from it; if it uses eunomai
      from source, wire `.claude/settings.json` (`$CLAUDE_PROJECT_DIR/hooks/guard.mjs`). Detect which.
 4. **Audit skills.** Invoke **`eunomai-skill-finder`** in audit mode over the project's existing skills; do
