@@ -35,7 +35,7 @@ rules:
     - Reference existing patterns/specs before inventing new ones.
     - Every requirement needs at least one WHEN/THEN scenario (scenarios use exactly 4 hashtags).
   design:
-    - Record the key decision as reuse-first: which existing tool/primitive we adopt and why.
+    - "Record the key decision as reuse-first: which existing tool/primitive we adopt and why."
     - Include trade-offs and an explicit low-maintenance check.
   tasks:
     - Keep tasks small and verifiable; map each back to a requirement.
