@@ -54,7 +54,7 @@ rules here, not there.
   out of scope and follow the SDD/handoff flow. The README is a lean index + summary + links; depth lives in
   `docs/`, each page linked from the README. See `docs/living-docs.md`.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
-- **`node projection/dist/cli.js docs-check`** — read-only: verifies every README→`docs/` link resolves and
+- **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves and
   every in-scope page is indexed (exit 1 on drift). Part of the gate; enforces structure, not prose.
 
 ## Skills
@@ -65,7 +65,7 @@ rules here, not there.
   (reject), the rest judgment. Best-effort floor-raiser, **not** a guarantee — safe-controls is the runtime
   backstop. No registry; org-trusted sources live in the project's rules.
 - Every skill under `skills/` carries a `PROVENANCE.md` sidecar (own skills: `origin: authored`).
-  **`node projection/dist/cli.js provenance-check`** — read-only; exit 1 if any skill lacks a valid record.
+  **`node projection/dist/cli.cjs provenance-check`** — read-only; exit 1 if any skill lacks a valid record.
   Part of the gate.
 
 ## Connector / bootstrap

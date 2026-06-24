@@ -28,10 +28,10 @@ This makes available, in the target project:
 - the **skills** — `eunomai-onboard`, `eunomai-living-docs`, `eunomai-skill-finder` (namespaced by the plugin);
 - the **safe-controls hooks** — `PreToolUse` guardrails (they resolve via `${CLAUDE_PLUGIN_ROOT}`).
 
-> **What ships vs build-from-source (honest scope):** the skills and hooks ship with the plugin and work
-> immediately. The `projection/` CLI checks (`docs-check`, `provenance-check`) are **not** shipped yet — they
-> run where `projection/` is built (`cd projection && npm i && npm run build`). Shipping them with the plugin
-> is a planned follow-up.
+> **Everything ships with the plugin.** The skills, the safe-controls hooks, **and** the `projection/` CLI
+> (`compile`, `docs-check`, `provenance-check`) all install with eunomai — the CLI as a single self-contained
+> bundle (`projection/dist/cli.cjs`), so there is no build step. Run it via
+> `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" <command>`.
 
 ## Apply eunomai to a project (new or existing)
 
@@ -63,10 +63,11 @@ It will, with you in control:
   [living-docs.md](living-docs.md).
 - **Skills:** use `eunomai-skill-finder` to adopt/create/audit skills behind the trust gate. See
   [skill-finder.md](skill-finder.md).
-- **Checks** (where `projection/` is built): `node projection/dist/cli.js docs-check` and `… provenance-check`
-  are read-only and belong in your gate.
+- **Checks:** `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` and `… provenance-check` are
+  read-only and belong in your gate.
 
 ## Authoring note
 
 `AGENTS.md` is the authored source of truth; `CLAUDE.md` and `.github/copilot-instructions.md` are
-**generated** from it (`node projection/dist/cli.js compile`). Edit `AGENTS.md`, never the generated files.
+**generated** from it (`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" compile`). Edit `AGENTS.md`,
+never the generated files.

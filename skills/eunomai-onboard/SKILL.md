@@ -34,8 +34,8 @@ everything it seeds lives in the project's own files (zero lock-in).
    not audit them yourself.
 5. **Drive the checks green.**
    ```bash
-   node projection/dist/cli.js docs-check
-   node projection/dist/cli.js provenance-check
+   node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check
+   node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check
    ```
    Fix until both exit 0.
 6. **Hand off.** Point the author at the steady-state pillars and stop. No background or cross-project process.

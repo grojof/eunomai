@@ -19,7 +19,7 @@ You assist; the human stays in control — never silently rewrite docs.
 
 1. **Survey.** Read `README.md` and list the pages under `docs/` (excluding `docs/decisions/` and
    `docs/development/`). Note what changed recently (git log / current work).
-2. **Run the check.** `node projection/dist/cli.js docs-check` to see broken links and orphaned pages.
+2. **Run the check.** `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
 3. **Refresh, in order:**
    - **Summary** — update the README's one-paragraph summary so it matches what the project now is.
    - **Index** — ensure every in-scope `docs/` page is linked from the README; remove links to pages that no
@@ -27,7 +27,7 @@ You assist; the human stays in control — never silently rewrite docs.
    - **Split** — if a README section is long-form, move it into a `docs/<topic>.md` page and leave a link.
 4. **Confirm before applying.** Show the proposed edits; apply them with the user's agreement.
 5. **Verify.** Re-run `docs-check` until it exits 0. If docs changes touched `AGENTS.md`, re-project
-   (`node projection/dist/cli.js compile`).
+   (`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" compile`).
 
 ## Boundaries
 

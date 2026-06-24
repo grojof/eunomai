@@ -56,7 +56,7 @@ modifications: <what the fit pass changed, or "none">
 ```
 
 eunomai's own authored skills use `origin: authored`, `verdict: authored`. Run
-`node projection/dist/cli.js provenance-check` to confirm every skill under `skills/` has a valid record.
+`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check` to confirm every skill under `skills/` has a valid record.
 
 ## Boundaries
 

@@ -68,7 +68,7 @@ function editDecision(filePath) {
         decision: "ask",
         reason:
           "eunomai: this is a generated file. Edit the authored AGENTS.md and re-run projection " +
-          "(node projection/dist/cli.js compile) instead of editing it directly.",
+          "(node projection/dist/cli.cjs compile) instead of editing it directly.",
       };
     }
   }

@@ -4,7 +4,7 @@
   "description": "Connector-first governance layer for cross-tool AI workspaces (AGENTS.md + rulesync).",
   "type": "module",
   "bin": {
-    "eunomai": "dist/cli.js"
+    "eunomai": "dist/cli.cjs"
   },
   "files": [
     "dist"

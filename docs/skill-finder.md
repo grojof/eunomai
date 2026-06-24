@@ -38,7 +38,7 @@ modifications: <what changed, or "none">
 ```
 
 ```bash
-node projection/dist/cli.js provenance-check   # read-only; exit 1 if any skill lacks a valid record
+node projection/dist/cli.cjs provenance-check   # read-only; exit 1 if any skill lacks a valid record
 ```
 
 It runs as part of the gate. Org-trusted sources, if any, live in the project's **rules** — not here.

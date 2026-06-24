@@ -21,7 +21,7 @@ Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check)
 - **`docs-check`** — a read-only integrity check (no writes, non-zero exit on divergence):
 
   ```bash
-  node projection/dist/cli.js docs-check
+  node projection/dist/cli.cjs docs-check
   ```
 
   It verifies every README→`docs/` link resolves and every in-scope `docs/` page is reachable from the README
