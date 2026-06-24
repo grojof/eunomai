@@ -42,26 +42,39 @@ A hard veto first, then weighed judgment — mirroring safe-controls (one hard b
 - **Always run a fit pass** on adopt/create: adapt `description`/triggers/scope to the project before it's done.
 - If skill-creator is not installed, degrade gracefully to manual authoring guidance — never block.
 
-## Provenance — record every decision
+## Provenance — one audit registry, not sidecars
 
-Write a `PROVENANCE.md` sidecar in the skill directory (YAML frontmatter), required keys:
+Record every decision in a **single** `eunomai-skills-audit.md` at the skills root — `.claude/skills/` in a
+consumer project, `skills/` in the eunomai plugin. **Do not** drop a `PROVENANCE.md` into skill folders; keep
+each folder to the skill itself. The registry's YAML frontmatter lists one entry per skill, plus a short run
+narrative in the body:
 
 ```yaml
-origin: <url / marketplace id / "authored">
-ref: <version or commit SHA, or "authored">
-date: <YYYY-MM-DD>
-verdict: adopt | adopt-and-improve | create | authored
-rubric: <one-line justification across veto + authorship/usage/quality>
-modifications: <what the fit pass changed, or "none">
+---
+generated: <YYYY-MM-DD>
+skills:
+  - name: <skill dir name>
+    origin: <url / marketplace id / "authored">
+    ref: <real commit SHA or version | "authored" | "unpinned">
+    verdict: adopt | adopt-and-improve | create | authored
+    rubric: <one line across veto + authorship/usage/quality>
+    gaps: []          # e.g. [unpinned] — never hide a gap behind "veto OK"
+---
+# eunomai skills audit
+<what was searched, the verdicts, anything notable>
 ```
 
-eunomai's own authored skills use `origin: authored`, `verdict: authored`. Run
-`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check` to confirm every skill under `skills/` has a valid record.
+**Pin honestly.** When you vendor from a repo, record the **actual commit SHA** (it is available at vendor
+time — `git rev-parse HEAD`). If a SHA is genuinely unavailable, set `ref: unpinned` and `gaps: [unpinned]` —
+never write a rationalized "veto OK". eunomai's own skills use `origin: authored`.
+
+Run `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check` — it scans `.claude/skills/` and
+`skills/`, fails on any skill not covered by the registry, and lists trust gaps to act on.
 
 ## Boundaries
 
 - **Not a sandbox/scanner.** The veto is a read, not a guarantee; pair with safe-controls at runtime.
-- **No registry.** Judge fresh each time; trust lives in the per-skill provenance, not a central allowlist.
-  Any org-trusted sources belong in the project's **rules**, not here.
+- **No *central* registry.** Judge fresh each time; the `eunomai-skills-audit.md` is a per-project, generated
+  audit — not a global curated allowlist. Any org-trusted sources belong in the project's **rules**, not here.
 - **Audit is invoked and scoped** — no background watcher.
 - **Not project onboarding** — bootstrapping a whole foreign project is `eunomai-onboard` (the connector axis).

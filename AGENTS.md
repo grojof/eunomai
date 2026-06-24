@@ -64,10 +64,12 @@ rules here, not there.
   See `docs/reference/skill-finder.md`.
 - **Gate = security/provenance veto + weighed judgment** (authorship · usage · quality). One hard bar
   (reject), the rest judgment. Best-effort floor-raiser, **not** a guarantee — safe-controls is the runtime
-  backstop. No registry; org-trusted sources live in the project's rules.
-- Every skill under `skills/` carries a `PROVENANCE.md` sidecar (own skills: `origin: authored`).
-  **`node projection/dist/cli.cjs provenance-check`** — read-only; exit 1 if any skill lacks a valid record.
-  Part of the gate.
+  backstop. No *central* registry; org-trusted sources live in the project's rules.
+- Provenance is **one** `eunomai-skills-audit.md` at the skills root (`.claude/skills/` in a project,
+  `skills/` here) — not per-skill sidecars; skill folders stay clean. Record the real SHA when vendoring;
+  unpinned → `gaps: [unpinned]`, never "veto OK".
+  **`node projection/dist/cli.cjs provenance-check`** — read-only; scans `.claude/skills/` + `skills/`, fails
+  on any skill not covered by the registry, lists trust gaps. Part of the gate.
 
 ## Connector / bootstrap
 - `eunomai-onboard` is the **cold-start** orchestrator: analyze a new/existing project → establish docs

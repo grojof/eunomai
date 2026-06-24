@@ -2,7 +2,7 @@
 import { check, compile } from "./compile.js";
 import { ConfigError, loadConfig } from "./config.js";
 import { DocsError, checkDocs } from "./docs.js";
-import { checkProvenance } from "./provenance.js";
+import { checkSkillsAudit } from "./provenance.js";
 
 const HELP = `eunomai — connector-first governance for cross-tool AI workspaces
 
@@ -42,14 +42,16 @@ async function run(argv: string[]): Promise<number> {
   }
 
   if (cmd === "provenance-check") {
-    const { missing, invalid, checked } = checkProvenance();
-    if (missing.length > 0 || invalid.length > 0) {
+    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit();
+    for (const g of gaps) console.warn(`  gap (review): ${g}`);
+    if (uncovered.length > 0 || invalid.length > 0) {
       console.error("provenance-check failed:");
-      for (const m of missing) console.error(`  missing PROVENANCE.md: skills/${m}`);
-      for (const i of invalid) console.error(`  invalid provenance: ${i}`);
+      for (const i of invalid) console.error(`  registry: ${i}`);
+      for (const u of uncovered) console.error(`  uncovered skill (no audit entry): ${u}`);
       return 1;
     }
-    console.log(`provenance-check: ${checked} skill(s) have valid provenance.`);
+    const where = roots.length > 0 ? roots.join(", ") : "(no skills)";
+    console.log(`provenance-check: ${checked} skill(s) covered by the audit registry in ${where}.`);
     return 0;
   }
 

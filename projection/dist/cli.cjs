@@ -78005,16 +78005,20 @@ function checkDocs(cwd = process.cwd()) {
 var import_node_fs7 = require("fs");
 var import_node_path9 = require("path");
 var import_yaml2 = __toESM(require_dist(), 1);
-var SKILLS_DIR = "skills";
-var ProvenanceSchema = external_exports2.object({
+var SKILL_ROOTS = [".claude/skills", "skills"];
+var REGISTRY = "eunomai-skills-audit.md";
+var EntrySchema = external_exports2.object({
+  name: external_exports2.string().min(1),
   origin: external_exports2.string().min(1),
   ref: external_exports2.string().min(1),
-  // version/SHA, or "authored"
-  date: external_exports2.string().min(1),
+  // a real commit SHA / version, "authored", or "unpinned"
   verdict: external_exports2.enum(["adopt", "adopt-and-improve", "create", "authored"]),
   rubric: external_exports2.string().min(1),
-  modifications: external_exports2.string().min(1)
-  // "none" is fine
+  gaps: external_exports2.array(external_exports2.string()).optional().default([])
+});
+var RegistrySchema = external_exports2.object({
+  generated: external_exports2.string().optional(),
+  skills: external_exports2.array(EntrySchema)
 });
 function frontmatter(text) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
@@ -78025,23 +78029,42 @@ function frontmatter(text) {
     return void 0;
   }
 }
-function checkProvenance(cwd = process.cwd()) {
-  const root = (0, import_node_path9.resolve)(cwd, SKILLS_DIR);
-  const result = { missing: [], invalid: [], checked: 0 };
-  if (!(0, import_node_fs7.existsSync)(root)) return result;
-  for (const entry of (0, import_node_fs7.readdirSync)(root)) {
-    const dir = (0, import_node_path9.join)(root, entry);
-    if (!(0, import_node_fs7.statSync)(dir).isDirectory() || !(0, import_node_fs7.existsSync)((0, import_node_path9.join)(dir, "SKILL.md"))) continue;
-    result.checked += 1;
-    const provPath = (0, import_node_path9.join)(dir, "PROVENANCE.md");
-    if (!(0, import_node_fs7.existsSync)(provPath)) {
-      result.missing.push(entry);
+var isUnpinned = (ref) => /^unpinned$|no registrado|sin sha|\bTBD\b/i.test(ref);
+function checkSkillsAudit(cwd = process.cwd()) {
+  const result = { uncovered: [], invalid: [], gaps: [], checked: 0, roots: [] };
+  for (const rel of SKILL_ROOTS) {
+    const root = (0, import_node_path9.resolve)(cwd, rel);
+    if (!(0, import_node_fs7.existsSync)(root)) continue;
+    const skillDirs = (0, import_node_fs7.readdirSync)(root).filter(
+      (e) => (0, import_node_fs7.statSync)((0, import_node_path9.join)(root, e)).isDirectory() && (0, import_node_fs7.existsSync)((0, import_node_path9.join)(root, e, "SKILL.md"))
+    );
+    if (skillDirs.length === 0) continue;
+    result.roots.push(rel);
+    result.checked += skillDirs.length;
+    const registryPath = (0, import_node_path9.join)(root, REGISTRY);
+    if (!(0, import_node_fs7.existsSync)(registryPath)) {
+      result.invalid.push(`${rel}: missing ${REGISTRY}`);
+      for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
     }
-    const parsed = ProvenanceSchema.safeParse(frontmatter((0, import_node_fs7.readFileSync)(provPath, "utf8")));
+    const parsed = RegistrySchema.safeParse(frontmatter((0, import_node_fs7.readFileSync)(registryPath, "utf8")));
     if (!parsed.success) {
       const detail = parsed.error.issues.map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`).join("; ");
-      result.invalid.push(`${entry} (${detail})`);
+      result.invalid.push(`${rel}/${REGISTRY}: ${detail}`);
+      for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
+      continue;
+    }
+    const byName = new Map(parsed.data.skills.map((s) => [s.name, s]));
+    for (const dir of skillDirs) {
+      const entry = byName.get(dir);
+      if (!entry) {
+        result.uncovered.push(`${rel}/${dir}`);
+        continue;
+      }
+      if (entry.gaps.length > 0 || isUnpinned(entry.ref)) {
+        const detail = entry.gaps.length > 0 ? entry.gaps.join(", ") : "unpinned ref";
+        result.gaps.push(`${rel}/${dir}: ${detail}`);
+      }
     }
   }
   return result;
@@ -78080,14 +78103,16 @@ async function run(argv) {
     return 0;
   }
   if (cmd === "provenance-check") {
-    const { missing, invalid, checked } = checkProvenance();
-    if (missing.length > 0 || invalid.length > 0) {
+    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit();
+    for (const g of gaps) console.warn(`  gap (review): ${g}`);
+    if (uncovered.length > 0 || invalid.length > 0) {
       console.error("provenance-check failed:");
-      for (const m of missing) console.error(`  missing PROVENANCE.md: skills/${m}`);
-      for (const i of invalid) console.error(`  invalid provenance: ${i}`);
+      for (const i of invalid) console.error(`  registry: ${i}`);
+      for (const u of uncovered) console.error(`  uncovered skill (no audit entry): ${u}`);
       return 1;
     }
-    console.log(`provenance-check: ${checked} skill(s) have valid provenance.`);
+    const where = roots.length > 0 ? roots.join(", ") : "(no skills)";
+    console.log(`provenance-check: ${checked} skill(s) covered by the audit registry in ${where}.`);
     return 0;
   }
   if (cmd !== "compile") {

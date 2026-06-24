@@ -3,25 +3,38 @@ import { join, resolve } from "node:path";
 import { parse } from "yaml";
 import { z } from "zod";
 
-const SKILLS_DIR = "skills";
+/** Skill roots: `.claude/skills/` (consumer projects) and `skills/` (the eunomai plugin). */
+const SKILL_ROOTS = [".claude/skills", "skills"];
 
-/** Required shape of a `PROVENANCE.md` sidecar's YAML frontmatter. */
-const ProvenanceSchema = z.object({
+/** The consolidated audit registry filename, at each skills root. */
+const REGISTRY = "eunomai-skills-audit.md";
+
+/** Required shape of one audit entry in the registry frontmatter. */
+const EntrySchema = z.object({
+  name: z.string().min(1),
   origin: z.string().min(1),
-  ref: z.string().min(1), // version/SHA, or "authored"
-  date: z.string().min(1),
+  ref: z.string().min(1), // a real commit SHA / version, "authored", or "unpinned"
   verdict: z.enum(["adopt", "adopt-and-improve", "create", "authored"]),
   rubric: z.string().min(1),
-  modifications: z.string().min(1), // "none" is fine
+  gaps: z.array(z.string()).optional().default([]),
 });
 
-export type ProvenanceCheckResult = {
-  /** Skill names with no `PROVENANCE.md`. */
-  missing: string[];
-  /** `name (reason)` for skills whose provenance frontmatter is invalid. */
+const RegistrySchema = z.object({
+  generated: z.string().optional(),
+  skills: z.array(EntrySchema),
+});
+
+export type SkillsAuditResult = {
+  /** `<root>/<dir>` for a skill with `SKILL.md` but no registry entry. */
+  uncovered: string[];
+  /** `<root>: <reason>` for a missing or invalid registry. */
   invalid: string[];
+  /** `<root>/<name>: <gap>` for entries carrying trust gaps (e.g. `unpinned`). */
+  gaps: string[];
   /** Count of skill directories checked. */
   checked: number;
+  /** Skill roots that were scanned. */
+  roots: string[];
 };
 
 /** Extract and parse leading YAML frontmatter (between `---` fences). */
@@ -35,32 +48,56 @@ function frontmatter(text: string): unknown {
   }
 }
 
+const isUnpinned = (ref: string): boolean => /^unpinned$|no registrado|sin sha|\bTBD\b/i.test(ref);
+
 /**
- * Read-only check that every skill under `skills/` (a directory containing a
- * `SKILL.md`) carries a valid `PROVENANCE.md` sidecar. Writes nothing.
+ * Read-only check that every skill under the skill roots (`.claude/skills/` and
+ * `skills/`) is covered by that root's `eunomai-skills-audit.md` registry. Reports
+ * uncovered skills and invalid registries (failures) and trust gaps (warnings).
+ * Writes nothing.
  */
-export function checkProvenance(cwd: string = process.cwd()): ProvenanceCheckResult {
-  const root = resolve(cwd, SKILLS_DIR);
-  const result: ProvenanceCheckResult = { missing: [], invalid: [], checked: 0 };
-  if (!existsSync(root)) return result;
+export function checkSkillsAudit(cwd: string = process.cwd()): SkillsAuditResult {
+  const result: SkillsAuditResult = { uncovered: [], invalid: [], gaps: [], checked: 0, roots: [] };
 
-  for (const entry of readdirSync(root)) {
-    const dir = join(root, entry);
-    if (!statSync(dir).isDirectory() || !existsSync(join(dir, "SKILL.md"))) continue;
-    result.checked += 1;
+  for (const rel of SKILL_ROOTS) {
+    const root = resolve(cwd, rel);
+    if (!existsSync(root)) continue;
 
-    const provPath = join(dir, "PROVENANCE.md");
-    if (!existsSync(provPath)) {
-      result.missing.push(entry);
+    const skillDirs = readdirSync(root).filter(
+      (e) => statSync(join(root, e)).isDirectory() && existsSync(join(root, e, "SKILL.md")),
+    );
+    if (skillDirs.length === 0) continue;
+    result.roots.push(rel);
+    result.checked += skillDirs.length;
+
+    const registryPath = join(root, REGISTRY);
+    if (!existsSync(registryPath)) {
+      result.invalid.push(`${rel}: missing ${REGISTRY}`);
+      for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
     }
-    const parsed = ProvenanceSchema.safeParse(frontmatter(readFileSync(provPath, "utf8")));
+
+    const parsed = RegistrySchema.safeParse(frontmatter(readFileSync(registryPath, "utf8")));
     if (!parsed.success) {
-      const detail = parsed.error.issues
-        .map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`)
-        .join("; ");
-      result.invalid.push(`${entry} (${detail})`);
+      const detail = parsed.error.issues.map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`).join("; ");
+      result.invalid.push(`${rel}/${REGISTRY}: ${detail}`);
+      for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
+      continue;
+    }
+
+    const byName = new Map(parsed.data.skills.map((s) => [s.name, s]));
+    for (const dir of skillDirs) {
+      const entry = byName.get(dir);
+      if (!entry) {
+        result.uncovered.push(`${rel}/${dir}`);
+        continue;
+      }
+      if (entry.gaps.length > 0 || isUnpinned(entry.ref)) {
+        const detail = entry.gaps.length > 0 ? entry.gaps.join(", ") : "unpinned ref";
+        result.gaps.push(`${rel}/${dir}: ${detail}`);
+      }
     }
   }
+
   return result;
 }

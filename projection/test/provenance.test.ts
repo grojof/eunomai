@@ -2,75 +2,97 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { checkProvenance } from "../src/provenance.js";
+import { checkSkillsAudit } from "../src/provenance.js";
 
 let dir: string;
 
-const VALID = `---
-origin: authored
-ref: authored
-date: 2026-06-24
-verdict: authored
-rubric: Authored in-repo.
-modifications: none
----
-`;
+const write = (rel: string, body: string): void => {
+  const abs = join(dir, rel);
+  mkdirSync(join(abs, ".."), { recursive: true });
+  writeFileSync(abs, body);
+};
 
-const skill = (name: string, provenance?: string): void => {
-  const d = join(dir, "skills", name);
-  mkdirSync(d, { recursive: true });
-  writeFileSync(join(d, "SKILL.md"), `---\nname: ${name}\ndescription: x\n---\n`);
-  if (provenance !== undefined) writeFileSync(join(d, "PROVENANCE.md"), provenance);
+/** Add a skill folder under a skills root (default `.claude/skills`). */
+const skill = (name: string, root = ".claude/skills"): void =>
+  write(`${root}/${name}/SKILL.md`, `---\nname: ${name}\ndescription: x\n---\n`);
+
+/** Write the audit registry for a root from a list of entries. */
+const registry = (
+  entries: { name: string; ref?: string; verdict?: string; gaps?: string[] }[],
+  root = ".claude/skills",
+): void => {
+  const body = entries
+    .map(
+      (e) =>
+        `  - name: ${e.name}\n    origin: authored\n    ref: ${e.ref ?? "authored"}\n` +
+        `    verdict: ${e.verdict ?? "authored"}\n    rubric: t\n    gaps: [${(e.gaps ?? []).join(", ")}]`,
+    )
+    .join("\n");
+  write(`${root}/eunomai-skills-audit.md`, `---\ngenerated: 2026-06-24\nskills:\n${body}\n---\n# audit\n`);
 };
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "eunomai-prov-"));
+  dir = mkdtempSync(join(tmpdir(), "eunomai-audit-"));
 });
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-describe("checkProvenance", () => {
-  it("passes when every skill has a valid PROVENANCE.md", () => {
-    skill("a", VALID);
-    skill("b", VALID);
-    const r = checkProvenance(dir);
-    expect(r.missing).toEqual([]);
+describe("checkSkillsAudit", () => {
+  it("passes when the registry covers every skill", () => {
+    skill("a");
+    skill("b");
+    registry([{ name: "a" }, { name: "b" }]);
+    const r = checkSkillsAudit(dir);
+    expect(r.uncovered).toEqual([]);
     expect(r.invalid).toEqual([]);
+    expect(r.gaps).toEqual([]);
     expect(r.checked).toBe(2);
+    expect(r.roots).toEqual([".claude/skills"]);
   });
 
-  it("flags a skill with no PROVENANCE.md", () => {
-    skill("a", VALID);
-    skill("b"); // no provenance
-    const r = checkProvenance(dir);
-    expect(r.missing).toEqual(["b"]);
+  it("flags a skill with no registry entry (uncovered)", () => {
+    skill("a");
+    skill("b");
+    registry([{ name: "a" }]); // b missing
+    const r = checkSkillsAudit(dir);
+    expect(r.uncovered).toEqual([".claude/skills/b"]);
   });
 
-  it("flags a skill whose provenance is missing a required field", () => {
-    skill("a", "---\norigin: authored\ndate: 2026-06-24\n---\n"); // missing ref/verdict/rubric/modifications
-    const r = checkProvenance(dir);
-    expect(r.invalid).toHaveLength(1);
-    expect(r.invalid[0]).toContain("a (");
+  it("flags an invalid registry (missing required field) and treats skills as uncovered", () => {
+    skill("a");
+    write(".claude/skills/eunomai-skills-audit.md", "---\nskills:\n  - name: a\n---\n"); // missing fields
+    const r = checkSkillsAudit(dir);
+    expect(r.invalid.length).toBe(1);
+    expect(r.uncovered).toEqual([".claude/skills/a"]);
   });
 
-  it("flags provenance with no frontmatter at all", () => {
-    skill("a", "just prose, no frontmatter\n");
-    const r = checkProvenance(dir);
-    expect(r.invalid).toHaveLength(1);
+  it("flags a missing registry when skills exist", () => {
+    skill("a");
+    const r = checkSkillsAudit(dir);
+    expect(r.invalid[0]).toContain("missing");
+    expect(r.uncovered).toEqual([".claude/skills/a"]);
   });
 
-  it("ignores directory entries that are not skills (no SKILL.md)", () => {
-    skill("a", VALID);
-    mkdirSync(join(dir, "skills", "not-a-skill"), { recursive: true });
-    writeFileSync(join(dir, "skills", "README.md"), "# skills\n");
-    const r = checkProvenance(dir);
-    expect(r.checked).toBe(1);
-    expect(r.missing).toEqual([]);
+  it("surfaces gaps (unpinned) but keeps them non-fatal (covered)", () => {
+    skill("vendored");
+    registry([{ name: "vendored", ref: "unpinned", verdict: "adopt", gaps: ["unpinned"] }]);
+    const r = checkSkillsAudit(dir);
+    expect(r.uncovered).toEqual([]);
+    expect(r.invalid).toEqual([]);
+    expect(r.gaps).toEqual([".claude/skills/vendored: unpinned"]);
   });
 
-  it("returns empty when there is no skills/ directory", () => {
-    const r = checkProvenance(dir);
-    expect(r).toEqual({ missing: [], invalid: [], checked: 0 });
+  it("checks the top-level skills/ root too (the eunomai plugin)", () => {
+    skill("own", "skills");
+    registry([{ name: "own" }], "skills");
+    const r = checkSkillsAudit(dir);
+    expect(r.roots).toEqual(["skills"]);
+    expect(r.uncovered).toEqual([]);
+  });
+
+  it("returns empty when there are no skills", () => {
+    const r = checkSkillsAudit(dir);
+    expect(r).toEqual({ uncovered: [], invalid: [], gaps: [], checked: 0, roots: [] });
   });
 });

@@ -23,22 +23,31 @@ A hard veto, then weighed judgment (mirroring safe-controls: one hard bar, the r
 
 Reuse is total: skill-creator owns authoring; eunomai owns the gate, the provenance, and the playbook.
 
-## Provenance (no registry)
+## Provenance (one audit registry, not sidecars)
 
-Every skill under `skills/` carries a `PROVENANCE.md` sidecar (YAML frontmatter) — decentralized, so trust
-lives *with* the skill, not in a central allowlist:
+Trust lives in **one** `eunomai-skills-audit.md` at the skills root — `.claude/skills/` in a consumer project,
+`skills/` in the eunomai plugin. Skill folders stay clean (just the skill); the registry is the per-project,
+generated audit (not a central allowlist):
 
 ```yaml
-origin: <url / marketplace id / "authored">
-ref: <version or SHA, or "authored">
-date: <YYYY-MM-DD>
-verdict: adopt | adopt-and-improve | create | authored
-rubric: <one-line justification>
-modifications: <what changed, or "none">
+---
+generated: <YYYY-MM-DD>
+skills:
+  - name: <skill dir name>
+    origin: <url / marketplace id / "authored">
+    ref: <real commit SHA / version | "authored" | "unpinned">
+    verdict: adopt | adopt-and-improve | create | authored
+    rubric: <one line>
+    gaps: []          # e.g. [unpinned] — surfaced, never hidden
+---
+# eunomai skills audit
+<run narrative: what was searched, verdicts, notes>
 ```
 
 ```bash
-node projection/dist/cli.cjs provenance-check   # read-only; exit 1 if any skill lacks a valid record
+node projection/dist/cli.cjs provenance-check   # read-only
 ```
 
-It runs as part of the gate. Org-trusted sources, if any, live in the project's **rules** — not here.
+The check scans `.claude/skills/` **and** `skills/`, **fails** on any skill not covered by the registry (or an
+invalid registry), and **lists trust gaps** (e.g. `unpinned`) to act on. It runs as part of the gate.
+Org-trusted sources, if any, live in the project's **rules** — not here.
