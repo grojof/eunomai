@@ -23,7 +23,7 @@ rules here, not there.
   (`CLAUDE.md`, `.github/copilot-instructions.md`) are **committed artifacts**.
 
 ## Structure
-- `.claude-plugin/plugin.json` + `skills/` (+ `agents/`, `hooks/`) — the Claude Code plugin (the deliverable).
+- `.claude-plugin/plugin.json` + `skills/` + `hooks/` (+ `agents/`) — the Claude Code plugin (the deliverable).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
 - `docs/` — `VISION.md` (charter) + `decisions/` (ADRs, e.g. why we adopted OpenSpec).
@@ -34,3 +34,14 @@ rules here, not there.
   `openspec/changes/<name>/`. eunomai's tailoring is in `openspec/config.yaml`. Keep it current with
   `openspec update`.
 - For the projection tool: `cd projection && npm run typecheck && npm run lint && npm test` before finishing.
+
+## Safe controls
+- The plugin enforces its conventions via `PreToolUse` hooks (`hooks/hooks.json` → `hooks/guard.mjs`; pure
+  logic in `hooks/decide.mjs`, tested with `node --test "hooks/*.test.mjs"`): **commit-trailer guard**
+  (deny AI-attribution trailers), **safety gate** (ask before force-push / `rm -rf` / version bumps /
+  secret access), and **authored-source guard** (ask before editing generated `CLAUDE.md` /
+  `copilot-instructions.md`).
+- **Ask-by-default, fail-open** — only the trailer rule is a hard deny; a hook error never blocks work. It
+  is a floor-raiser, not a security boundary. Claude-only (Copilot has no hook API).
+- Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
+  `docs/safe-controls.md`.

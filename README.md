@@ -43,6 +43,7 @@ eunomai/
 - **SDD/SPDD** runs on [OpenSpec](https://github.com/Fission-AI/OpenSpec) (`/opsx:*`; artifacts in
   `openspec/`); see **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** for why.
 - **[projection/](projection/)** — the Copilot projection tool (`compile` + `compile --check`).
+- **[docs/safe-controls.md](docs/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
 
 ## One principle above all
 
