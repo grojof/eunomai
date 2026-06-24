@@ -37,6 +37,7 @@ eunomai/
   docs/VISION.md               ← the charter
   docs/safe-controls.md        ← the hooks + recommended permissions baseline
   docs/living-docs.md          ← the project-docs standard + docs-check
+  docs/skill-finder.md         ← the skill trust gate + provenance-check
   docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
@@ -48,6 +49,7 @@ eunomai/
 - **[projection/](projection/)** — the Copilot projection tool (`compile` + `compile --check`).
 - **[docs/safe-controls.md](docs/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
 - **[docs/living-docs.md](docs/living-docs.md)** — the project-docs structure standard + `docs-check`.
+- **[docs/skill-finder.md](docs/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
 
 ## One principle above all
 

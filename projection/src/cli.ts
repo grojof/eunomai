@@ -2,6 +2,7 @@
 import { check, compile } from "./compile.js";
 import { ConfigError, loadConfig } from "./config.js";
 import { DocsError, checkDocs } from "./docs.js";
+import { checkProvenance } from "./provenance.js";
 
 const HELP = `eunomai — connector-first governance for cross-tool AI workspaces
 
@@ -9,6 +10,7 @@ Usage:
   eunomai compile [--check]    Project AGENTS.md to the declared targets (via rulesync).
                                --check: read-only; exit 1 if any output has drifted.
   eunomai docs-check           Read-only: verify README<->docs/ links and index coverage.
+  eunomai provenance-check     Read-only: verify every skill under skills/ has a PROVENANCE.md.
   eunomai --help               Show this help.
 
 Config: eunomai.yaml at the repo root, e.g.
@@ -36,6 +38,18 @@ async function run(argv: string[]): Promise<number> {
       return 1;
     }
     console.log(`docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed.`);
+    return 0;
+  }
+
+  if (cmd === "provenance-check") {
+    const { missing, invalid, checked } = checkProvenance();
+    if (missing.length > 0 || invalid.length > 0) {
+      console.error("provenance-check failed:");
+      for (const m of missing) console.error(`  missing PROVENANCE.md: skills/${m}`);
+      for (const i of invalid) console.error(`  invalid provenance: ${i}`);
+      return 1;
+    }
+    console.log(`provenance-check: ${checked} skill(s) have valid provenance.`);
     return 0;
   }
 

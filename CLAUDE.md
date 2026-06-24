@@ -26,8 +26,8 @@ rules here, not there.
 - `.claude-plugin/plugin.json` + `skills/` + `hooks/` (+ `agents/`) — the Claude Code plugin (the deliverable).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
-- `docs/` — project-docs (`VISION.md`, `safe-controls.md`, `living-docs.md`) indexed from the lean root
-  `README.md`; dev-docs in `decisions/` (ADRs) + `development/` (status/handoff).
+- `docs/` — project-docs (`VISION.md`, `safe-controls.md`, `living-docs.md`, `skill-finder.md`) indexed from
+  the lean root `README.md`; dev-docs in `decisions/` (ADRs) + `development/` (status/handoff).
 
 ## Workflow
 - **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial
@@ -54,3 +54,14 @@ rules here, not there.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
 - **`node projection/dist/cli.js docs-check`** — read-only: verifies every README→`docs/` link resolves and
   every in-scope page is indexed (exit 1 on drift). Part of the gate; enforces structure, not prose.
+
+## Skills
+- **Own skills only.** `eunomai-skill-finder` is the trust-gated steward: discover → gate → adopt / improve /
+  create (authoring delegated to Anthropic's **skill-creator**) → fit pass; plus on-demand, scoped **audit**.
+  See `docs/skill-finder.md`.
+- **Gate = security/provenance veto + weighed judgment** (authorship · usage · quality). One hard bar
+  (reject), the rest judgment. Best-effort floor-raiser, **not** a guarantee — safe-controls is the runtime
+  backstop. No registry; org-trusted sources live in the project's rules.
+- Every skill under `skills/` carries a `PROVENANCE.md` sidecar (own skills: `origin: authored`).
+  **`node projection/dist/cli.js provenance-check`** — read-only; exit 1 if any skill lacks a valid record.
+  Part of the gate.
