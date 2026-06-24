@@ -1,0 +1,42 @@
+schema: spec-driven
+
+# ── eunomai layer ───────────────────────────────────────────────────────────
+# OpenSpec is the SDD engine (upgradable via `openspec update`). Everything below
+# is eunomai's thin, tailored layer: it is injected into the AI prompts for each
+# artifact. A custom schema (openspec/schemas/eunomai/) is only added if we ever
+# need a new artifact (e.g. an SPDD "reasons" doc) — YAGNI until then.
+
+context: |
+  eunomai is a focused, Claude-first AI workspace, packaged as a Claude Code plugin, built on existing
+  tools (Claude Code native + rulesync + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD,
+  living docs (dev-docs + project-docs), safe controls, trust-gated skills.
+
+  Stack: TypeScript, ESM, Node >= 20 (the projection tool lives in `projection/`). Files are UTF-8, LF,
+  final newline at EOF.
+
+  Guiding principles (do not break):
+  - Don't reinvent — stand on existing tools; build only the tailored glue.
+  - Claude-first, Copilot best-effort (project AGENTS.md -> Copilot via rulesync; document the gaps).
+  - Low maintenance over reach; trust-gated skills are a criteria gate, never a hand-curated registry.
+  - AGENTS.md is authored, never generated (zero lock-in). Idempotency is sacred.
+
+  Conventions:
+  - Commits: Conventional Commits, imperative mood, one logical change per commit, NO co-author and no
+    AI-attribution trailers. Prepare the commit and ask for approval before committing.
+  - Safety gate: stop and ask before version bumps, migrations, irreversible/outward-facing actions, or
+    touching auth/secrets/permissions.
+
+rules:
+  proposal:
+    - State reuse vs net-new explicitly (which existing tool/primitive we lean on vs what eunomai adds) — connector-first.
+    - Always include a Non-goals / out-of-scope section.
+    - Keep to the "why"; defer "how" to design.
+  specs:
+    - Reference existing patterns/specs before inventing new ones.
+    - Every requirement needs at least one WHEN/THEN scenario (scenarios use exactly 4 hashtags).
+  design:
+    - Record the key decision as reuse-first: which existing tool/primitive we adopt and why.
+    - Include trade-offs and an explicit low-maintenance check.
+  tasks:
+    - Keep tasks small and verifiable; map each back to a requirement.
+    - Where code changes, the final task runs the gate (cd projection && npm run typecheck && lint && test).

@@ -29,15 +29,17 @@ eunomai/
   skills/                      ← the pillars, as Agent Skills (built incrementally)
   agents/  hooks/              ← (added as pillars land)
   projection/                  ← Copilot best-effort: AGENTS.md → tools via rulesync (+ drift check)
+  openspec/                    ← SDD engine (OpenSpec): changes · specs · archive · config.yaml (eunomai layer)
   AGENTS.md                    ← the workspace's own authored source of truth
   docs/VISION.md               ← the charter
-  docs/specs/                  ← spec-first SDD artifacts
+  docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
 ## Start here
 
 - **[docs/VISION.md](docs/VISION.md)** — the charter: what eunomai is, principles, pillars, architecture.
-- **[docs/specs/README.md](docs/specs/README.md)** — how we work spec-first.
+- **SDD/SPDD** runs on [OpenSpec](https://github.com/Fission-AI/OpenSpec) (`/opsx:*`; artifacts in
+  `openspec/`); see **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** for why.
 - **[projection/](projection/)** — the Copilot projection tool (`compile` + `compile --check`).
 
 ## One principle above all

@@ -25,8 +25,12 @@ rules here, not there.
 ## Structure
 - `.claude-plugin/plugin.json` + `skills/` (+ `agents/`, `hooks/`) — the Claude Code plugin (the deliverable).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
-- `docs/` — `VISION.md` (charter) + `specs/` (spec-first SDD artifacts).
+- `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
+- `docs/` — `VISION.md` (charter) + `decisions/` (ADRs, e.g. why we adopted OpenSpec).
 
 ## Workflow
-- Spec-first for non-trivial change: `docs/specs/changes/<n>/` (proposal → spec → design → tasks → verify → archive).
+- **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial
+  change use `/opsx:explore → /opsx:propose <name> → /opsx:apply → /opsx:archive`; artifacts live in
+  `openspec/changes/<name>/`. eunomai's tailoring is in `openspec/config.yaml`. Keep it current with
+  `openspec update`.
 - For the projection tool: `cd projection && npm run typecheck && npm run lint && npm test` before finishing.
