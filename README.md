@@ -29,11 +29,13 @@ works as a **one-shot connector / bootstrap** — it seeds a project with these 
 eunomai/
   .claude-plugin/plugin.json   ← the Claude Code plugin manifest
   skills/                      ← the pillars, as Agent Skills (built incrementally)
-  agents/  hooks/              ← (added as pillars land)
+  hooks/                       ← safe-controls: PreToolUse guard (deny/ask) + tests
+  agents/                      ← (added as pillars land)
   projection/                  ← Copilot best-effort: AGENTS.md → tools via rulesync (+ drift check)
   openspec/                    ← SDD engine (OpenSpec): changes · specs · archive · config.yaml (eunomai layer)
   AGENTS.md                    ← the workspace's own authored source of truth
   docs/VISION.md               ← the charter
+  docs/safe-controls.md        ← the hooks + recommended permissions baseline
   docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 

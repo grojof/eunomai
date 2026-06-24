@@ -68,5 +68,6 @@ engine — seed-and-step-aside, never re-govern N projects over time.
 
 ## Status
 
-Clean restart **2026-06-24**. The Copilot projection tool (`projection/`) is implemented and verified. SDD
-(pillar 1) is adopted on OpenSpec; the rest are built incrementally as plugin skills via the SDD flow.
+Clean restart **2026-06-24**. The Copilot projection tool (`projection/`) is implemented and verified.
+**SDD** (pillar 1, on OpenSpec) and **safe controls** (pillar 3, `PreToolUse` hooks — verified live) are
+done; living docs and skills are built incrementally as plugin skills via the SDD flow.
