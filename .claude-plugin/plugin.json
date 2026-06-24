@@ -1,9 +1,8 @@
 {
   "name": "eunomai",
   "description": "A Claude-first AI workspace: SDD/SPDD, living docs, safe controls, and trust-gated skills — packaged as a Claude Code plugin.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "Guillermo Rojo"
-  },
-  "hooks": "./hooks/hooks.json"
+  }
 }
