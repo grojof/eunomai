@@ -36,6 +36,7 @@ eunomai/
   AGENTS.md                    ← the workspace's own authored source of truth
   docs/VISION.md               ← the charter
   docs/safe-controls.md        ← the hooks + recommended permissions baseline
+  docs/living-docs.md          ← the project-docs standard + docs-check
   docs/decisions/              ← ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
@@ -46,6 +47,7 @@ eunomai/
   `openspec/`); see **[docs/decisions/0001-adopt-openspec/](docs/decisions/0001-adopt-openspec/)** for why.
 - **[projection/](projection/)** — the Copilot projection tool (`compile` + `compile --check`).
 - **[docs/safe-controls.md](docs/safe-controls.md)** — the `PreToolUse` hooks + the recommended permissions baseline.
+- **[docs/living-docs.md](docs/living-docs.md)** — the project-docs structure standard + `docs-check`.
 
 ## One principle above all
 

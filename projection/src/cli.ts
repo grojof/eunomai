@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { check, compile } from "./compile.js";
 import { ConfigError, loadConfig } from "./config.js";
+import { DocsError, checkDocs } from "./docs.js";
 
 const HELP = `eunomai — connector-first governance for cross-tool AI workspaces
 
 Usage:
   eunomai compile [--check]    Project AGENTS.md to the declared targets (via rulesync).
                                --check: read-only; exit 1 if any output has drifted.
+  eunomai docs-check           Read-only: verify README<->docs/ links and index coverage.
   eunomai --help               Show this help.
 
 Config: eunomai.yaml at the repo root, e.g.
@@ -24,6 +26,19 @@ async function run(argv: string[]): Promise<number> {
   }
 
   const [cmd, ...rest] = args;
+
+  if (cmd === "docs-check") {
+    const { broken, orphaned, checkedLinks, scannedPages } = checkDocs();
+    if (broken.length > 0 || orphaned.length > 0) {
+      console.error("docs-check failed:");
+      for (const b of broken) console.error(`  broken README link -> ${b}`);
+      for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
+      return 1;
+    }
+    console.log(`docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed.`);
+    return 0;
+  }
+
   if (cmd !== "compile") {
     console.error(`Unknown command: ${cmd}\n\n${HELP}`);
     return 1;
@@ -52,7 +67,7 @@ async function run(argv: string[]): Promise<number> {
 run(process.argv)
   .then((code) => process.exit(code))
   .catch((err: unknown) => {
-    if (err instanceof ConfigError) {
+    if (err instanceof ConfigError || err instanceof DocsError) {
       console.error(`Error: ${err.message}`);
       process.exit(1);
     }

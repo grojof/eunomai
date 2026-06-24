@@ -26,7 +26,8 @@ rules here, not there.
 - `.claude-plugin/plugin.json` + `skills/` + `hooks/` (+ `agents/`) — the Claude Code plugin (the deliverable).
 - `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
-- `docs/` — `VISION.md` (charter) + `decisions/` (ADRs, e.g. why we adopted OpenSpec).
+- `docs/` — project-docs (`VISION.md`, `safe-controls.md`, `living-docs.md`) indexed from the lean root
+  `README.md`; dev-docs in `decisions/` (ADRs) + `development/` (status/handoff).
 
 ## Workflow
 - **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial
@@ -45,3 +46,11 @@ rules here, not there.
   is a floor-raiser, not a security boundary. Claude-only (Copilot has no hook API).
 - Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
   `docs/safe-controls.md`.
+
+## Living docs
+- **Project-docs only** (root `README.md` + `docs/` topic pages); dev-docs (`decisions/`, `development/`) are
+  out of scope and follow the SDD/handoff flow. The README is a lean index + summary + links; depth lives in
+  `docs/`, each page linked from the README. See `docs/living-docs.md`.
+- Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
+- **`node projection/dist/cli.js docs-check`** — read-only: verifies every README→`docs/` link resolves and
+  every in-scope page is indexed (exit 1 on drift). Part of the gate; enforces structure, not prose.
