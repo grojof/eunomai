@@ -1,7 +1,10 @@
 # base-skills Specification
 
 ## Purpose
-TBD - created by archiving change base-skills. Update Purpose after archive.
+Define the tiny, standards-anchored set of skills eunomai ships in its base — today `eunomai-secure-coding`
+(OWASP Top 10 + CWE) and `eunomai-dependency-upgrade` (OWASP A03:2025 + SLSA) — and the admission filter that
+keeps it small: a skill is base-eligible only if universal, non-prescriptive, standards-anchored, and
+low-maintenance. These base skills are authored in-repo and audited like any other.
 ## Requirements
 ### Requirement: Base-skill admission filter
 

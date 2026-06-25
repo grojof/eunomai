@@ -1,7 +1,10 @@
 # living-docs Specification
 
 ## Purpose
-TBD - created by archiving change living-docs. Update Purpose after archive.
+Define eunomai's living-docs pillar for project-facing documentation: a Diátaxis-organized, lean-index
+structure (README → `docs/`), an on-demand refresh skill, a read-only README→docs integrity check, Mermaid/C4
+diagram enrichment, workspace-aware per-repo auditing, and recovery of thin or missing docs via the structured
+interview. Dev-facing ADRs are out of scope, and eunomai dogfoods the standard on its own docs.
 ## Requirements
 ### Requirement: Project-docs structure standard
 

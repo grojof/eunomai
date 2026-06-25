@@ -1,7 +1,10 @@
 # skill-finder Specification
 
 ## Purpose
-TBD - created by archiving change skill-finder. Update Purpose after archive.
+Define eunomai's trust-gated skills pillar: a trust gate (a security/provenance veto plus weighed judgment that
+yields a verdict), acquisition via Anthropic's skill-creator with a fit pass, on-demand auditing of existing
+skills, a read-only `provenance-check`, and a single consolidated skills-audit registry per skills root. A
+best-effort floor-raiser, not a guarantee — eunomai dogfoods the provenance record on its own skills.
 ## Requirements
 ### Requirement: Trust gate — security/provenance veto
 

@@ -1,7 +1,9 @@
 # distribution Specification
 
 ## Purpose
-TBD - created by archiving change usage-and-packaging. Update Purpose after archive.
+Govern how eunomai is packaged and consumed: installable as a Claude Code plugin via the marketplace, with a
+coherent end-to-end usage guide, a README that leads with getting started, preserved README→docs integrity,
+and a self-contained CLI shipped inside the plugin (no external build step at install time).
 ## Requirements
 ### Requirement: Installable as a Claude Code plugin
 

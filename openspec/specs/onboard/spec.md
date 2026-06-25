@@ -1,7 +1,11 @@
 # onboard Specification
 
 ## Purpose
-TBD - created by archiving change onboard. Update Purpose after archive.
+Define eunomai's connector/bootstrap axis: the one-shot `eunomai-onboard` orchestrator that applies eunomai to
+a new or existing project — survey the workspace and confirm scope, analyze and interview per confirmed project
+root, establish living-docs, seed conventions, audit skills via skill-finder, drive the checks green, then hand
+off. It anchors per project root (never the workspace root by default), gathers input through a structured
+interview, and orchestrates the pillars without reimplementing them (establish, don't maintain).
 ## Requirements
 ### Requirement: Analyze project and gather author input
 

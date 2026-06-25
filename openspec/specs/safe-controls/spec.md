@@ -1,7 +1,10 @@
 # safe-controls Specification
 
 ## Purpose
-TBD - created by archiving change safe-controls. Update Purpose after archive.
+Define eunomai's safe-controls pillar: PreToolUse hooks that raise the floor without getting in the way — a
+hard commit-trailer deny, an ask-by-default safety gate for irreversible or sensitive operations, and an
+authored-source guard — backed by a recommended native-permissions baseline. Hooks are cross-platform and
+zero-dependency, and fail open by default (a hook error never blocks work).
 ## Requirements
 ### Requirement: Commit-trailer guard
 
