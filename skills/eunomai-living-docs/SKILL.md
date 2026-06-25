@@ -46,6 +46,14 @@ read-only survey to the **`workspace-survey`** subagent to identify the project 
 against a **chosen project root** and report doc state **per repo** — never assume the workspace root is the
 project. In a plain single repo (cwd = project root = workspace) this adds no ceremony: proceed directly.
 
+## Thin or missing docs → the structured interview
+
+When a project root's docs are **thin or missing**, recover its knowledge with a **structured interview**, not
+a form dump: ask **one question at a time**, **recommend a default** per question, and **explore the codebase
+first** when a question is answerable from code — don't ask what you can detect. Keep it human-in-control;
+write the recovered knowledge into the docs standard (and, for non-trivial choices, an ADR). This is the same
+technique `eunomai-onboard` uses to create docs from scratch.
+
 ## Flow
 
 1. **Survey.** (Workspace first if relevant — see above.) For the chosen project root, read its `README.md`

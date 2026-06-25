@@ -58,7 +58,9 @@ rules here, not there.
   (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/reference/living-docs.md`.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites). In a
   workspace with nested/multiple repos it surveys first, operates on a chosen **project root** (checks run from
-  there), and reports per repo — never assuming the workspace root is the project.
+  there), and reports per repo — never assuming the workspace root is the project. Thin/missing docs are
+  recovered via the same **structured interview** onboard uses (one question at a time · recommend a default ·
+  explore-first).
 - **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
   every in-scope page is indexed, and the mandatory community-health files are present (exit 1 on drift). Part
   of the gate; enforces structure, not prose.
@@ -87,7 +89,9 @@ rules here, not there.
 ## Connector / bootstrap
 - `eunomai-onboard` is the **cold-start** orchestrator: **survey the workspace** (the read-only
   `workspace-survey` subagent maps repos root + nested, the user confirms scope — *detect, don't assume*) →
-  per confirmed **project root**: establish docs (living-docs standard) → seed conventions (lean `AGENTS.md`
+  per confirmed **project root**: gather input via a **structured interview** (one question at a time ·
+  recommend a default · explore-first; from-scratch docs crystallize into ADRs + a glossary) → establish docs
+  (living-docs standard) → seed conventions (lean `AGENTS.md`
   declaring the project's boundary + paths, `openspec/config.yaml`, permissions, hooks) → audit skills via
   skill-finder → drive `docs-check` + `provenance-check` green (run from the project root) → step aside. The
   layer anchors **per project root, never the workspace root by default**; multirepo onboards each project

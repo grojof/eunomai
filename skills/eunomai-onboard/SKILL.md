@@ -28,14 +28,16 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    subagent: it discovers all git repos (root + nested) and remotes, detects code manifests and existing
    `CLAUDE.md`/`AGENTS.md`, and returns a map with a proposed *environment vs project* classification. Present
    the map; **infer-then-confirm** — propose a classification, ask a single confirmation, and **ask** about
-   genuinely ambiguous repos (e.g. code but no remote). The user chooses which repos are **in scope** and
-   where the eunomai layer anchors. Change nothing in this step.
+   genuinely ambiguous repos (e.g. code but no remote) via the **structured interview** (below). The user
+   chooses which repos are **in scope** and where the eunomai layer anchors. Change nothing in this step.
 1. **Analyze + gather input — per confirmed project root.** For each chosen project root, survey its stack,
-   existing docs, skills, and conventions, and ask the author for that project's purpose, domain, and
-   audience. Change nothing yet.
+   existing docs, skills, and conventions, and gather that project's purpose, domain, and audience via the
+   **structured interview** (below). Change nothing yet.
 2. **Establish docs** (at the project root) → the living-docs standard:
    - Existing docs → restructure into a lean `README.md` index + `docs/` topic pages.
-   - No docs → create a lean README + `docs/` pages from the analysis and the author's input.
+   - No docs → create a lean README + `docs/` pages from the analysis and the structured interview, capturing
+     non-trivial choices as **ADRs** (`docs/decisions/`) and the domain vocabulary as a **glossary**
+     explanation page (indexed in the README).
    - (After this, the `eunomai-living-docs` skill maintains them.)
 3. **Seed conventions** (at the project root) — derive each from eunomai's own live conventions and adapt to
    the target (do not drop verbatim):
@@ -64,10 +66,31 @@ marking the root as environment, with **no per-project conventions** (Claude Cod
 `CLAUDE.md` when working in a child, so keep it tiny). No workspace manifest file is introduced; scope rides on
 hierarchical `CLAUDE.md`/`AGENTS.md`.
 
+## The structured interview (gathering input)
+
+When you need input from the author — a project's purpose/domain/audience, an ambiguous repo classification, or
+knowledge to create docs from scratch — run a **structured interview**, not a form dump:
+
+- **One question at a time.** Asking several at once is bewildering; ask, wait, then ask the next.
+- **Recommend a default.** Offer your best answer to each question so the author confirms rather than authors
+  from scratch.
+- **Explore first.** If a question is answerable from the codebase (stack, structure, conventions), explore and
+  answer it yourself — don't ask what you can detect (*detect, don't assume*).
+
+Keep it human-in-control and **skippable**; when a single confirmation suffices, don't interrogate
+field-by-field.
+
+**Docs as a byproduct.** When creating docs from scratch, let the interview's answers crystallize into the
+living-docs standard: non-trivial choices become **ADRs** under `docs/decisions/`, and the project's domain
+vocabulary becomes a **glossary** explanation page indexed in the README. (Harvested from the
+`mattpocock/skills` *grilling* pattern via skill-finder — the idea, authored into our own skill.)
+
 ## Boundaries
 
 - **Detect, don't assume.** Survey the workspace and have the user confirm scope before seeding; never decide
   silently which repo is "the project" or where the layer anchors.
+- **Interview, don't interrogate.** Gather input one question at a time with a recommended default, exploring
+  the codebase first; human-in-control and skippable.
 - **Anchor per project root.** Seed at each confirmed project root, never the workspace root by default; the
   environment repo gets at most a minimal delegating `CLAUDE.md`, with consent.
 - **Boundaries are authored, not invented.** Scope is expressed via hierarchical `CLAUDE.md`/`AGENTS.md` — no

@@ -68,7 +68,9 @@ Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check)
   keeps you in control; it never silently rewrites docs. In a **workspace** with nested or multiple repos it
   first runs a read-only **workspace survey**, operates on a chosen **project root** (running `docs-check`
   from that root), and reports doc state per repo — it never assumes the workspace root is the project. A
-  plain single repo adds no extra ceremony.
+  plain single repo adds no extra ceremony. When a project's docs are **thin or missing**, it recovers the
+  knowledge with a **structured interview** (one question at a time, recommend a default, explore the codebase
+  first — the same technique `eunomai-onboard` uses), human-in-control.
 - **`docs-check`** — a read-only integrity check (no writes, non-zero exit on divergence):
 
   ```bash

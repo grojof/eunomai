@@ -17,9 +17,10 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
   workspace (may be an env repo + nested project repos, or multirepo)
     0. survey → workspace-survey subagent maps repos (root + nested), remotes, manifests;
                proposes env vs project; USER confirms scope + where the layer anchors
-    1. analyze (stack, docs, skills) + author input  — per confirmed project root
+    1. analyze (stack, docs, skills) + gather input via a structured interview — per confirmed project root
     2. docs   → living-docs standard: content tree (Diátaxis) + project surface
-               (the mandatory community-health files), restructured or created from scratch
+               (the mandatory community-health files), restructured or created from scratch;
+               from-scratch interviews crystallize into ADRs + a glossary explanation page
     3. seed   → lean AGENTS.md (declares the project's boundary + paths) · openspec/config.yaml ·
                permissions baseline · hooks wiring
     4. skills → invoke eunomai-skill-finder (audit)
@@ -28,6 +29,15 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
        (multirepo: steps 1–6 run independently per project; env root gets at most a
         minimal delegating CLAUDE.md, with consent)
 ```
+
+## The structured interview
+
+onboard gathers author input — and recovers knowledge when creating docs from scratch — through a **structured
+interview**, not a form dump: **one question at a time**, **recommend a default** per question, and **explore
+the codebase first** when a question is answerable from code (don't ask what you can detect). It stays
+human-in-control and skippable. When creating docs from scratch, the answers crystallize into the living-docs
+standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the domain vocabulary becomes a
+**glossary** explanation page. (`eunomai-living-docs` uses the same technique to recover thin or missing docs.)
 
 ## Principles it honours
 
