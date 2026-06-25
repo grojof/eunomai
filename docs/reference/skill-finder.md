@@ -45,7 +45,7 @@ skills:
 ```
 
 ```bash
-node projection/dist/cli.cjs provenance-check   # read-only
+node tools/dist/cli.cjs provenance-check   # read-only
 ```
 
 The check scans `.claude/skills/` **and** `skills/`, **fails** on any skill not covered by the registry (or an

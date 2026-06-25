@@ -36,13 +36,13 @@ After onboarding, `docs-check` SHALL pass on the project.
 
 ### Requirement: Seed eunomai conventions
 
-The onboard skill SHALL seed the project's conventions by **adapting** templates — a lean `AGENTS.md`, an
+The onboard skill SHALL seed the project's conventions by **adapting** templates — a lean `CLAUDE.md`, an
 `openspec/config.yaml` layer, the permissions baseline, and the hooks wiring (`.claude/settings.json`) — to
 the project, not dropping them verbatim.
 
 #### Scenario: Seed authoring + SDD config
 - **WHEN** onboard seeds scaffolding
-- **THEN** it writes a lean `AGENTS.md` and an `openspec/config.yaml` adapted to the project
+- **THEN** it writes a lean `CLAUDE.md` and an `openspec/config.yaml` adapted to the project
 
 #### Scenario: Seed safe controls
 - **WHEN** onboard seeds safe-controls
@@ -116,30 +116,30 @@ silently, and the survey SHALL change nothing.
 
 ### Requirement: Anchor the eunomai layer at each project root
 
-The onboard skill SHALL seed the eunomai layer (a lean `AGENTS.md`, `openspec/`, `docs/`, the permissions
+The onboard skill SHALL seed the eunomai layer (a lean `CLAUDE.md`, `openspec/`, `docs/`, the permissions
 baseline, and the hooks wiring) at each confirmed **project root**, and SHALL NOT seed it at the workspace
 root by default. A repository classified as environment SHALL receive at most a minimal delegating
 `CLAUDE.md`, and only with the user's consent.
 
 #### Scenario: Seed at the project subfolder
 - **WHEN** the user confirms a nested subfolder as the project root
-- **THEN** onboard anchors `openspec/`, `docs/`, and `AGENTS.md` there, not at the workspace root
+- **THEN** onboard anchors `openspec/`, `docs/`, and `CLAUDE.md` there, not at the workspace root
 
 #### Scenario: Environment root is not seeded as a project
 - **WHEN** the workspace root is classified as environment
 - **THEN** onboard does not seed the eunomai layer there, offering at most a minimal delegating `CLAUDE.md` with consent
 
-### Requirement: Declare boundaries via hierarchical CLAUDE.md/AGENTS.md
+### Requirement: Declare boundaries via hierarchical CLAUDE.md
 
-Each onboarded project's `AGENTS.md` SHALL declare its own boundary and key paths (the `openspec/` and `docs/`
+Each onboarded project's `CLAUDE.md` SHALL declare its own boundary and key paths (the `openspec/` and `docs/`
 locations and what is tracked) so that config and agents operate within that project. Any workspace-root
 `CLAUDE.md` SHALL only delegate — pointing at the project directories and marking the root as environment —
 and SHALL carry no per-project conventions. No new manifest file SHALL be introduced; scope SHALL be expressed
-through Claude Code's native hierarchical `CLAUDE.md`/`AGENTS.md` discovery.
+through Claude Code's native hierarchical `CLAUDE.md` discovery.
 
 #### Scenario: Project declares its own boundary
 - **WHEN** onboard seeds a project root
-- **THEN** that project's `AGENTS.md` states its boundary and the `openspec/`/`docs/` paths it owns
+- **THEN** that project's `CLAUDE.md` states its boundary and the `openspec/`/`docs/` paths it owns
 
 #### Scenario: Workspace root only delegates
 - **WHEN** onboard writes a workspace-root `CLAUDE.md`

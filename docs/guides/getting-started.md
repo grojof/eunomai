@@ -34,10 +34,10 @@ This makes available, in the target project:
 - the **skills** — `eunomai-onboard`, `eunomai-living-docs`, `eunomai-skill-finder` (namespaced by the plugin);
 - the **safe-controls hooks** — `PreToolUse` guardrails (they resolve via `${CLAUDE_PLUGIN_ROOT}`).
 
-> **Everything ships with the plugin.** The skills, the safe-controls hooks, **and** the `projection/` CLI
-> (`compile`, `docs-check`, `provenance-check`) all install with eunomai — the CLI as a single self-contained
-> bundle (`projection/dist/cli.cjs`), so there is no build step. Run it via
-> `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" <command>`.
+> **Everything ships with the plugin.** The skills, the safe-controls hooks, **and** the read-only checks CLI
+> (`docs-check`, `provenance-check`) all install with eunomai — the CLI as a single self-contained bundle
+> (`tools/dist/cli.cjs`), so there is no build step. Run it via
+> `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" <command>`.
 
 ## Apply eunomai to a project (new or existing)
 
@@ -53,7 +53,7 @@ It will, with you in control:
 1. **Analyze** the stack, existing docs, and skills, and ask about the project's purpose/domain/audience.
 2. **Docs** → establish the living-docs structure: a lean `README.md` index + `docs/` topic pages (or create
    them from scratch when none exist).
-3. **Seed** conventions adapted to the project: a lean `AGENTS.md`, an `openspec/config.yaml` layer, the
+3. **Seed** conventions adapted to the project: a lean `CLAUDE.md`, an `openspec/config.yaml` layer, the
    permissions baseline, and the hooks wiring.
 4. **Skills** → audit any existing skills via `eunomai-skill-finder` and record provenance.
 5. **Hand off** to the steady-state pillars. eunomai is dispensable from here — everything it seeded lives in
@@ -69,11 +69,10 @@ It will, with you in control:
   [living-docs.md](../reference/living-docs.md).
 - **Skills:** use `eunomai-skill-finder` to adopt/create/audit skills behind the trust gate. See
   [skill-finder.md](../reference/skill-finder.md).
-- **Checks:** `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` and `… provenance-check` are
+- **Checks:** `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" docs-check` and `… provenance-check` are
   read-only and belong in your gate.
 
 ## Authoring note
 
-`AGENTS.md` is the authored source of truth; `CLAUDE.md` and `.github/copilot-instructions.md` are
-**generated** from it (`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" compile`). Edit `AGENTS.md`,
-never the generated files.
+`CLAUDE.md` is the single authored source of truth. Claude-only (see ADR-0004): there are no generated
+instruction files and no cross-tool projection — edit `CLAUDE.md` directly.

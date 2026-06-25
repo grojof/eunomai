@@ -29,7 +29,7 @@ state*:
 | Kind of knowledge | Where it lives in eunomai | Activation state |
 |-------------------|---------------------------|------------------|
 | Explanatory / reference (project) | [living-docs](../reference/living-docs.md) (Diátaxis) | 🟢 **passive** — a human reads it |
-| Normative / conventions | `AGENTS.md`, `openspec/config.yaml`, permissions | 🟡 **semi-active** — injected as agent context |
+| Normative / conventions | `CLAUDE.md`, `openspec/config.yaml`, permissions | 🟡 **semi-active** — injected as agent context |
 | Requirements / change decisions | [OpenSpec specs](../reference/sdd.md) + ADRs (`decisions/`) | 🟡 **semi-active** — traceable specs |
 | Procedural / know-how | [skills](../reference/skill-finder.md) (+ [base-skills](../reference/base-skills.md)) | 🔴 **active** — an agent executes it |
 | Operational / policy | [safe-controls](../reference/safe-controls.md) hooks | 🔴 **enforced** — at runtime |
@@ -48,7 +48,7 @@ Some of KDD-the-methodology's ideas already appear in eunomai, organically and l
   OpenSpec change as a unit of change-knowledge.
 - **Industry → enterprise → project hierarchy** ↔ the gradient from **base skills** (universal,
   standards-anchored) → **skill-finder + project rules** (project-specific).
-- **Single source of truth** ↔ the authored `AGENTS.md` projected to generated tool files.
+- **Single source of truth** ↔ the single authored `CLAUDE.md` (Claude-only; no generated copies).
 
 ## What eunomai deliberately does *not* adopt
 

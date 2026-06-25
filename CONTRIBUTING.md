@@ -5,8 +5,8 @@ lives at **[docs/guides/contributing.md](docs/guides/contributing.md)** — read
 
 ## TL;DR
 
-- **`AGENTS.md` is the authored source of truth.** `CLAUDE.md` and `.github/copilot-instructions.md` are
-  **generated** — edit `AGENTS.md`, then regenerate with `node projection/dist/cli.cjs compile`.
+- **`CLAUDE.md` is the single authored source of truth.** There are no generated instruction files and no
+  cross-tool projection (Claude-only — see ADR-0004).
 - **Conventional Commits**, imperative mood, one logical change per commit. **No AI-attribution trailers**
   (a hook hard-denies them).
 - **Non-trivial change is spec-first** via OpenSpec: `/opsx:explore → /opsx:propose <name> → /opsx:apply →
@@ -17,10 +17,9 @@ lives at **[docs/guides/contributing.md](docs/guides/contributing.md)** — read
 Run the package dev loop and the read-only gate; all green is the definition of done:
 
 ```bash
-cd projection && npm run typecheck && npm run lint && npm test && npm run build
-node projection/dist/cli.cjs docs-check
-node projection/dist/cli.cjs provenance-check
-node projection/dist/cli.cjs compile --check
+cd tools && npm run typecheck && npm run lint && npm test && npm run build
+node tools/dist/cli.cjs docs-check
+node tools/dist/cli.cjs provenance-check
 ```
 
 ## Reporting issues

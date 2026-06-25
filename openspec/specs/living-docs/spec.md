@@ -127,15 +127,15 @@ already discoverable in the codebase.
 
 During a docs refresh, the `eunomai-living-docs` skill SHALL identify content whose nature places it at a
 **higher activation state** than passive prose, and SHALL **surface it as a suggestion** naming the owning
-pillar — a recurring convention → `AGENTS.md`; an enforceable policy → a hook (safe-controls); a repeatable
+pillar — a recurring convention → `CLAUDE.md`; an enforceable policy → a hook (safe-controls); a repeatable
 procedure → a skill (via `eunomai-skill-finder`); a trackable requirement → an OpenSpec spec. It SHALL
 **delegate** the actual move to that pillar and SHALL NOT perform the move itself (it does not write
-`AGENTS.md`, author hooks or skills, or create specs), SHALL keep the human in control, and SHALL add no new
+`CLAUDE.md`, author hooks or skills, or create specs), SHALL keep the human in control, and SHALL add no new
 check.
 
-#### Scenario: A recurring convention is routed to AGENTS.md
+#### Scenario: A recurring convention is routed to CLAUDE.md
 - **WHEN** a docs refresh finds a recurring "always do X / never do Y" convention living as README prose
-- **THEN** living-docs suggests moving it to `AGENTS.md` and does not edit `AGENTS.md` itself
+- **THEN** living-docs suggests moving it to `CLAUDE.md` and does not edit `CLAUDE.md` itself
 
 #### Scenario: An enforceable policy is routed to a hook
 - **WHEN** the content is a rule that a runtime could enforce (e.g. "block force-push to main")

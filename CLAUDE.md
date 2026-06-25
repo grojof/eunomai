@@ -1,31 +1,31 @@
-# eunomai — AI Agent Guide (AGENTS.md)
+# eunomai — AI Agent Guide (CLAUDE.md)
 
-A focused, **Claude-first AI workspace**, packaged as a Claude Code plugin, built on existing tools (Claude
-Code native + rulesync) — not reinventing them. Four pillars: SDD/SPDD, living docs, safe controls, and
+A focused, **Claude-only AI workspace**, packaged as a Claude Code plugin, built on existing tools (Claude
+Code native + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD, living docs, safe controls, and
 trust-gated skills. See `docs/explanation/vision.md` for the charter.
 
-This file is the **single source of truth** for AI agents working *on* eunomai. The tool-specific files
-(`CLAUDE.md`, `.github/copilot-instructions.md`) are **generated** from it by the `projection/` tool — edit
-rules here, not there.
+This file is the **single authored source of truth** for AI agents working *on* eunomai — edit rules here.
+Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-tool projection.
 
 ## Conventions
 - Files are UTF-8, newlines are LF, with a final newline at EOF.
 - Conventional Commits in the imperative mood. One logical change per commit. No AI-attribution trailers.
-- TypeScript, ESM, Node ≥ 20 (in `projection/`). Match the surrounding code; small functions, early returns.
+- TypeScript, ESM, Node ≥ 20 (in `tools/`). Match the surrounding code; small functions, early returns.
 - Validate inputs at boundaries; handle errors explicitly. Never weaken validation to "make it work".
 
 ## Principles (do not break)
-- **Don't reinvent** — stand on Claude Code native config + rulesync; build only the tailored glue.
-- **Claude-first, Copilot best-effort** — where Copilot adds gaps, go Claude-only and document it.
+- **Don't reinvent** — stand on Claude Code native config + OpenSpec; build only the tailored glue.
+- **Claude-only** — Claude Code is the only host; **OpenSpec** is the sole external dependency (the SDD engine
+  and the historical record of decisions and development). No cross-tool projection (see ADR-0004).
 - **Low maintenance over reach.** Trust-gated skills are a *criteria* gate, never a hand-curated registry.
-- **`AGENTS.md` is authored, never generated** (zero lock-in). Projection is delegated to rulesync.
-- **Idempotency is sacred** — a second projection with unchanged inputs changes 0 files. Generated files
-  (`CLAUDE.md`, `.github/copilot-instructions.md`) are **committed artifacts**.
+- **`CLAUDE.md` is the single authored instruction file** (zero lock-in) — no generated copies, no projection.
+- **Open substrate** — knowledge is plain Markdown + frontmatter (see ADR-0003); Claude-only is the host, not
+  lock-in.
 
 ## Structure
 - `.claude-plugin/` (`plugin.json` + `marketplace.json`) + `skills/` + `hooks/` (+ `agents/`) — the Claude
   Code plugin (the deliverable; installable via the marketplace).
-- `projection/` — the Copilot best-effort tool (`compile` + `compile --check`), an npm/TS package.
+- `tools/` — the read-only checks CLI (`docs-check` + `provenance-check`), a self-contained npm/TS bundle.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
 - `docs/` — project-docs, **Diátaxis-organized**: `guides/` (how-to), `reference/` (per-pillar facts),
   `explanation/` (the why), `decisions/` (ADRs). All in-scope pages are indexed from the lean root
@@ -37,16 +37,15 @@ rules here, not there.
   change use `/opsx:explore → /opsx:propose <name> → /opsx:apply → /opsx:archive`; artifacts live in
   `openspec/changes/<name>/`. eunomai's tailoring is in `openspec/config.yaml`. Keep it current with
   `openspec update`.
-- For the projection tool: `cd projection && npm run typecheck && npm run lint && npm test` before finishing.
+- For the tools CLI: `cd tools && npm run typecheck && npm run lint && npm test && npm run build` before finishing.
 
 ## Safe controls
 - The plugin enforces its conventions via `PreToolUse` hooks (`hooks/hooks.json` → `hooks/guard.mjs`; pure
-  logic in `hooks/decide.mjs`, tested with `node --test "hooks/*.test.mjs"`): **commit-trailer guard**
-  (deny AI-attribution trailers), **safety gate** (ask before force-push / `rm -rf` / version bumps /
-  secret access), and **authored-source guard** (ask before editing generated `CLAUDE.md` /
-  `copilot-instructions.md`).
+  logic in `hooks/decide.mjs`, tested with `node --test "hooks/*.test.mjs"`): a **commit-trailer guard**
+  (deny AI-attribution trailers) and a **safety gate** (ask before force-push / `rm -rf` / version bumps /
+  secret access).
 - **Ask-by-default, fail-open** — only the trailer rule is a hard deny; a hook error never blocks work. It
-  is a floor-raiser, not a security boundary. Claude-only (Copilot has no hook API).
+  is a floor-raiser, not a security boundary. Claude-only by nature (no cross-tool hook API).
 - Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
   `docs/reference/safe-controls.md`.
 
@@ -61,7 +60,7 @@ rules here, not there.
   there), and reports per repo — never assuming the workspace root is the project. Thin/missing docs are
   recovered via the same **structured interview** onboard uses (one question at a time · recommend a default ·
   explore-first).
-- **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
+- **`node tools/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
   every in-scope page is indexed, and the mandatory community-health files are present (exit 1 on drift). Part
   of the gate; enforces structure, not prose.
 
@@ -75,7 +74,7 @@ rules here, not there.
 - Provenance is **one** `eunomai-skills-audit.md` at the skills root (`.claude/skills/` in a project,
   `skills/` here) — not per-skill sidecars; skill folders stay clean. Record the real SHA when vendoring;
   unpinned → `gaps: [unpinned]`, never "veto OK".
-  **`node projection/dist/cli.cjs provenance-check`** — read-only; scans `.claude/skills/` + `skills/`, fails
+  **`node tools/dist/cli.cjs provenance-check`** — read-only; scans `.claude/skills/` + `skills/`, fails
   on any skill not covered by the registry, lists trust gaps. Part of the gate.
 
 ## Base skills
@@ -91,11 +90,11 @@ rules here, not there.
   `workspace-survey` subagent maps repos root + nested, the user confirms scope — *detect, don't assume*) →
   per confirmed **project root**: gather input via a **structured interview** (one question at a time ·
   recommend a default · explore-first; from-scratch docs crystallize into ADRs + a glossary) → establish docs
-  (living-docs standard) → seed conventions (lean `AGENTS.md`
+  (living-docs standard) → seed conventions (lean `CLAUDE.md`
   declaring the project's boundary + paths, `openspec/config.yaml`, permissions, hooks) → audit skills via
   skill-finder → drive `docs-check` + `provenance-check` green (run from the project root) → step aside. The
   layer anchors **per project root, never the workspace root by default**; multirepo onboards each project
-  independently; scope rides on hierarchical `CLAUDE.md`/`AGENTS.md` (no manifest). See
+  independently; scope rides on hierarchical `CLAUDE.md` (no manifest). See
   `docs/reference/onboard.md`.
 - **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
   dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"

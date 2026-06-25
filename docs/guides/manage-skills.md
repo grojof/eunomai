@@ -33,7 +33,7 @@ entry — useful when vendoring a skill someone else added, or re-checking after
 After any change to `skills/` (or `.claude/skills/` in a consumer project), confirm every skill is covered:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check
+node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" provenance-check
 ```
 
 It **fails** on any skill missing a registry entry and **lists trust gaps** (e.g. `unpinned`) to act on.

@@ -53,21 +53,6 @@ proceed without a prompt.
 - **WHEN** a `Bash` call runs a safe, reversible command such as `git status` or `npm test`
 - **THEN** the hook allows the call without prompting
 
-### Requirement: Authored-source guard
-
-The plugin SHALL return an `ask` decision when an `Edit` or `Write` tool call targets a generated artifact
-(`CLAUDE.md`, `.github/copilot-instructions.md`) directly, with a reason pointing the editor to the authored
-`AGENTS.md` and the projection step. Edits to `AGENTS.md` or any non-generated file SHALL proceed without a
-prompt.
-
-#### Scenario: Editing a generated artifact is escalated
-- **WHEN** an `Edit` or `Write` call targets `CLAUDE.md` or `.github/copilot-instructions.md`
-- **THEN** the hook returns an `ask` decision whose reason points to `AGENTS.md` and projection
-
-#### Scenario: Editing the authored source is allowed
-- **WHEN** an `Edit` or `Write` call targets `AGENTS.md` or an unrelated source file
-- **THEN** the hook allows the call without prompting
-
 ### Requirement: Recommended native-permissions baseline
 
 The plugin SHALL document a recommended Claude Code native `permissions` baseline (deny/ask path globs for

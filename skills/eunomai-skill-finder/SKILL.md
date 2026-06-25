@@ -68,7 +68,7 @@ skills:
 time — `git rev-parse HEAD`). If a SHA is genuinely unavailable, set `ref: unpinned` and `gaps: [unpinned]` —
 never write a rationalized "veto OK". eunomai's own skills use `origin: authored`.
 
-Run `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check` — it scans `.claude/skills/` and
+Run `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" provenance-check` — it scans `.claude/skills/` and
 `skills/`, fails on any skill not covered by the registry, and lists trust gaps to act on.
 
 ## Boundaries

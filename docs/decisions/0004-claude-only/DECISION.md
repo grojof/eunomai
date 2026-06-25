@@ -15,8 +15,9 @@ Concretely:
   development.
 - **Keep the read-only checks** (`docs-check`, `provenance-check`) — Claude-agnostic and valuable — rehomed as a
   small self-contained CLI under a non-"projection" name.
-- **Consolidate to a single open-standard authored instruction file** (`AGENTS.md`); `CLAUDE.md` becomes a
-  trivial replica or unnecessary (exact mechanism settled in the rebase).
+- **Consolidate to a single authored `CLAUDE.md`** (the open question in `explore.md` is resolved in favour of
+  `CLAUDE.md`, which Claude Code loads natively): drop `AGENTS.md`, and retire the now-moot **authored-source
+  guard** (with no generated file to protect, editing `CLAUDE.md` directly is correct).
 
 This supersedes the "Claude-first, Copilot best-effort" principle.
 
@@ -41,8 +42,8 @@ open even though the tool targets Claude.
 - Principles / README / getting-started: drop Copilot; state Claude-only + OpenSpec-only-dependency.
 - `projection/`: remove the Copilot/rulesync role and `eunomai.yaml`; keep `docs-check` + `provenance-check` as
   a self-contained CLI renamed away from "projection".
-- Instruction files: `AGENTS.md` as the single authored, open-standard source; `CLAUDE.md` trivial or dropped
-  (resolves the `AGENTS.md ↔ CLAUDE.md` replica question behind the base-block idea).
+- Instruction files: `CLAUDE.md` as the single authored source; `AGENTS.md` dropped; the safe-controls
+  authored-source guard retired (no generated file to protect).
 - Migrations are **not** a concern — this lands as a clean, coherent rebase, not an incremental shim.
 
 ## The trade we accepted

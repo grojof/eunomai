@@ -1,39 +1,34 @@
 # Contributing (working on eunomai)
 
 For developers working **on** eunomai itself (not just using it). The authoritative conventions live in
-[`AGENTS.md`](../../AGENTS.md) — this page is the practical dev loop.
+[`CLAUDE.md`](../../CLAUDE.md) — this page is the practical dev loop.
 
 ## Source of truth
 
-- **`AGENTS.md` is authored; `CLAUDE.md` and `.github/copilot-instructions.md` are generated** from it via
-  [projection](../reference/projection.md). Edit `AGENTS.md`, never the generated files — a hook will ask
-  before you edit a generated artifact.
-- After changing `AGENTS.md`, regenerate and commit:
-  ```bash
-  node projection/dist/cli.cjs compile
-  ```
+- **`CLAUDE.md` is the single authored source of truth.** Claude-only (ADR-0004): there are no generated
+  instruction files and no cross-tool projection — edit `CLAUDE.md` directly.
 
 ## Conventions
 
 - UTF-8, **LF** newlines, final newline at EOF.
 - **Conventional Commits**, imperative mood, **one logical change per commit**. **No AI-attribution
   trailers** (the commit-trailer hook hard-denies them).
-- TypeScript, ESM, Node ≥ 20 in `projection/`. Match the surrounding code; small functions, early returns.
+- TypeScript, ESM, Node ≥ 20 in `tools/`. Match the surrounding code; small functions, early returns.
 - Validate inputs at boundaries; never weaken validation to "make it work".
 
-## The projection package (`projection/`)
+## The tools package (`tools/`)
 
 Run the full loop before finishing any change to the package:
 
 ```bash
-cd projection
+cd tools
 npm run typecheck   # tsc --noEmit
 npm run lint        # eslint .
 npm test            # vitest run
 npm run build       # tsup -> dist/cli.cjs (the shipped, committed bundle)
 ```
 
-The bundle (`projection/dist/cli.cjs`) is a **committed artifact** — rebuild and commit it when the source
+The bundle (`tools/dist/cli.cjs`) is a **committed artifact** — rebuild and commit it when the source
 changes, so consumers need no build step.
 
 ## The hooks (`hooks/`)
@@ -55,5 +50,5 @@ with `openspec update`.
 
 ## Before you finish
 
-Run the [gate](run-the-checks.md) — `docs-check`, `provenance-check`, `compile --check` — plus the package
-loop above. All green is the definition of done.
+Run the [gate](run-the-checks.md) — `docs-check`, `provenance-check` — plus the package loop above. All green
+is the definition of done.

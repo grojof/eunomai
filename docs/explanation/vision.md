@@ -1,28 +1,27 @@
 # eunomai — Vision / Charter
 
-> A focused, **Claude-first AI workspace**, tailored 100% to how we work — built on existing tools, not
-> reinventing them. Distributed as a **Claude Code plugin**.
+> A focused, **Claude-only AI workspace**, tailored 100% to how we work — built on existing tools, not
+> reinventing them. Distributed as a **Claude Code plugin**; **OpenSpec** is the only external dependency.
 
 The name comes from **Eunomia** (Εὐνομία), the Greek personification of *good order* — *eu* (good) + *nomos*
 (norm) — with the `·ai` suffix.
 
 ## What eunomai is (and isn't)
 
-- **Is:** a curated Claude Code plugin (skills + commands + hooks + subagents) empowering four pillars, plus
-  a thin `AGENTS.md` → Copilot projection for best-effort parity. It works as a **one-shot connector /
-  bootstrap**: it seeds a project with conventions (OpenSpec config + lean `AGENTS.md`/`CLAUDE.md` + skills
-  + rules) and then **steps aside** — dispensable, because everything lives in the generated output (zero
-  lock-in).
+- **Is:** a curated Claude Code plugin (skills + commands + hooks + subagents) empowering four pillars. It
+  works as a **one-shot connector / bootstrap**: it seeds a project with conventions (OpenSpec config + a lean
+  `CLAUDE.md` + skills + rules) and then **steps aside** — dispensable, because everything it seeds lives in the
+  project's own files (zero lock-in).
 - **Is not:** a cross-tool *governance control plane* (abandoned 2026-06-24 — irreducible gaps + high
   maintenance); a **continuous cross-project sync / conformance engine** (that *is* the abandoned tower — the
-  bootstrap is one-shot, seed-and-step-aside); a rule-sync engine (we consume **rulesync**); an SDD framework
-  (we use **OpenSpec**).
+  bootstrap is one-shot, seed-and-step-aside); an SDD framework (we use **OpenSpec**, the sole external
+  dependency).
 
 ## Principles
 
-1. **Don't reinvent** — stand on existing tools (Claude Code native, rulesync) and build only the tailored
+1. **Don't reinvent** — stand on existing tools (Claude Code native, OpenSpec) and build only the tailored
    glue.
-2. **Claude-first, Copilot best-effort.** Where Copilot adds gaps, go Claude-only and document it.
+2. **Claude-only.** Claude Code is the only host; OpenSpec is the sole external dependency (see ADR-0004).
 3. **Low maintenance over reach.** Useful to us beats winning a market; fine if superseded one day.
 4. **Trust-gated skills.** Adopt only skills that pass a criteria gate (usage, authorship, origin, quality);
    else create; always improve.
@@ -44,9 +43,9 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 ## Connector / bootstrap (how the pillars travel)
 
 eunomai is also the **one-shot connector** that distributes a team's or individual's **templates** (OpenSpec
-config + lean `AGENTS.md`/`CLAUDE.md` that reference per-project MDs) + skills + rules into new or existing
-projects, then **steps aside**. It is the starting point, not a dependency: everything lives in the generated
-output, so removing eunomai leaves a working project (zero lock-in). Deliberately **not** a continuous sync
+config + a lean `CLAUDE.md` that references per-project MDs) + skills + rules into new or existing projects,
+then **steps aside**. It is the starting point, not a dependency: everything it seeds lives in the project's
+own files, so removing eunomai leaves a working project (zero lock-in). Deliberately **not** a continuous sync
 engine — seed-and-step-aside, never re-govern N projects over time.
 
 ## The unifying lens (knowledge activation)
@@ -65,18 +64,19 @@ no conformance engine — that would be the abandoned tower). See
 - **Claude support is native (verified):** plugins bundle skills/agents/hooks/MCP; hooks enforce
   (`PreToolUse` → `deny`/`ask`); the marketplace gives provenance (commit-SHA pin, `author`) plus
   `claude plugin validate` and automated safety screening — the primitives the skill-trust gate builds on.
-- **Copilot best-effort:** the `projection/` tool projects the authored `AGENTS.md` → Copilot (and other
-  tools) via rulesync, with a drift check. Gaps are documented, never faked.
+- **Read-only checks:** the `tools/` CLI bundles `docs-check` + `provenance-check` (no cross-tool projection —
+  see ADR-0004). They enforce structure, never prose.
 
 ## Reuse vs net-new
 
-- **Reuse:** Claude Code native config; **rulesync** (Copilot projection); skill-creator patterns.
+- **Reuse:** Claude Code native config; **OpenSpec** (the SDD engine + decision history); skill-creator patterns.
 - **Net-new:** the tailored assembly of the four pillars + the **trust gate** of the skill-finder (built as
   a criteria gate on top of Claude's provenance primitives — *not* a hand-curated registry, to avoid
   reintroducing maintenance).
 
 ## Status
 
-Clean restart **2026-06-24**. The Copilot projection tool (`projection/`) is implemented and verified.
-**SDD** (pillar 1, on OpenSpec) and **safe controls** (pillar 3, `PreToolUse` hooks — verified live) are
-done; living docs and skills are built incrementally as plugin skills via the SDD flow.
+Clean restart **2026-06-24**; reoriented to **Claude-only** on 2026-06-25 (ADR-0004). The read-only checks
+CLI (`tools/`) is implemented and verified. **SDD** (pillar 1, on OpenSpec) and **safe controls** (pillar 3,
+`PreToolUse` hooks — verified live) are done; living docs and skills are built incrementally as plugin skills
+via the SDD flow.

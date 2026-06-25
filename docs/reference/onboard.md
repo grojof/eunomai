@@ -21,7 +21,7 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
     2. docs   → living-docs standard: content tree (Diátaxis) + project surface
                (the mandatory community-health files), restructured or created from scratch;
                from-scratch interviews crystallize into ADRs + a glossary explanation page
-    3. seed   → lean AGENTS.md (declares the project's boundary + paths) · openspec/config.yaml ·
+    3. seed   → lean CLAUDE.md (declares the project's boundary + paths) · openspec/config.yaml ·
                permissions baseline · hooks wiring
     4. skills → invoke eunomai-skill-finder (audit)
     5. drive docs-check + provenance-check to green  — run from the project root
@@ -50,5 +50,5 @@ standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the dom
 
 ## The seed
 
-The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `AGENTS.md`,
+The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `CLAUDE.md`,
 `openspec/config.yaml`, `docs/reference/safe-controls.md`) and adapted to the target — not copies that could drift.

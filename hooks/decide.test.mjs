@@ -52,16 +52,11 @@ test("allow: ordinary reversible commands", () => {
   assert.equal(bash("npm test").decision, "allow");
 });
 
-// --- Authored-source guard (ask) ---
+// --- Edits are unguarded (CLAUDE.md is the single authored source) ---
 
-test("ask: editing a generated artifact", () => {
-  assert.equal(edit("CLAUDE.md").decision, "ask");
-  assert.equal(edit(".github/copilot-instructions.md").decision, "ask");
-  assert.equal(decide("Write", { file_path: "C:\\repo\\CLAUDE.md" }).decision, "ask");
-});
-
-test("allow: editing the authored source or unrelated files", () => {
-  assert.equal(edit("AGENTS.md").decision, "allow");
+test("allow: editing any file, including CLAUDE.md", () => {
+  assert.equal(edit("CLAUDE.md").decision, "allow");
+  assert.equal(decide("Write", { file_path: "C:\\repo\\CLAUDE.md" }).decision, "allow");
   assert.equal(edit("src/index.ts").decision, "allow");
 });
 

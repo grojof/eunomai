@@ -4,9 +4,9 @@
 
 eunomai SHALL target **Claude Code only**. It SHALL NOT project to or generate instruction files for other
 tools (no `rulesync` cross-tool projection, no `.github/copilot-instructions.md`, no `eunomai.yaml`). The
-authored agent-instruction source SHALL be a single open-standard `AGENTS.md`; any `CLAUDE.md` SHALL be a
-trivial replica of it (or absent), never a separately authored file. **OpenSpec** SHALL be the sole external
-runtime dependency (the SDD engine and the historical record of decisions and development).
+authored agent-instruction source SHALL be a single `CLAUDE.md`; there SHALL be no separate `AGENTS.md` and no
+generated instruction files. **OpenSpec** SHALL be the sole external runtime dependency (the SDD engine and the
+historical record of decisions and development).
 
 #### Scenario: No cross-tool projection artifacts
 - **WHEN** the repository is built or inspected
@@ -14,7 +14,7 @@ runtime dependency (the SDD engine and the historical record of decisions and de
 
 #### Scenario: Single authored instruction source
 - **WHEN** agent instructions need editing
-- **THEN** `AGENTS.md` is the one authored file, and any `CLAUDE.md` mirrors it rather than diverging
+- **THEN** `CLAUDE.md` is the one authored file; there is no separate `AGENTS.md` and no generated copy to sync
 
 #### Scenario: OpenSpec is the only external dependency
 - **WHEN** the dependencies of the distribution are listed

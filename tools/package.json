@@ -1,7 +1,7 @@
 {
-  "name": "eunomai",
+  "name": "eunomai-tools",
   "version": "0.0.0",
-  "description": "Connector-first governance layer for cross-tool AI workspaces (AGENTS.md + rulesync).",
+  "description": "Read-only checks for an eunomai (Claude Code) AI workspace: docs-check + provenance-check.",
   "type": "module",
   "bin": {
     "eunomai": "dist/cli.cjs"
@@ -20,7 +20,6 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "rulesync": "^8.31.0",
     "yaml": "^2.5.0",
     "zod": "^3.23.0"
   },

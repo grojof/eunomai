@@ -4,6 +4,6 @@ dist/
 coverage/
 
 # Ship the self-contained CLI bundle with the plugin (everything else in dist/ stays ignored)
-!projection/dist/
-projection/dist/*
-!projection/dist/cli.cjs
+!tools/dist/
+tools/dist/*
+!tools/dist/cli.cjs

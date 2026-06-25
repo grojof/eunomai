@@ -7,6 +7,19 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+### Changed
+
+- **Reoriented to Claude-only** (ADR-0004): Claude Code is the only host and **OpenSpec** is the sole external
+  dependency. `CLAUDE.md` is now the single authored instruction source.
+- Renamed the `projection/` package to `tools/` — a read-only checks CLI (`docs-check`, `provenance-check`).
+  Decision records: ADR-0003 (OKF / open substrate), ADR-0004 (Claude-only).
+
+### Removed
+
+- The Copilot best-effort surface: the `rulesync` dependency, `eunomai.yaml`, the generated
+  `.github/copilot-instructions.md`, and the `compile` / `compile --check` projection commands.
+- The safe-controls **authored-source guard** — moot once there is no generated instruction file.
+
 ## [0.0.3] - 2026-06-25
 
 ### Added

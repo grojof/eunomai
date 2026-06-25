@@ -61,7 +61,7 @@ Docs are the **passive** end of eunomai's knowledge-activation spectrum (the KDD
 at the **wrong** state: it would be better *activated* in another pillar.
 While refreshing, **notice and surface** such content — naming the owning pillar — then **delegate** the move:
 
-- a recurring **convention** ("always do X / never do Y") → `AGENTS.md` (🟡 semi-active)
+- a recurring **convention** ("always do X / never do Y") → `CLAUDE.md` (🟡 semi-active)
 - an enforceable **policy** ("block force-push to main") → a hook via **safe-controls** (🔴 enforced)
 - a repeatable **procedure** (step-by-step know-how an agent could run) → a skill via **`eunomai-skill-finder`**
   (🔴 active)
@@ -77,7 +77,7 @@ reference — its correct passive state — stays where it is; don't route it.
    and list the pages under `docs/` (excluding `docs/decisions/`). Note what changed recently (git log /
    current work).
 2. **Run the check — from the project root** (`cd` into it; the check resolves relative to `cwd`):
-   `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
+   `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
 3. **Refresh, in order:**
    - **Summary** — update the README's one-paragraph summary so it matches what the project now is.
    - **Index** — ensure every in-scope `docs/` page is linked from the README; remove links to pages that no
@@ -85,14 +85,13 @@ reference — its correct passive state — stays where it is; don't route it.
    - **Split** — if a README section is long-form, move it into the matching Diátaxis folder
      (`guides/` · `reference/` · `explanation/`) and leave a link.
 4. **Confirm before applying.** Show the proposed edits; apply them with the user's agreement.
-5. **Verify.** Re-run `docs-check` until it exits 0. If docs changes touched `AGENTS.md`, re-project
-   (`node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" compile`).
+5. **Verify.** Re-run `docs-check` until it exits 0.
 
 ## Boundaries
 
 - **Structure, not invention.** Keep docs authored; do not generate API docs from code.
 - **Project-docs only.** Do not edit ADRs here — those follow the SDD / handoff flow.
 - **Suggest and delegate, don't activate.** When routing knowledge to a higher activation state, you only
-  surface the suggestion and name the owning pillar — you never write `AGENTS.md`, author a hook or a skill, or
+  surface the suggestion and name the owning pillar — you never write `CLAUDE.md`, author a hook or a skill, or
   create a spec yourself, and you never auto-apply the move. The author decides; the pillar enacts.
 - **No auto-rewrite hook.** This is invoked deliberately, consistent with eunomai's ask-by-default posture.

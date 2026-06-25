@@ -28,12 +28,6 @@ const SAFETY_GATES = [
   },
 ];
 
-// Generated artifacts that must not be hand-edited — edit AGENTS.md instead.
-const GENERATED_FILES = [
-  /(^|[\\/])CLAUDE\.md$/i,
-  /(^|[\\/])copilot-instructions\.md$/i,
-];
-
 function bashDecision(command) {
   if (typeof command !== "string" || command.length === 0) return { decision: "allow" };
 
@@ -44,7 +38,7 @@ function bashDecision(command) {
           decision: "deny",
           reason:
             "eunomai: commit message carries an AI-attribution trailer. Remove it — no " +
-            "co-author / 'Generated with Claude Code' lines (see AGENTS.md conventions).",
+            "co-author / 'Generated with Claude Code' lines (see CLAUDE.md conventions).",
         };
       }
     }
@@ -59,25 +53,7 @@ function bashDecision(command) {
   return { decision: "allow" };
 }
 
-function editDecision(filePath) {
-  if (typeof filePath !== "string" || filePath.length === 0) return { decision: "allow" };
-
-  for (const generated of GENERATED_FILES) {
-    if (generated.test(filePath)) {
-      return {
-        decision: "ask",
-        reason:
-          "eunomai: this is a generated file. Edit the authored AGENTS.md and re-run projection " +
-          "(node projection/dist/cli.cjs compile) instead of editing it directly.",
-      };
-    }
-  }
-
-  return { decision: "allow" };
-}
-
 export function decide(toolName, toolInput = {}) {
   if (toolName === "Bash") return bashDecision(toolInput.command);
-  if (toolName === "Edit" || toolName === "Write") return editDecision(toolInput.file_path);
   return { decision: "allow" };
 }

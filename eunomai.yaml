@@ -1,3 +1,0 @@
-targets: [claudecode, copilot]
-scopes:
-  project: ./AGENTS.md

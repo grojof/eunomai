@@ -1,6 +1,6 @@
 # Security Policy
 
-eunomai is a Claude-first AI workspace (a Claude Code plugin: skills · hooks · the projection CLI). Its
+eunomai is a Claude-only AI workspace (a Claude Code plugin: skills · hooks · the read-only checks CLI). Its
 **safe-controls** hooks are a best-effort floor-raiser, **not** a security boundary — a determined agent can
 bypass a `PreToolUse` hook. Treat the hooks and the skill trust gate as defence-in-depth, never the only
 control. See [docs/reference/safe-controls.md](docs/reference/safe-controls.md).
@@ -17,16 +17,16 @@ fixes; please reproduce on the current `main` before reporting.
 - Use **GitHub Private Vulnerability Reporting** (the repo's *Security → Report a vulnerability* tab), or
 - email **guillermo.rojo.fdez@gmail.com** with the details.
 
-Please include: affected component (skill / hook / `projection` CLI), version or commit SHA, a minimal
+Please include: affected component (skill / hook / checks CLI), version or commit SHA, a minimal
 reproduction, and the impact you observed. We aim to acknowledge within a few business days and will keep you
 updated on the fix and disclosure timeline.
 
 ## Scope
 
-In scope: the plugin's hooks (`hooks/`), the skills under `skills/`, and the projection CLI
-(`projection/`). Out of scope: vulnerabilities in upstream tools eunomai stands on
-([Claude Code](https://www.anthropic.com/), [OpenSpec](https://github.com/Fission-AI/OpenSpec),
-[rulesync](https://github.com/dyoshikawa/rulesync)) — report those to their respective projects.
+In scope: the plugin's hooks (`hooks/`), the skills under `skills/`, and the checks CLI
+(`tools/`). Out of scope: vulnerabilities in upstream tools eunomai stands on
+([Claude Code](https://www.anthropic.com/), [OpenSpec](https://github.com/Fission-AI/OpenSpec)) — report those
+to their respective projects.
 
 ## Handling secrets
 

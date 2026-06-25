@@ -7,18 +7,18 @@ schema: spec-driven
 # need a new artifact (e.g. an SPDD "reasons" doc) — YAGNI until then.
 
 context: |
-  eunomai is a focused, Claude-first AI workspace, packaged as a Claude Code plugin, built on existing
-  tools (Claude Code native + rulesync + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD,
-  living docs (dev-docs + project-docs), safe controls, trust-gated skills.
+  eunomai is a focused, Claude-only AI workspace, packaged as a Claude Code plugin, built on existing
+  tools (Claude Code native + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD,
+  living docs (project-docs), safe controls, trust-gated skills.
 
-  Stack: TypeScript, ESM, Node >= 20 (the projection tool lives in `projection/`). Files are UTF-8, LF,
+  Stack: TypeScript, ESM, Node >= 20 (the read-only checks CLI lives in `tools/`). Files are UTF-8, LF,
   final newline at EOF.
 
   Guiding principles (do not break):
   - Don't reinvent — stand on existing tools; build only the tailored glue.
-  - Claude-first, Copilot best-effort (project AGENTS.md -> Copilot via rulesync; document the gaps).
+  - Claude-only — Claude Code is the only host; OpenSpec is the sole external dependency (ADR-0004).
   - Low maintenance over reach; trust-gated skills are a criteria gate, never a hand-curated registry.
-  - AGENTS.md is authored, never generated (zero lock-in). Idempotency is sacred.
+  - CLAUDE.md is the single authored source (zero lock-in); no cross-tool projection.
 
   Conventions:
   - Commits: Conventional Commits, imperative mood, one logical change per commit, NO co-author and no
@@ -39,4 +39,4 @@ rules:
     - Include trade-offs and an explicit low-maintenance check.
   tasks:
     - Keep tasks small and verifiable; map each back to a requirement.
-    - Where code changes, the final task runs the gate (cd projection && npm run typecheck && lint && test).
+    - Where code changes, the final task runs the gate (cd tools && npm run typecheck && lint && test).

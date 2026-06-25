@@ -1,6 +1,6 @@
 ---
 name: eunomai-onboard
-description: Cold-start orchestrator that applies eunomai to a new or existing project. Use when bringing a foreign project up to eunomai's standards — analyze it, establish/restructure docs (or create them), seed conventions (AGENTS.md, OpenSpec config, permissions, hooks), audit existing skills, then hand off. One-shot and dispensable; orchestrates the pillars, does not reimplement them.
+description: Cold-start orchestrator that applies eunomai to a new or existing project. Use when bringing a foreign project up to eunomai's standards — analyze it, establish/restructure docs (or create them), seed conventions (CLAUDE.md, OpenSpec config, permissions, hooks), audit existing skills, then hand off. One-shot and dispensable; orchestrates the pillars, does not reimplement them.
 ---
 
 # eunomai-onboard
@@ -41,7 +41,7 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    - (After this, the `eunomai-living-docs` skill maintains them.)
 3. **Seed conventions** (at the project root) — derive each from eunomai's own live conventions and adapt to
    the target (do not drop verbatim):
-   - a lean `AGENTS.md` (authored source → projected) that **declares this project's boundary + paths** (the
+   - a lean `CLAUDE.md` (the single authored source) that **declares this project's boundary + paths** (the
      `openspec/` and `docs/` locations and what is tracked), so config and agents operate within it,
    - an `openspec/config.yaml` layer (run `openspec update`),
    - the **permissions baseline** (`docs/reference/safe-controls.md`),
@@ -51,8 +51,8 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    not audit them yourself.
 5. **Drive the checks green — from the project root** (`cd` into it; the checks resolve relative to `cwd`):
    ```bash
-   node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check
-   node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" provenance-check
+   node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" docs-check
+   node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" provenance-check
    ```
    Fix until both exit 0.
 6. **Hand off.** Point the author at the steady-state pillars and stop. No background or cross-project process.
@@ -64,7 +64,7 @@ gets its own seed and its own green checks. There is **no shared conformance lay
 consent, it may receive at most a **minimal delegating `CLAUDE.md`** — pointing at the project directories and
 marking the root as environment, with **no per-project conventions** (Claude Code always loads the parent
 `CLAUDE.md` when working in a child, so keep it tiny). No workspace manifest file is introduced; scope rides on
-hierarchical `CLAUDE.md`/`AGENTS.md`.
+hierarchical `CLAUDE.md`.
 
 ## The structured interview (gathering input)
 
@@ -93,7 +93,7 @@ vocabulary becomes a **glossary** explanation page indexed in the README. (Harve
   the codebase first; human-in-control and skippable.
 - **Anchor per project root.** Seed at each confirmed project root, never the workspace root by default; the
   environment repo gets at most a minimal delegating `CLAUDE.md`, with consent.
-- **Boundaries are authored, not invented.** Scope is expressed via hierarchical `CLAUDE.md`/`AGENTS.md` — no
+- **Boundaries are authored, not invented.** Scope is expressed via hierarchical `CLAUDE.md` — no
   workspace manifest, no registry.
 - **Establish, don't maintain.** Ongoing doc refresh is `eunomai-living-docs`; ongoing skill work is
   `eunomai-skill-finder`. Delegate.
