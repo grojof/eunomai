@@ -9,7 +9,8 @@ skill-finder, the hooks, and OpenSpec maintain.
 ```
   foreign / new project
     1. analyze (stack, docs, skills) + author input
-    2. docs   → living-docs standard (restructure, or create from scratch)
+    2. docs   → living-docs standard: content tree (Diátaxis) + project surface
+               (the mandatory community-health files), restructured or created from scratch
     3. seed   → lean AGENTS.md · openspec/config.yaml · permissions baseline · hooks wiring
     4. skills → invoke eunomai-skill-finder (audit)
     5. drive docs-check + provenance-check to green

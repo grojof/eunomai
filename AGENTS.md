@@ -51,12 +51,15 @@ rules here, not there.
   `docs/reference/safe-controls.md`.
 
 ## Living docs
-- **Project-docs only**, organized by **Diátaxis** (`guides/` · `reference/` · `explanation/`); `decisions/`
-  (ADRs) is dev-facing and out of the index. The README is a lean index + summary + links; depth lives under
-  `docs/`, each in-scope page linked from the README. See `docs/reference/living-docs.md`.
+- **Two layers, both standardized.** *Content* — project-docs organized by **Diátaxis** (`guides/` ·
+  `reference/` · `explanation/`; `decisions/` ADRs are dev-facing, out of the index), README a lean index +
+  summary + links, each in-scope page linked from it. *Project surface* — the **community-health files** GitHub
+  recognizes (anchored to GitHub Community Standards): mandatory `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
+  (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/reference/living-docs.md`.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
-- **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves and
-  every in-scope page is indexed (exit 1 on drift). Part of the gate; enforces structure, not prose.
+- **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
+  every in-scope page is indexed, and the mandatory community-health files are present (exit 1 on drift). Part
+  of the gate; enforces structure, not prose.
 
 ## Skills
 - **Own skills only.** `eunomai-skill-finder` is the trust-gated steward: discover → gate → adopt / improve /

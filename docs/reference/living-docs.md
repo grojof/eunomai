@@ -3,6 +3,16 @@
 Keeping eunomai's **project-facing** documentation fresh and structurally honest. Project-docs only —
 ADRs under `docs/decisions/` are dev-facing and out of the index.
 
+A well-formed project has **two layers**, and the standard covers both:
+
+| Layer | Answers | Anchored to | Lives in |
+|-------|---------|-------------|----------|
+| **Content** | "how is the documentation organized?" | [Diátaxis](https://diataxis.fr/) | `docs/` (+ the README index) |
+| **Project surface** | "what makes this a well-formed GitHub project?" | [GitHub Community Standards](https://docs.github.com/communities) | repo root / `.github/` |
+
+Diátaxis organizes the *content*; it says nothing about the *community-health files* GitHub itself recognizes.
+Both are part of the standard — don't reinvent either; anchor to the source.
+
 ## The structure standard
 
 The root `README.md` is a **lean front door** — a short project summary plus an *index of links* into
@@ -20,6 +30,27 @@ main cause of confusing docs):
 **Every in-scope page** (under `guides/`, `reference/`, `explanation/`) **is linked from the README index.**
 When a README section outgrows a couple of paragraphs, it becomes a page in the matching folder and the
 README keeps a link. `decisions/` is excluded from the index.
+
+## The project surface (community-health files)
+
+The files GitHub recognizes and surfaces in a repo's *Community Standards* profile. The standard defines a
+**mandatory** set (enforced by `docs-check`) and an **optional** set (recommended, not enforced). A file
+counts as present in any location GitHub recognizes — repo root, `.github/`, or `docs/`.
+
+| File | Status | Purpose / anchor |
+|------|--------|------------------|
+| `README.md` | mandatory | the lean index (see above) — already covered by the link/index check |
+| `LICENSE` | **mandatory** | the terms of use; without it the project is "all rights reserved" by default |
+| `SECURITY.md` | **mandatory** | how to report a vulnerability — pairs with [safe-controls](safe-controls.md) / [base-skills](base-skills.md) |
+| `CONTRIBUTING.md` | **mandatory** | how to contribute; place it where GitHub auto-links it (root / `.github/` / `docs/`), **not** buried under `docs/guides/` |
+| `CHANGELOG.md` | **mandatory** | notable changes — [Keep a Changelog](https://keepachangelog.com/) + [SemVer](https://semver.org/) |
+| `CODE_OF_CONDUCT.md` | optional | community expectations (e.g. Contributor Covenant) |
+| issue / PR templates (`.github/`) | optional | `ISSUE_TEMPLATE/`, `PULL_REQUEST_TEMPLATE.md` |
+| `CODEOWNERS`, `SUPPORT.md`, `FUNDING.yml` | optional | review routing, support channels, sponsorship |
+
+> **Placement matters.** GitHub auto-detects `CONTRIBUTING.md` in the root, `.github/`, or `docs/` — but
+> **not** in `docs/guides/`. Keep the GitHub-discoverable file at a recognized path; depth (a full dev guide)
+> can still live under `docs/guides/` and be linked from it.
 
 ## Diagrams (Mermaid + C4)
 
@@ -41,5 +72,6 @@ Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check)
   node projection/dist/cli.cjs docs-check
   ```
 
-  It verifies every README→`docs/` link resolves and every in-scope `docs/` page is reachable from the README
-  index. It enforces *structure*, not prose accuracy — that is the skill's job. It runs as part of the gate.
+  It verifies every README→`docs/` link resolves, every in-scope `docs/` page is reachable from the README
+  index, and the **mandatory community-health files are present** (in any recognized location). It enforces
+  *structure*, not prose accuracy — that is the skill's job. It runs as part of the gate.
