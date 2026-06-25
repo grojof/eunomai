@@ -1,37 +1,52 @@
 ---
 type: reference
-title: "Checks (the read-only CLI)"
-description: "The docs-check and provenance-check CLI."
+title: "Checks (the read-only gate)"
+description: "The docs-check and provenance-check CLI, and how to run it as a gate."
 tags: [checks, gate]
 updated: 2026-06-25
 ---
 
-# Checks (the read-only CLI)
+# Checks (the read-only gate)
 
 eunomai's two **read-only** structural checks, shipped as a single self-contained bundle in
-[`tools/`](../tools/) — no build step for consumers. They enforce *structure*, never prose: they belong in
-your gate (CI / pre-merge) and never write anything.
+[`tools/`](../tools/) — no build step for consumers. They enforce *structure*, never prose; they **write
+nothing** and belong in your gate (CI / pre-merge) so structure and provenance can't silently drift.
+
+## The commands
+
+Run from a clone, or via `${CLAUDE_PLUGIN_ROOT}` inside a project that installed the plugin:
 
 ```bash
-node tools/dist/cli.cjs <command>
-# or, inside a project that installed the plugin:
-node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" <command>
+node tools/dist/cli.cjs docs-check          # README↔docs/ links + frontmatter + community-health files
+node tools/dist/cli.cjs provenance-check    # every skill covered by the audit registry
 ```
 
-| Command | Writes? | What it does |
-|---------|---------|--------------|
-| `docs-check` | no | Verifies every README→`docs/` link resolves, every in-scope `docs/` page is indexed, and the mandatory community-health files are present. See [living-docs](living-docs.md). |
-| `provenance-check` | no | Fails on any skill not covered by the skills-audit registry; lists trust gaps. See [skill-finder](skill-finder.md). |
+| Check | Passes when | Fails on |
+|-------|-------------|----------|
+| **`docs-check`** | every README→`docs/` link resolves, every in-scope page is indexed with valid frontmatter, and the mandatory community-health files are present | broken links · orphaned pages · invalid/missing frontmatter · missing health files |
+| **`provenance-check`** | every skill under `skills/` (and `.claude/skills/`) has a registry entry | uncovered skills · invalid registry (warns on gaps like `unpinned`) |
 
-Both run with plain `node` and no `node_modules` (every runtime dependency is inlined into the committed
-bundle), so the CLI travels with the plugin and resolves via `${CLAUDE_PLUGIN_ROOT}`.
+Both run with plain `node` and no `node_modules` (dependencies are inlined into the committed bundle).
+`docs-check` excludes `docs/decisions/` (ADRs are dev-facing, out of the index).
+
+## Run it as a gate
+
+```bash
+node tools/dist/cli.cjs docs-check \
+  && node tools/dist/cli.cjs provenance-check
+```
+
+This is the same gate eunomai runs on itself — wire it into CI / pre-merge.
+
+## Fixing failures
+
+- **`docs-check`** → add the missing README link (or remove the dead one), or fix a page's frontmatter; see
+  [refresh-living-docs](refresh-living-docs.md).
+- **`provenance-check`** → record the skill in `eunomai-skills-audit.md` with its real SHA; see
+  [manage-skills](manage-skills.md).
 
 ## Why a CLI and not a hook
 
-These are *gate* checks — deliberate, read-only verifications you run in CI or before merge. The runtime,
-ask-by-default guardrails are a separate pillar: the `PreToolUse` hooks (see [safe-controls](safe-controls.md)).
-
-## Development
-
-The dev loop (typecheck · lint · test · build) and how to contribute to this package live in
-[contributing](contributing.md).
+These are *gate* checks — deliberate, read-only verifications. The runtime, ask-by-default guardrails are a
+separate pillar: the `PreToolUse` hooks (see [safe-controls](safe-controls.md)). The package's own dev loop
+lives in [`CONTRIBUTING.md`](../CONTRIBUTING.md).

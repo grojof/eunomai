@@ -1,26 +1,40 @@
 # Contributing to eunomai
 
-Thanks for helping improve eunomai. This is the GitHub-discoverable entry point; the **full developer guide**
-lives at **[docs/contributing.md](docs/contributing.md)** — read it before opening a PR.
+Thanks for helping improve eunomai. This is the GitHub-discoverable home for working **on** eunomai itself —
+the single source of the dev loop (there is no separate `docs/contributing.md`).
 
-## TL;DR
+## Source of truth
 
-- **`CLAUDE.md` is the single authored source of truth.** There are no generated instruction files and no
-  cross-tool projection (Claude-only — see ADR-0004).
-- **Conventional Commits**, imperative mood, one logical change per commit. **No AI-attribution trailers**
-  (a hook hard-denies them).
-- **Non-trivial change is spec-first** via OpenSpec: `/opsx:explore → /opsx:propose <name> → /opsx:apply →
-  /opsx:archive`. See [docs/sdd.md](docs/sdd.md).
+**`CLAUDE.md` is the single authored source of truth** for conventions (Claude-only — see ADR-0004; no
+generated instruction files, no projection). Edit `CLAUDE.md` directly; this page is the practical loop, not a
+restatement of it.
 
-## Before you open a PR
+## Conventions
 
-Run the package dev loop and the read-only gate; all green is the definition of done:
+- UTF-8, **LF** newlines, final newline at EOF.
+- **Conventional Commits**, imperative mood, **one logical change per commit**. **No AI-attribution trailers**
+  (the commit-trailer hook hard-denies them).
+- TypeScript, ESM, Node ≥ 20 in `tools/`. Match the surrounding code; small functions, early returns.
+- Validate inputs at boundaries; never weaken validation to "make it work".
+
+## Spec-driven change
+
+Non-trivial work goes through the SDD flow on OpenSpec: `/opsx:explore` → `/opsx:propose <name>` →
+`/opsx:apply` → `/opsx:archive`. Keep the OpenSpec layer current with `openspec update`.
+
+## The dev loop
+
+Run the package loop before finishing any change to `tools/`, then the read-only gate:
 
 ```bash
-cd tools && npm run typecheck && npm run lint && npm test && npm run build
-node tools/dist/cli.cjs docs-check
-node tools/dist/cli.cjs provenance-check
+cd tools && npm run typecheck && npm run lint && npm test && npm run build   # rebuild + commit the bundle
+node tools/dist/cli.cjs docs-check          # README↔docs/ links + frontmatter
+node tools/dist/cli.cjs provenance-check    # every skill covered by the audit registry
+node --test "hooks/*.test.mjs"              # safe-controls decision logic
 ```
+
+The bundle (`tools/dist/cli.cjs`) is a **committed artifact** — rebuild and commit it when the source changes,
+so consumers need no build step. All green is the definition of done.
 
 ## Reporting issues
 

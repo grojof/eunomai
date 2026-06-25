@@ -101,6 +101,15 @@ This is a **review lens, not a new check**, and not an automatic move. You **sug
 accepts or declines, and the owning pillar performs the actual move. Content that is genuinely explanatory or
 reference — its correct passive state — stays where it is; don't route it.
 
+## Single source of truth (anti-duplication lens)
+
+**One fact, one home — everything else links** (see `docs/living-docs.md` and ADR-0006). Before authoring or
+keeping a page, apply the **"earns its place" test**: *is this fact already canonical in `CLAUDE.md`, an ADR,
+or the code?* → propose to **link, not restate**. During a refresh, **surface duplicates** — a page that
+restates `CLAUDE.md`/an ADR, or two pages stating the same fact (e.g. a `reference` and a `how-to` page that
+both list the same commands) — and propose a **merge or link**. The author decides; you never auto-merge. The
+deterministic gate is unaffected (duplication is judgement, not a gate rule).
+
 ## Flow
 
 1. **Survey.** (Workspace first if relevant — see above.) For the chosen project root, read its `README.md`

@@ -54,8 +54,6 @@ Full walkthrough → **[Getting started](docs/getting-started.md)**.
 **How-to**
 - **[Manage skills](docs/manage-skills.md)** — add or audit a skill behind the trust gate.
 - **[Refresh living docs](docs/refresh-living-docs.md)** — keep docs fresh and structurally honest.
-- **[Run the checks](docs/run-the-checks.md)** — the read-only gate (`docs-check`, `provenance-check`).
-- **[Contributing](docs/contributing.md)** — the dev loop for working **on** eunomai.
 
 **The pillars** (reference)
 - **[SDD](docs/sdd.md)** — the spec-driven flow on OpenSpec (explore → propose → apply → archive).

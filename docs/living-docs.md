@@ -19,6 +19,27 @@ drawn from a real source:
 | **Product-shaped map** | Stripe docs | the README is a map organized by **surface/journey**, with a quickstart and real examples |
 | **Deterministic gate** | eunomai's own posture | `docs-check` enforces frontmatter **shape**, never prose; AI judgment stays out of the gate |
 
+…governed by one principle above all (see [decisions/0006-docs-single-source-of-truth](decisions/0006-docs-single-source-of-truth/)):
+
+## Single source of truth (one fact, one home)
+
+**One fact lives in exactly one home — everything else links.** It is the convergence of GitHub README
+best-practice (link out, don't duplicate), KDD (single source of truth), OKF (`path = identity`), and Diátaxis
+(structure emerges). The homes:
+
+- **README** — the front door / map: links, never restates.
+- **`CLAUDE.md`** — the authored conventions (Claude-only source of truth).
+- **ADRs** (`docs/decisions/`) — the decisions (the *why*).
+- **`docs/*.md`** — only user-facing content that doesn't fit the README **and** isn't a convention or a
+  decision.
+- **community-health files** — the GitHub surface; exactly **one** `CONTRIBUTING.md`.
+
+**The "earns its place" test:** before writing a page, ask *is this fact already canonical in `CLAUDE.md`, an
+ADR, or the code?* → **link, don't restate**. A page earns its place only when it is the single home for its
+content. The `eunomai-living-docs` skill applies this as an **anti-duplication lens** — it surfaces pages or
+sections that duplicate another home and proposes a **merge or link** (human-in-control). This is judgement,
+not a gate rule: `docs-check` stays shape-only and never judges duplication.
+
 ## The frontmatter (the routable substrate)
 
 Every page under `docs/` carries YAML frontmatter. **Path = identity** (`docs/safe-controls.md` *is* the

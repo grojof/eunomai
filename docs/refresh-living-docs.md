@@ -48,7 +48,7 @@ node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check
 
 Read-only; non-zero exit on drift. It checks **structure** — every README→`docs/` link resolves and every
 in-scope page is indexed — not prose accuracy (that's the skill's job). See
-[run-the-checks](run-the-checks.md).
+[checks](checks.md).
 
 ## Diagrams
 

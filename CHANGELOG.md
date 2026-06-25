@@ -9,6 +9,12 @@ and the public surface may still change.
 
 ### Changed
 
+- **Docs single-source-of-truth** (ADR-0006): adopt *one fact, one home — everything else links* as the
+  governing living-docs principle; add an "earns its place" test + an anti-duplication lens to the skill.
+  Cleaned eunomai's own docs — merged the duplicated `CONTRIBUTING.md` into one, merged the `checks` reference
+  and `run-the-checks` how-to into a single page, and removed the empty Diátaxis leftover folders (14 → 12
+  pages). Also added: the living-docs/onboard skills now **propose** the docs folder structure (2–3 options,
+  default by size) instead of assuming it (ADR-0005 follow-up).
 - **Living-docs v2** (ADR-0005): Diátaxis becomes a **lens** via a `type` frontmatter field (not a folder
   mandate); docs gain an **OKF-routable substrate** (frontmatter + path-as-identity + link-graph); the README
   becomes a **product-shaped map** with an architecture diagram; and `docs-check` gains a **deterministic

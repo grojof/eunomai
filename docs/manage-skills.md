@@ -46,7 +46,7 @@ node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" provenance-check
 
 It **fails** on any skill missing a registry entry and **lists trust gaps** (e.g. `unpinned`) to act on.
 Record the **real SHA** when vendoring — an unpinned skill is surfaced as a gap, never hidden. See
-[run-the-checks](run-the-checks.md).
+[checks](checks.md).
 
 ## Base skills are different
 
