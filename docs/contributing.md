@@ -9,7 +9,7 @@ updated: 2026-06-25
 # Contributing (working on eunomai)
 
 For developers working **on** eunomai itself (not just using it). The authoritative conventions live in
-[`CLAUDE.md`](../../CLAUDE.md) — this page is the practical dev loop.
+[`CLAUDE.md`](../CLAUDE.md) — this page is the practical dev loop.
 
 ## Source of truth
 
@@ -48,11 +48,11 @@ built-in runner:
 node --test "hooks/*.test.mjs"
 ```
 
-See [safe-controls](../reference/safe-controls.md) for what the hooks enforce.
+See [safe-controls](safe-controls.md) for what the hooks enforce.
 
 ## Spec-driven change
 
-Non-trivial work goes through the [SDD flow](../reference/sdd.md):
+Non-trivial work goes through the [SDD flow](sdd.md):
 `/opsx:explore` → `/opsx:propose <name>` → `/opsx:apply` → `/opsx:archive`. Keep the OpenSpec layer current
 with `openspec update`.
 

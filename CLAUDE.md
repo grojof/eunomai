@@ -2,7 +2,7 @@
 
 A focused, **Claude-only AI workspace**, packaged as a Claude Code plugin, built on existing tools (Claude
 Code native + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD, living docs, safe controls, and
-trust-gated skills. See `docs/explanation/vision.md` for the charter.
+trust-gated skills. See `docs/vision.md` for the charter.
 
 This file is the **single authored source of truth** for AI agents working *on* eunomai — edit rules here.
 Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-tool projection.
@@ -27,10 +27,10 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
   Code plugin (the deliverable; installable via the marketplace).
 - `tools/` — the read-only checks CLI (`docs-check` + `provenance-check`), a self-contained npm/TS bundle.
 - `openspec/` — the SDD engine's home (changes/ · specs/ · archive/ · `config.yaml` = the eunomai layer).
-- `docs/` — project-docs, **Diátaxis-organized**: `guides/` (how-to), `reference/` (per-pillar facts),
-  `explanation/` (the why), `decisions/` (ADRs). All in-scope pages are indexed from the lean root
-  `README.md`; `decisions/` is dev-facing and excluded from the index.
-- **Using/installing eunomai:** see `docs/guides/getting-started.md` (install as a plugin + apply to a project).
+- `docs/` — project-docs (**living-docs v2**): flat `docs/*.md` pages, each with frontmatter whose `type` is
+  its Diátaxis mode (the *lens* — not folders); `decisions/` holds the ADR series. The root `README.md` is a
+  routable **map**; `decisions/` is dev-facing and excluded from it.
+- **Using/installing eunomai:** see `docs/getting-started.md` (install as a plugin + apply to a project).
 
 ## Workflow
 - **SDD/SPDD runs on OpenSpec** (adopted — see `docs/decisions/0001-adopt-openspec/`). For non-trivial
@@ -47,14 +47,15 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 - **Ask-by-default, fail-open** — only the trailer rule is a hard deny; a hook error never blocks work. It
   is a floor-raiser, not a security boundary. Claude-only by nature (no cross-tool hook API).
 - Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
-  `docs/reference/safe-controls.md`.
+  `docs/safe-controls.md`.
 
 ## Living docs
-- **Two layers, both standardized.** *Content* — project-docs organized by **Diátaxis** (`guides/` ·
-  `reference/` · `explanation/`; `decisions/` ADRs are dev-facing, out of the index), README a lean index +
-  summary + links, each in-scope page linked from it. *Project surface* — the **community-health files** GitHub
+- **Two layers, both standardized.** *Content* — project-docs as a **routable substrate** (living-docs v2):
+  flat `docs/*.md` with required frontmatter (`type`/`title`/`description`), Diátaxis as a `type` lens (not
+  folders), a product-shaped README **map**; `decisions/` ADRs are dev-facing, out of the map. *Project
+  surface* — the **community-health files** GitHub
   recognizes (anchored to GitHub Community Standards): mandatory `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
-  (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/reference/living-docs.md`.
+  (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/living-docs.md`.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites). In a
   workspace with nested/multiple repos it surveys first, operates on a chosen **project root** (checks run from
   there), and reports per repo — never assuming the workspace root is the project. Thin/missing docs are
@@ -67,7 +68,7 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 ## Skills
 - **Own skills only.** `eunomai-skill-finder` is the trust-gated steward: discover → gate → adopt / improve /
   create (authoring delegated to Anthropic's **skill-creator**) → fit pass; plus on-demand, scoped **audit**.
-  See `docs/reference/skill-finder.md`.
+  See `docs/skill-finder.md`.
 - **Gate = security/provenance veto + weighed judgment** (authorship · usage · quality). One hard bar
   (reject), the rest judgment. Best-effort floor-raiser, **not** a guarantee — safe-controls is the runtime
   backstop. No *central* registry; org-trusted sources live in the project's rules.
@@ -95,7 +96,7 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
   skill-finder → drive `docs-check` + `provenance-check` green (run from the project root) → step aside. The
   layer anchors **per project root, never the workspace root by default**; multirepo onboards each project
   independently; scope rides on hierarchical `CLAUDE.md` (no manifest). See
-  `docs/reference/onboard.md`.
+  `docs/onboard.md`.
 - **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
   dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"
   means the existing checks pass. The seed is derived from eunomai's own live conventions, not template copies.

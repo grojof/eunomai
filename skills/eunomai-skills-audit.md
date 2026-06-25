@@ -38,4 +38,4 @@ skills:
 All skills under `skills/` are eunomai's own, authored in this repository (`origin: authored`). No third-party
 skills are vendored into the plugin, so there are no trust gaps. This file is the consolidated provenance
 record the `eunomai-skill-finder` pillar produces (one registry per project, not per-skill sidecars) and that
-`provenance-check` verifies. See [`docs/reference/skill-finder.md`](../docs/reference/skill-finder.md).
+`provenance-check` verifies. See [`docs/skill-finder.md`](../docs/skill-finder.md).

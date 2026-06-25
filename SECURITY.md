@@ -3,7 +3,7 @@
 eunomai is a Claude-only AI workspace (a Claude Code plugin: skills · hooks · the read-only checks CLI). Its
 **safe-controls** hooks are a best-effort floor-raiser, **not** a security boundary — a determined agent can
 bypass a `PreToolUse` hook. Treat the hooks and the skill trust gate as defence-in-depth, never the only
-control. See [docs/reference/safe-controls.md](docs/reference/safe-controls.md).
+control. See [docs/safe-controls.md](docs/safe-controls.md).
 
 ## Supported versions
 

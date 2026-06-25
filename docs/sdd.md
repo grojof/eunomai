@@ -10,7 +10,7 @@ updated: 2026-06-25
 
 The first pillar: non-trivial change flows **spec-first**. eunomai does **not** build an SDD framework — it
 runs on [**OpenSpec**](https://github.com/Fission-AI/OpenSpec) and adds only a thin, tailored layer. The
-*why* of adopting OpenSpec lives in [the ADR](../decisions/0001-adopt-openspec/); this page is the facts.
+*why* of adopting OpenSpec lives in [the ADR](decisions/0001-adopt-openspec/); this page is the facts.
 
 ## The flow
 
@@ -59,4 +59,4 @@ The OpenSpec CLI is **reused, not bundled** — install it separately:
 npm i -g @fission-ai/openspec
 ```
 
-See [getting-started](../guides/getting-started.md) for the full install path.
+See [getting-started](getting-started.md) for the full install path.

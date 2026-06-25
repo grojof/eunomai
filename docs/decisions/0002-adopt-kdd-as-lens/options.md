@@ -66,7 +66,7 @@ a problem we do not yet have, against the project's bias for low maintenance.
 the passive→active spectrum across the pillars, and use it as a judgment tool for new capabilities. No new
 pillar, no new machinery, no new check.
 
-**How it works.** One explanation page ([knowledge-driven-development.md](../../explanation/knowledge-driven-development.md))
+**How it works.** One explanation page ([knowledge-driven-development.md](../../knowledge-driven-development.md))
 + this ADR + a pointer from `vision.md`. The lens then informs how future proposals are reasoned about (*what
 kind of knowledge is this, at what activation state?*).
 

@@ -8,7 +8,7 @@ updated: 2026-06-25
 
 # Run the checks (the gate)
 
-eunomai ships two **read-only** checks in the [checks](../reference/checks.md) CLI. Together they are the
+eunomai ships two **read-only** checks in the [checks](checks.md) CLI. Together they are the
 **gate** — wire them into CI / pre-merge so structure and provenance can't silently drift. They write nothing.
 
 ## The commands

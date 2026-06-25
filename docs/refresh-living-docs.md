@@ -9,7 +9,7 @@ updated: 2026-06-25
 # Refresh the living docs
 
 How to keep a project's docs fresh and structurally honest. The standard (Diátaxis layout, the lean README
-index) is in the [living-docs](../reference/living-docs.md) reference; this is the recipe.
+index) is in the [living-docs](living-docs.md) reference; this is the recipe.
 
 ## Refresh the content (the skill)
 

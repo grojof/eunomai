@@ -9,7 +9,7 @@ updated: 2026-06-25
 # Living docs
 
 Keeping a project's **user-facing** documentation fresh, **dev-loved**, and **routable for AI**. The v2
-standard (see [decisions/0005-living-docs-v2](../decisions/0005-living-docs-v2/)) rests on four ideas, each
+standard (see [decisions/0005-living-docs-v2](decisions/0005-living-docs-v2/)) rests on four ideas, each
 drawn from a real source:
 
 | Idea | From | What it means |

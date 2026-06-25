@@ -9,7 +9,7 @@ Keep **project-facing** documentation fresh and structurally honest. Scope is pr
 `README.md` and pages under `docs/`. ADRs under `docs/decisions/` are dev-facing and out of scope. You
 assist; the human stays in control — never silently rewrite docs.
 
-## The v2 standard (see `docs/reference/living-docs.md`)
+## The v2 standard (see `docs/living-docs.md`)
 
 Docs are a **routable substrate**, dev-loved and AI-legible. Four ideas:
 
@@ -72,7 +72,7 @@ technique `eunomai-onboard` uses to create docs from scratch.
 ## Activation routing (knowledge that belongs at a higher state)
 
 Docs are the **passive** end of eunomai's knowledge-activation spectrum (the KDD lens — see
-`docs/explanation/knowledge-driven-development.md`). Some prose found in a refresh is really knowledge sitting
+`docs/knowledge-driven-development.md`). Some prose found in a refresh is really knowledge sitting
 at the **wrong** state: it would be better *activated* in another pillar.
 While refreshing, **notice and surface** such content — naming the owning pillar — then **delegate** the move:
 

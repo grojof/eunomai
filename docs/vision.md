@@ -63,7 +63,7 @@ knowledge from *passive* (docs a human reads) to *active* (skills an agent runs,
 That is the **KDD lens** — adopted as vocabulary, **not** as the heavyweight methodology (no knowledge graph,
 no conformance engine — that would be the abandoned tower). See
 [knowledge-driven-development.md](knowledge-driven-development.md) and
-[decisions/0002-adopt-kdd-as-lens](../decisions/0002-adopt-kdd-as-lens/).
+[decisions/0002-adopt-kdd-as-lens](decisions/0002-adopt-kdd-as-lens/).
 
 ## Architecture
 

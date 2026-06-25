@@ -12,7 +12,7 @@ eunomai is best understood as a **knowledge-activation workspace**: it captures 
 moves it along a spectrum from *passive* (docs a human reads) to *active* (skills an agent executes, hooks a
 runtime enforces). "Knowledge-Driven Development" (KDD) is the **lens and vocabulary** for that idea — adopted
 deliberately as a *framing*, **not** as a heavyweight methodology. The decision and the rejected alternatives
-are recorded in [decisions/0002-adopt-kdd-as-lens](../decisions/0002-adopt-kdd-as-lens/).
+are recorded in [decisions/0002-adopt-kdd-as-lens](decisions/0002-adopt-kdd-as-lens/).
 
 ## Two things are called "KDD"
 
@@ -36,11 +36,11 @@ state*:
 
 | Kind of knowledge | Where it lives in eunomai | Activation state |
 |-------------------|---------------------------|------------------|
-| Explanatory / reference (project) | [living-docs](../reference/living-docs.md) (Diátaxis) | 🟢 **passive** — a human reads it |
+| Explanatory / reference (project) | [living-docs](living-docs.md) (Diátaxis) | 🟢 **passive** — a human reads it |
 | Normative / conventions | `CLAUDE.md`, `openspec/config.yaml`, permissions | 🟡 **semi-active** — injected as agent context |
-| Requirements / change decisions | [OpenSpec specs](../reference/sdd.md) + ADRs (`decisions/`) | 🟡 **semi-active** — traceable specs |
-| Procedural / know-how | [skills](../reference/skill-finder.md) (+ [base-skills](../reference/base-skills.md)) | 🔴 **active** — an agent executes it |
-| Operational / policy | [safe-controls](../reference/safe-controls.md) hooks | 🔴 **enforced** — at runtime |
+| Requirements / change decisions | [OpenSpec specs](sdd.md) + ADRs (`decisions/`) | 🟡 **semi-active** — traceable specs |
+| Procedural / know-how | [skills](skill-finder.md) (+ [base-skills](base-skills.md)) | 🔴 **active** — an agent executes it |
+| Operational / policy | [safe-controls](safe-controls.md) hooks | 🔴 **enforced** — at runtime |
 | Experiential | the agent's memory (one fact per file) | 🔵 **accumulating** |
 
 The key reframe: **KDD is not a synonym for living-docs — it is the lens that unifies all the pillars** as

@@ -46,7 +46,7 @@ diagnoses.
 
 ## What changes in the repo (executed in the follow-up change)
 
-- `docs/reference/living-docs.md` + the `eunomai-living-docs` skill — rewritten to the v2 standard.
+- `docs/living-docs.md` + the `eunomai-living-docs` skill — rewritten to the v2 standard.
 - `tools/` `docs-check` — extended with deterministic frontmatter-shape validation (reusing the existing `yaml`
   dependency). No new gate; an extension of the existing structural check.
 - Pilot on eunomai's own docs — frontmatter on every page, the README as a routable map, and the

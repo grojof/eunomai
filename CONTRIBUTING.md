@@ -1,7 +1,7 @@
 # Contributing to eunomai
 
 Thanks for helping improve eunomai. This is the GitHub-discoverable entry point; the **full developer guide**
-lives at **[docs/guides/contributing.md](docs/guides/contributing.md)** — read it before opening a PR.
+lives at **[docs/contributing.md](docs/contributing.md)** — read it before opening a PR.
 
 ## TL;DR
 
@@ -10,7 +10,7 @@ lives at **[docs/guides/contributing.md](docs/guides/contributing.md)** — read
 - **Conventional Commits**, imperative mood, one logical change per commit. **No AI-attribution trailers**
   (a hook hard-denies them).
 - **Non-trivial change is spec-first** via OpenSpec: `/opsx:explore → /opsx:propose <name> → /opsx:apply →
-  /opsx:archive`. See [docs/reference/sdd.md](docs/reference/sdd.md).
+  /opsx:archive`. See [docs/sdd.md](docs/sdd.md).
 
 ## Before you open a PR
 

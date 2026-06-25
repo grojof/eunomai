@@ -48,9 +48,9 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    - a lean `CLAUDE.md` (the single authored source) with two halves: the **structural** half that
      **declares this project's boundary + paths** (the `openspec/` and `docs/` locations and what is tracked),
      and the **activator block** — a principle-level statement of the base disciplines that points to the
-     skills as *accelerators* (see below and `docs/reference/onboard.md`),
+     skills as *accelerators* (see below and `docs/onboard.md`),
    - an `openspec/config.yaml` layer (run `openspec update`),
-   - the **permissions baseline** (`docs/reference/safe-controls.md`),
+   - the **permissions baseline** (`docs/safe-controls.md`),
    - **hooks wiring** — if the project installs the eunomai *plugin*, hooks come from it; if it uses eunomai
      from source, wire `.claude/settings.json` (`$CLAUDE_PROJECT_DIR/hooks/guard.mjs`). Detect which.
 4. **Audit skills.** Invoke **`eunomai-skill-finder`** in audit mode over the project's existing skills; do
@@ -77,7 +77,7 @@ hierarchical `CLAUDE.md`.
 The seeded `CLAUDE.md` carries an **activator block**: plain-language base disciplines (spec-first change ·
 honest docs · vet third-party skills/tools before adopting · secure-by-default · deliberate dependency changes
 · pause on irreversible/sensitive actions), each naming its skill as a **parenthetical accelerator**. **Adapt**
-the canonical block in `docs/reference/onboard.md` to the project — do not paste it verbatim. Honour three
+the canonical block in `docs/onboard.md` to the project — do not paste it verbatim. Honour three
 invariants:
 
 - **Self-sufficient** — each principle reads as actionable prose on its own; the skill is an accelerator, not a

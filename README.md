@@ -44,31 +44,31 @@ npm i -g @fission-ai/openspec        # the SDD engine (reused, installed separat
 /eunomai:eunomai-onboard             # apply eunomai to a new or existing project
 ```
 
-Full walkthrough → **[Getting started](docs/guides/getting-started.md)**.
+Full walkthrough → **[Getting started](docs/getting-started.md)**.
 
 ## The surface
 
 **New here**
-- **[Getting started](docs/guides/getting-started.md)** — install + apply eunomai to a project + the daily loop.
+- **[Getting started](docs/getting-started.md)** — install + apply eunomai to a project + the daily loop.
 
 **How-to**
-- **[Manage skills](docs/guides/manage-skills.md)** — add or audit a skill behind the trust gate.
-- **[Refresh living docs](docs/guides/refresh-living-docs.md)** — keep docs fresh and structurally honest.
-- **[Run the checks](docs/guides/run-the-checks.md)** — the read-only gate (`docs-check`, `provenance-check`).
-- **[Contributing](docs/guides/contributing.md)** — the dev loop for working **on** eunomai.
+- **[Manage skills](docs/manage-skills.md)** — add or audit a skill behind the trust gate.
+- **[Refresh living docs](docs/refresh-living-docs.md)** — keep docs fresh and structurally honest.
+- **[Run the checks](docs/run-the-checks.md)** — the read-only gate (`docs-check`, `provenance-check`).
+- **[Contributing](docs/contributing.md)** — the dev loop for working **on** eunomai.
 
 **The pillars** (reference)
-- **[SDD](docs/reference/sdd.md)** — the spec-driven flow on OpenSpec (explore → propose → apply → archive).
-- **[Living docs](docs/reference/living-docs.md)** — the v2 docs standard (Diátaxis-as-lens + OKF-routable).
-- **[Safe controls](docs/reference/safe-controls.md)** — the `PreToolUse` hooks + the permissions baseline.
-- **[Skill finder](docs/reference/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
-- **[Base skills](docs/reference/base-skills.md)** — the standards-anchored base set + the admission filter.
-- **[Onboard](docs/reference/onboard.md)** — the connector/bootstrap that applies eunomai to a project.
-- **[Checks](docs/reference/checks.md)** — the read-only checks CLI (`docs-check`, `provenance-check`).
+- **[SDD](docs/sdd.md)** — the spec-driven flow on OpenSpec (explore → propose → apply → archive).
+- **[Living docs](docs/living-docs.md)** — the v2 docs standard (Diátaxis-as-lens + OKF-routable).
+- **[Safe controls](docs/safe-controls.md)** — the `PreToolUse` hooks + the permissions baseline.
+- **[Skill finder](docs/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
+- **[Base skills](docs/base-skills.md)** — the standards-anchored base set + the admission filter.
+- **[Onboard](docs/onboard.md)** — the connector/bootstrap that applies eunomai to a project.
+- **[Checks](docs/checks.md)** — the read-only checks CLI (`docs-check`, `provenance-check`).
 
 **Go deeper** (explanation)
-- **[Vision / Charter](docs/explanation/vision.md)** — what eunomai is, its principles, pillars, architecture.
-- **[Knowledge-driven development](docs/explanation/knowledge-driven-development.md)** — the KDD lens:
+- **[Vision / Charter](docs/vision.md)** — what eunomai is, its principles, pillars, architecture.
+- **[Knowledge-driven development](docs/knowledge-driven-development.md)** — the KDD lens:
   eunomai as a knowledge-activation spectrum (passive docs → active skills/hooks).
 
 **Decisions** → **[docs/decisions/](docs/decisions/)** — the ADR series (OpenSpec · KDD · OKF · Claude-only ·

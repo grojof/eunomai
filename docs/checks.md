@@ -9,7 +9,7 @@ updated: 2026-06-25
 # Checks (the read-only CLI)
 
 eunomai's two **read-only** structural checks, shipped as a single self-contained bundle in
-[`tools/`](../../tools/) — no build step for consumers. They enforce *structure*, never prose: they belong in
+[`tools/`](../tools/) — no build step for consumers. They enforce *structure*, never prose: they belong in
 your gate (CI / pre-merge) and never write anything.
 
 ```bash
@@ -34,4 +34,4 @@ ask-by-default guardrails are a separate pillar: the `PreToolUse` hooks (see [sa
 ## Development
 
 The dev loop (typecheck · lint · test · build) and how to contribute to this package live in
-[contributing](../guides/contributing.md).
+[contributing](contributing.md).

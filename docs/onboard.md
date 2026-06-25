@@ -59,7 +59,7 @@ standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the dom
 ## The seed
 
 The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `CLAUDE.md`,
-`openspec/config.yaml`, `docs/reference/safe-controls.md`) and adapted to the target — not copies that could drift.
+`openspec/config.yaml`, `docs/safe-controls.md`) and adapted to the target — not copies that could drift.
 
 ## The activator block (the behavioural seed)
 

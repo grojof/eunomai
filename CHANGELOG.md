@@ -34,7 +34,7 @@ and the public surface may still change.
 ### Added
 
 - onboard now seeds a self-sufficient **activator block** into the project's `CLAUDE.md` (principle-level base
-  disciplines pointing to the skills as accelerators) — see [docs/reference/onboard.md](docs/reference/onboard.md).
+  disciplines pointing to the skills as accelerators) — see [docs/onboard.md](docs/onboard.md).
 - Two read-only subagents — **`codebase-cartographer`** (comprehension + an "at a glance" Mermaid/C4 diagram)
   and **`coherence-auditor`** (a one-shot doc↔code coherence report) — delegated from onboard and living-docs,
   mirroring `workspace-survey`.
@@ -51,7 +51,7 @@ and the public surface may still change.
 
 - Living-docs **project-surface layer**: the standard now defines the community-health files (anchored to
   GitHub Community Standards) alongside the Diátaxis content tree — see
-  [docs/reference/living-docs.md](docs/reference/living-docs.md).
+  [docs/living-docs.md](docs/living-docs.md).
 - Community-health files: `LICENSE` (MIT), `SECURITY.md`, `CONTRIBUTING.md`, and this `CHANGELOG.md`.
 - Reference pages for previously undocumented pillars/components: `sdd`, `base-skills`, `projection`.
 - How-to guides: `manage-skills`, `refresh-living-docs`, `run-the-checks`, `contributing`.

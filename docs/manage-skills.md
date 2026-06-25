@@ -9,7 +9,7 @@ updated: 2026-06-25
 # Add or audit a skill
 
 How to bring a skill into a project behind eunomai's trust gate, and how to (re)audit one. The mechanics live
-in the [`eunomai-skill-finder`](../reference/skill-finder.md) reference; this is the task recipe.
+in the [`eunomai-skill-finder`](skill-finder.md) reference; this is the task recipe.
 
 ## Add a skill (acquire)
 
@@ -28,7 +28,7 @@ It runs one flow with you in control:
    **skill-creator**), followed by a **fit pass** that adapts the skill to your project.
 4. **Provenance** — the result is recorded in the one `eunomai-skills-audit.md` registry at the skills root.
 
-> The gate is a **floor-raiser, not a guarantee**. [safe-controls](../reference/safe-controls.md) is the
+> The gate is a **floor-raiser, not a guarantee**. [safe-controls](safe-controls.md) is the
 > runtime backstop, and org-trusted sources belong in the project's **rules**, not a central allowlist.
 
 ## Audit an existing skill
@@ -50,5 +50,5 @@ Record the **real SHA** when vendoring — an unpinned skill is surfaced as a ga
 
 ## Base skills are different
 
-The [base skills](../reference/base-skills.md) (`eunomai-secure-coding`, `eunomai-dependency-upgrade`) ship
+The [base skills](base-skills.md) (`eunomai-secure-coding`, `eunomai-dependency-upgrade`) ship
 with eunomai and are recorded as `verdict: authored` — you don't acquire them through this flow.

@@ -31,10 +31,10 @@ does?" — is correct but partial: living-docs is only the **passive** slice; sk
 
 ## What changed in the repo
 
-- New explanation page **[docs/explanation/knowledge-driven-development.md](../../explanation/knowledge-driven-development.md)**
+- New explanation page **[docs/knowledge-driven-development.md](../../knowledge-driven-development.md)**
   — the KDD lens, the activation-spectrum table, the parallels, and the explicit out-of-scope line. Indexed
   from the README.
-- A pointer added from **[vision.md](../../explanation/vision.md)** to the new page.
+- A pointer added from **[vision.md](../../vision.md)** to the new page.
 - No code, no new pillar, no new check. Generated files unchanged.
 
 ## The trade we accepted
@@ -47,7 +47,7 @@ graph engine.
 
 ## How to use it
 
-- Read the [explanation page](../../explanation/knowledge-driven-development.md) to place any artifact on the
+- Read the [explanation page](../../knowledge-driven-development.md) to place any artifact on the
   passive→active spectrum.
 - When proposing a new capability, ask which **kind** of knowledge it is and which **activation state** it
   belongs in — keep docs explaining, skills acting, hooks enforcing, specs tracking.

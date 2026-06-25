@@ -21,13 +21,13 @@ SHALL provide eunomai's skills and the safe-controls hooks (hooks resolving via 
 
 ### Requirement: Coherent end-to-end usage guide
 
-eunomai SHALL provide a `docs/guides/getting-started.md` that documents, in one place: prerequisites (Claude
+eunomai SHALL provide a `docs/getting-started.md` that documents, in one place: prerequisites (Claude
 Code + OpenSpec), how to install, how to apply eunomai to a new or existing project via `eunomai-onboard`, and
 the day-to-day workflow (the SDD loop, the hooks, the skills, the checks). It SHALL be linked from the README,
 SHALL state honestly what ships with the plugin, and SHALL NOT reference Copilot or a cross-tool projection.
 
 #### Scenario: Follow it end to end
-- **WHEN** a new user opens `docs/guides/getting-started.md`
+- **WHEN** a new user opens `docs/getting-started.md`
 - **THEN** they can go from install to applying eunomai to a project without piecing together the per-pillar docs
 
 #### Scenario: The CLI ships with the plugin
@@ -37,15 +37,15 @@ SHALL state honestly what ships with the plugin, and SHALL NOT reference Copilot
 ### Requirement: README leads with getting started
 
 The README SHALL present a **Getting started** entry point (install → apply → workflow) prominently, in
-addition to the reference index, linking to `docs/guides/getting-started.md`.
+addition to the reference index, linking to `docs/getting-started.md`.
 
 #### Scenario: Front door points to the guide
 - **WHEN** a reader opens the README
-- **THEN** a Getting started section points to `docs/guides/getting-started.md` ahead of the deep reference links
+- **THEN** a Getting started section points to `docs/getting-started.md` ahead of the deep reference links
 
 ### Requirement: Docs integrity preserved
 
-The `docs/guides/getting-started.md` page SHALL be indexed in the README so that `docs-check` continues to pass.
+The `docs/getting-started.md` page SHALL be indexed in the README so that `docs-check` continues to pass.
 
 #### Scenario: docs-check stays green
 - **WHEN** `docs-check` runs
