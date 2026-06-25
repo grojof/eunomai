@@ -32,7 +32,11 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    chooses which repos are **in scope** and where the eunomai layer anchors. Change nothing in this step.
 1. **Analyze + gather input — per confirmed project root.** For each chosen project root, survey its stack,
    existing docs, skills, and conventions, and gather that project's purpose, domain, and audience via the
-   **structured interview** (below). Change nothing yet.
+   **structured interview** (below). Delegate the heavy, read-only reading: the **`codebase-cartographer`**
+   subagent returns a comprehension map (architecture · entry points · data flow · stack + versions) and a
+   proposed "at a glance" diagram; for an **existing** project with docs, also run a one-shot
+   **`coherence-auditor`** pass to surface doc↔code drift and stale versions. Both are read-only — they report,
+   you confirm. Change nothing yet.
 2. **Establish docs** (at the project root) → the living-docs standard:
    - Existing docs → restructure into a lean `README.md` index + `docs/` topic pages.
    - No docs → create a lean README + `docs/` pages from the analysis and the structured interview, capturing

@@ -24,6 +24,9 @@ and the public surface may still change.
 
 - onboard now seeds a self-sufficient **activator block** into the project's `CLAUDE.md` (principle-level base
   disciplines pointing to the skills as accelerators) — see [docs/reference/onboard.md](docs/reference/onboard.md).
+- Two read-only subagents — **`codebase-cartographer`** (comprehension + an "at a glance" Mermaid/C4 diagram)
+  and **`coherence-auditor`** (a one-shot doc↔code coherence report) — delegated from onboard and living-docs,
+  mirroring `workspace-survey`.
 
 ### Security
 

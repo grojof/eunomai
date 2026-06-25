@@ -30,7 +30,16 @@ to the story**, and keep each one simple (one idea per diagram):
 - **class / erDiagram** — code or data structure.
 - **stateDiagram** — status changes / lifecycles.
 
-Reach for a diagram when prose would be harder to follow than a picture — not as decoration.
+Reach for a diagram when prose would be harder to follow than a picture — not as decoration. For an
+architecture diagram of an unfamiliar project, delegate the read-only derivation to the
+**`codebase-cartographer`** subagent and adapt its proposed Mermaid/C4 — you place and confirm it, the agent
+only proposes.
+
+## Surfacing stale docs
+
+To find docs that have drifted from the code (or cite stale versions), delegate a one-shot read-only
+**`coherence-auditor`** pass: it returns a report of doc↔code drift you resolve with the author. It is a
+disposable diagnostic, suggestion-only — never a continuous check, never auto-fixing.
 
 ## When to use
 
