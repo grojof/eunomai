@@ -65,7 +65,10 @@ Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check)
 
 - **`eunomai-living-docs` skill** — invoke it to refresh project docs toward the standard: update the README
   summary, sync the index with what exists under `docs/`, and split overgrown sections into topic pages. It
-  keeps you in control; it never silently rewrites docs.
+  keeps you in control; it never silently rewrites docs. In a **workspace** with nested or multiple repos it
+  first runs a read-only **workspace survey**, operates on a chosen **project root** (running `docs-check`
+  from that root), and reports doc state per repo — it never assumes the workspace root is the project. A
+  plain single repo adds no extra ceremony.
 - **`docs-check`** — a read-only integrity check (no writes, non-zero exit on divergence):
 
   ```bash

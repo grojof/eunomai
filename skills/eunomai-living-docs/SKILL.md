@@ -38,11 +38,21 @@ Reach for a diagram when prose would be harder to follow than a picture — not 
 - A new `docs/` page exists but nothing links to it (or `docs-check` reports an orphan/broken link).
 - A README section has outgrown a couple of paragraphs and should become a topic page.
 
+## Project root in a workspace
+
+Operate on a **project root**, which may **not** be the current directory. If the workspace has nested or
+multiple repos (an environment repo at the root with project repos under it, or a multirepo), first delegate a
+read-only survey to the **`workspace-survey`** subagent to identify the project roots, then audit/refresh
+against a **chosen project root** and report doc state **per repo** — never assume the workspace root is the
+project. In a plain single repo (cwd = project root = workspace) this adds no ceremony: proceed directly.
+
 ## Flow
 
-1. **Survey.** Read `README.md` and list the pages under `docs/` (excluding `docs/decisions/`). Note what
-   changed recently (git log / current work).
-2. **Run the check.** `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
+1. **Survey.** (Workspace first if relevant — see above.) For the chosen project root, read its `README.md`
+   and list the pages under `docs/` (excluding `docs/decisions/`). Note what changed recently (git log /
+   current work).
+2. **Run the check — from the project root** (`cd` into it; the check resolves relative to `cwd`):
+   `node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
 3. **Refresh, in order:**
    - **Summary** — update the README's one-paragraph summary so it matches what the project now is.
    - **Index** — ensure every in-scope `docs/` page is linked from the README; remove links to pages that no

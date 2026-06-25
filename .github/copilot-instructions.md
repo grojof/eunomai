@@ -56,7 +56,9 @@ rules here, not there.
   summary + links, each in-scope page linked from it. *Project surface* — the **community-health files** GitHub
   recognizes (anchored to GitHub Community Standards): mandatory `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
   (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/reference/living-docs.md`.
-- Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites).
+- Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites). In a
+  workspace with nested/multiple repos it surveys first, operates on a chosen **project root** (checks run from
+  there), and reports per repo — never assuming the workspace root is the project.
 - **`node projection/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
   every in-scope page is indexed, and the mandatory community-health files are present (exit 1 on drift). Part
   of the gate; enforces structure, not prose.
@@ -83,9 +85,13 @@ rules here, not there.
   `skill-finder` + project rules. The base set stays small and undisputed; breadth lives in the cited standards.
 
 ## Connector / bootstrap
-- `eunomai-onboard` is the **cold-start** orchestrator: analyze a new/existing project → establish docs
-  (living-docs standard) → seed conventions (lean `AGENTS.md`, `openspec/config.yaml`, permissions, hooks) →
-  audit skills via skill-finder → drive `docs-check` + `provenance-check` green → step aside. See
+- `eunomai-onboard` is the **cold-start** orchestrator: **survey the workspace** (the read-only
+  `workspace-survey` subagent maps repos root + nested, the user confirms scope — *detect, don't assume*) →
+  per confirmed **project root**: establish docs (living-docs standard) → seed conventions (lean `AGENTS.md`
+  declaring the project's boundary + paths, `openspec/config.yaml`, permissions, hooks) → audit skills via
+  skill-finder → drive `docs-check` + `provenance-check` green (run from the project root) → step aside. The
+  layer anchors **per project root, never the workspace root by default**; multirepo onboards each project
+  independently; scope rides on hierarchical `CLAUDE.md`/`AGENTS.md` (no manifest). See
   `docs/reference/onboard.md`.
 - **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
   dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"
