@@ -1,3 +1,11 @@
+---
+type: explanation
+title: "Vision / Charter"
+description: "What eunomai is, its principles, pillars, and architecture."
+tags: [vision, charter]
+updated: 2026-06-25
+---
+
 # eunomai — Vision / Charter
 
 > A focused, **Claude-only AI workspace**, tailored 100% to how we work — built on existing tools, not

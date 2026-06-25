@@ -1,26 +1,36 @@
 # living-docs Specification
 
 ## Purpose
-Define eunomai's living-docs pillar for project-facing documentation: a Diátaxis-organized, lean-index
-structure (README → `docs/`), an on-demand refresh skill, a read-only README→docs integrity check, Mermaid/C4
-diagram enrichment, workspace-aware per-repo auditing, and recovery of thin or missing docs via the structured
-interview. Dev-facing ADRs are out of scope, and eunomai dogfoods the standard on its own docs.
+Define eunomai's living-docs pillar (v2) for project-facing documentation: Diátaxis as a **lens** via a `type`
+frontmatter field (not a folder mandate), an **OKF-routable substrate** (frontmatter + path-as-identity + a
+link-graph), a **product-shaped README map** with a dev-quality bar, and a **deterministic frontmatter gate**
+in `docs-check` — with AI coherence-auditing kept out of the gate. Plus an on-demand refresh skill, Mermaid/C4
+diagrams, workspace-aware per-repo auditing, and recovery of thin/missing docs via the structured interview.
+Dev-facing ADRs are out of scope; eunomai dogfoods the standard on its own docs.
 ## Requirements
 ### Requirement: Project-docs structure standard
 
-The root `README.md` SHALL be a lean front door — a short project summary plus an index of links into deeper
-documentation. Detailed project documentation SHALL live under `docs/`, **organized by Diátaxis type**:
-`guides/` (how-to, including getting-started), `reference/` (technical facts — one page per capability),
-`explanation/` (the why / concepts), and `decisions/` (ADRs). Every in-scope page SHALL be reachable from the
-README index, and the README SHALL NOT inline long-form content that belongs in a `docs/` page.
+The root `README.md` SHALL be a **routable map** — a short at-a-glance summary, an architecture diagram, a
+quickstart, and an index organized by **surface/journey** (not by Diátaxis bucket). Detailed documentation
+SHALL live under `docs/` as a **routable substrate**: every page SHALL carry YAML frontmatter with **required**
+`type` (∈ `tutorial | how-to | reference | explanation | decision`), `title`, and `description`; **recommended**
+`tags`; and **optional** `audience`, `related`, `updated`. The Diátaxis mode SHALL be expressed by the `type`
+field (a **lens** — one page, one mode), **not** by a mandated folder tree: folders are a convenience and MAY
+stay flat while small, a surface promoted to its own folder only as it grows. Each page's path SHALL serve as
+its identity, pages SHALL link to form a navigable graph, and every in-scope page SHALL be reachable from the
+README map. The README SHALL NOT inline long-form content that belongs in a `docs/` page.
 
 #### Scenario: A reader opens the README
 - **WHEN** a reader opens `README.md`
-- **THEN** they get a concise summary of the project and a navigable index of links to the `docs/` pages
+- **THEN** they get an at-a-glance summary, an architecture diagram, a quickstart, and a surface-organized map of links to the `docs/` pages
 
-#### Scenario: A new page is placed by type
-- **WHEN** new long-form documentation is authored
-- **THEN** it goes under the matching Diátaxis folder (`guides/`, `reference/`, or `explanation/`) and is linked from the README index, not inlined
+#### Scenario: A page declares its mode in frontmatter
+- **WHEN** new documentation is authored
+- **THEN** it carries frontmatter whose `type` states its single Diátaxis mode, and it is reachable from the README map — regardless of which folder it sits in
+
+#### Scenario: Folders are convenience, not mandate
+- **WHEN** a project is small
+- **THEN** `docs/` pages MAY stay flat (the `type` field classifies them), and no empty Diátaxis folders are required
 
 ### Requirement: On-demand docs refresh skill
 
@@ -39,21 +49,25 @@ human-invoked and SHALL keep the human in control (it does not silently rewrite 
 
 ### Requirement: README-to-docs integrity check
 
-The plugin SHALL provide a read-only integrity check that verifies (a) every README link into `docs/`
-resolves to an existing file, and (b) every in-scope project-doc page under `docs/` is reachable from the
-README index. The check SHALL exit non-zero on any divergence, report what diverged, and make no changes.
+The plugin SHALL provide a read-only integrity check that verifies, **deterministically**: (a) every README
+link into `docs/` resolves; (b) every in-scope page under `docs/` is reachable from the README map; and (c)
+every in-scope page carries valid frontmatter **shape** — `type` present and in the allowed set, with non-empty
+`title` and `description`. The check SHALL validate **shape, never prose** (it does not judge whether the
+content truly matches its `type`, nor doc↔code coherence — that is the `coherence-auditor` agent's one-shot,
+human-resolved job, which SHALL NOT be part of the gate). It SHALL exit non-zero on any divergence, report what
+diverged, and make no changes.
 
 #### Scenario: A README link is broken
 - **WHEN** the README links to a `docs/` file that does not exist
 - **THEN** the check reports the broken link and exits non-zero
 
-#### Scenario: A docs page is not indexed
-- **WHEN** an in-scope project-doc page under `docs/` is not reachable from the README index
-- **THEN** the check reports the orphaned page and exits non-zero
+#### Scenario: A page is missing or has invalid frontmatter
+- **WHEN** an in-scope `docs/` page has no frontmatter, an unknown `type`, or an empty `title`/`description`
+- **THEN** the check reports it and exits non-zero
 
-#### Scenario: README and docs are in sync
-- **WHEN** every README→`docs/` link resolves and every in-scope page is indexed
-- **THEN** the check exits zero and writes no files
+#### Scenario: AI judgment is not in the gate
+- **WHEN** the gate runs
+- **THEN** it performs only deterministic shape/link checks and never invokes AI judgment on prose or coherence
 
 ### Requirement: Dev-docs excluded from scope
 

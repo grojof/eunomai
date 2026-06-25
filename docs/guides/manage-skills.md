@@ -1,3 +1,11 @@
+---
+type: how-to
+title: "Manage skills"
+description: "Add or audit a skill behind the trust gate."
+tags: [skills, skill-finder]
+updated: 2026-06-25
+---
+
 # Add or audit a skill
 
 How to bring a skill into a project behind eunomai's trust gate, and how to (re)audit one. The mechanics live

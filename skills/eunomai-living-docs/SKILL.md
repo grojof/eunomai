@@ -1,6 +1,6 @@
 ---
 name: eunomai-living-docs
-description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's lean-index, Diátaxis-organized standard — update the summary, sync the README index with docs/ pages, and place/split content into the right Diátaxis folder. Use when project docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (ADRs are out of scope).
+description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (ADRs are out of scope).
 ---
 
 # eunomai-living-docs
@@ -9,15 +9,21 @@ Keep **project-facing** documentation fresh and structurally honest. Scope is pr
 `README.md` and pages under `docs/`. ADRs under `docs/decisions/` are dev-facing and out of scope. You
 assist; the human stays in control — never silently rewrite docs.
 
-## Structure (Diátaxis)
+## The v2 standard (see `docs/reference/living-docs.md`)
 
-The README is a lean index → links into `docs/`, organized by [Diátaxis](https://diataxis.fr/) so each page
-has one purpose. Place every page in the folder that matches its kind:
+Docs are a **routable substrate**, dev-loved and AI-legible. Four ideas:
 
-- `guides/` — **how-to** (and tutorials): getting-started, task recipes.
-- `reference/` — **reference**: one page per capability, just the facts.
-- `explanation/` — **explanation**: the why, concepts, charter.
-- `decisions/` — ADRs (dev-facing, excluded from the README index).
+- **Frontmatter on every page** (OKF-style): required `type` + `title` + `description`; recommended `tags`;
+  optional `audience`/`related`/`updated`. **Path = identity**; pages link to form a graph; the README is the
+  root map. `docs-check` enforces frontmatter **shape** deterministically.
+- **Diátaxis as a lens via `type`** (`tutorial | how-to | reference | explanation | decision`) — one page, one
+  mode. Diátaxis is a *compass, not a folder mandate*: **folders are convenience** (stay flat while small;
+  promote a surface to its own folder only when it grows). The `type` field, not the path, states the mode.
+- **README = a product-shaped map** (Stripe-style): at-a-glance summary · an architecture diagram · a
+  quickstart · a surface/journey-organized index. Not a flat link list.
+- **Dev-quality bar:** lead with the answer · real examples · layered (`audience`) · scannable reference.
+
+ADRs under `docs/decisions/` are dev-facing (`type: decision`), a series excluded from the indexed map.
 
 ## Diagrams (Mermaid + C4)
 
@@ -88,11 +94,12 @@ reference — its correct passive state — stays where it is; don't route it.
 2. **Run the check — from the project root** (`cd` into it; the check resolves relative to `cwd`):
    `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" docs-check` to see broken links and orphaned pages.
 3. **Refresh, in order:**
-   - **Summary** — update the README's one-paragraph summary so it matches what the project now is.
-   - **Index** — ensure every in-scope `docs/` page is linked from the README; remove links to pages that no
-     longer exist.
-   - **Split** — if a README section is long-form, move it into the matching Diátaxis folder
-     (`guides/` · `reference/` · `explanation/`) and leave a link.
+   - **Map** — keep the README's at-a-glance summary, diagram, quickstart, and surface-organized index in line
+     with reality; ensure every in-scope `docs/` page is reachable and remove links to pages that no longer exist.
+   - **Frontmatter** — every `docs/` page carries valid frontmatter (required `type`/`title`/`description`);
+     set `type` by the page's Diátaxis mode (the lens — one page, one mode).
+   - **Split** — if a README section is long-form, move it into a `docs/` page (flat while small) and leave a
+     link; let folders emerge only when a surface grows.
 4. **Confirm before applying.** Show the proposed edits; apply them with the user's agreement.
 5. **Verify.** Re-run `docs-check` until it exits 0.
 

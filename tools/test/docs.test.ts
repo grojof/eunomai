@@ -11,6 +11,10 @@ const write = (rel: string, body: string): void => {
   writeFileSync(abs, body);
 };
 
+/** A page body with valid v2 frontmatter (required type/title/description). */
+const page = (type: string, title = "T", description = "D"): string =>
+  `---\ntype: ${type}\ntitle: ${title}\ndescription: ${description}\n---\n\n# ${title}\n`;
+
 /** Seed the mandatory community-health files so checkDocs reports none missing. */
 const writeHealthFiles = (): void => {
   write("LICENSE", "MIT\n");
@@ -27,16 +31,51 @@ afterEach(() => {
 });
 
 describe("checkDocs", () => {
-  it("passes when every link resolves and every in-scope page is indexed", () => {
+  it("passes when every link resolves, every page is indexed, and frontmatter is valid", () => {
     write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
-    write("docs/guide.md", "# Guide\n");
+    write("docs/guide.md", page("how-to", "Guide"));
     writeHealthFiles();
     const r = checkDocs(dir);
     expect(r.broken).toEqual([]);
     expect(r.orphaned).toEqual([]);
     expect(r.missingHealth).toEqual([]);
+    expect(r.frontmatterIssues).toEqual([]);
     expect(r.checkedLinks).toBe(1);
     expect(r.scannedPages).toBe(1);
+  });
+
+  it("flags a page with no frontmatter", () => {
+    write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
+    write("docs/guide.md", "# Guide\n");
+    const r = checkDocs(dir);
+    expect(r.frontmatterIssues).toEqual(["docs/guide.md: missing frontmatter"]);
+  });
+
+  it("flags a page whose type is not an allowed Diátaxis mode", () => {
+    write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
+    write("docs/guide.md", page("guide", "Guide")); // 'guide' is not a valid type
+    const r = checkDocs(dir);
+    expect(r.frontmatterIssues.length).toBe(1);
+    expect(r.frontmatterIssues[0]).toMatch(/docs\/guide\.md: invalid 'type'/);
+  });
+
+  it("flags missing or empty required fields", () => {
+    write("README.md", "# P\n\n- [A](docs/a.md) [B](docs/b.md)\n");
+    write("docs/a.md", "---\ntype: reference\ntitle: A\n---\n\n# A\n"); // no description
+    write("docs/b.md", "---\ntype: reference\ntitle: ''\ndescription: D\n---\n\n# B\n"); // empty title
+    const r = checkDocs(dir);
+    expect(r.frontmatterIssues).toEqual([
+      "docs/a.md: missing or empty 'description'",
+      "docs/b.md: missing or empty 'title'",
+    ]);
+  });
+
+  it("does not check frontmatter on dev-docs (ADRs under docs/decisions)", () => {
+    write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
+    write("docs/guide.md", page("reference", "Guide"));
+    write("docs/decisions/0001-x/DECISION.md", "# ADR\n"); // no frontmatter, but out of scope
+    const r = checkDocs(dir);
+    expect(r.frontmatterIssues).toEqual([]);
   });
 
   it("flags every mandatory community-health file when none are present", () => {

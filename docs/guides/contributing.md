@@ -1,3 +1,11 @@
+---
+type: how-to
+title: "Contributing (working on eunomai)"
+description: "The practical dev loop for working on eunomai itself."
+tags: [contributing, dev]
+updated: 2026-06-25
+---
+
 # Contributing (working on eunomai)
 
 For developers working **on** eunomai itself (not just using it). The authoritative conventions live in

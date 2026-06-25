@@ -1,101 +1,118 @@
+---
+type: reference
+title: "Living docs"
+description: "The v2 project-docs standard: Diátaxis as a lens via type, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
+tags: [living-docs, docs, okf, diataxis]
+updated: 2026-06-25
+---
+
 # Living docs
 
-Keeping eunomai's **project-facing** documentation fresh and structurally honest. Project-docs only —
-ADRs under `docs/decisions/` are dev-facing and out of the index.
+Keeping a project's **user-facing** documentation fresh, **dev-loved**, and **routable for AI**. The v2
+standard (see [decisions/0005-living-docs-v2](../decisions/0005-living-docs-v2/)) rests on four ideas, each
+drawn from a real source:
 
-A well-formed project has **two layers**, and the standard covers both:
+| Idea | From | What it means |
+|------|------|---------------|
+| **Diátaxis as a lens** | [Diátaxis](https://diataxis.fr/how-to-use-diataxis/) (its own guidance: a compass, not a blueprint) | the content *mode* is a page-level lens, carried in a `type` field — **not** a mandated folder tree |
+| **Routable substrate** | [OKF](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing) | frontmatter + path-as-identity + a link-graph → legible to humans **and** agents |
+| **Product-shaped map** | Stripe docs | the README is a map organized by **surface/journey**, with a quickstart and real examples |
+| **Deterministic gate** | eunomai's own posture | `docs-check` enforces frontmatter **shape**, never prose; AI judgment stays out of the gate |
 
-| Layer | Answers | Anchored to | Lives in |
-|-------|---------|-------------|----------|
-| **Content** | "how is the documentation organized?" | [Diátaxis](https://diataxis.fr/) | `docs/` (+ the README index) |
-| **Project surface** | "what makes this a well-formed GitHub project?" | [GitHub Community Standards](https://docs.github.com/communities) | repo root / `.github/` |
+## The frontmatter (the routable substrate)
 
-Diátaxis organizes the *content*; it says nothing about the *community-health files* GitHub itself recognizes.
-Both are part of the standard — don't reinvent either; anchor to the source.
+Every page under `docs/` carries YAML frontmatter. **Path = identity** (`docs/safe-controls.md` *is* the
+"safe-controls" concept); pages link to each other to form a navigable graph; the README is the graph's root
+map.
 
-## The structure standard
+```yaml
+---
+type: reference            # REQUIRED — the Diátaxis mode (the lens): tutorial | how-to | reference | explanation | decision
+title: Safe controls       # REQUIRED
+description: …             # REQUIRED — one line, for human recall and AI routing
+tags: [safe-controls, hooks]   # recommended — grouping / graph
+audience: maintainer       # optional — newcomer | maintainer (Stripe-style layering)
+related: [skill-finder]    # optional — explicit graph edges (body links also count)
+updated: 2026-06-25        # optional — freshness
+---
+```
 
-The root `README.md` is a **lean front door** — a short project summary plus an *index of links* into
-deeper docs; it never inlines long-form content. The depth lives under `docs/`, organized by the
-[**Diátaxis**](https://diataxis.fr/) framework so each page has one clear purpose (mixing kinds is the
-main cause of confusing docs):
+`type` is **required** and machine-checked; `tags` is recommended; `audience`/`related`/`updated` are optional.
 
-| Folder | Diátaxis type | Holds | Answers |
-|--------|---------------|-------|---------|
-| `guides/` | how-to (+ tutorials) | getting-started, task recipes | "how do I…?" |
-| `reference/` | reference | one page per capability — the facts | "what exactly is…?" |
-| `explanation/` | explanation | the why, concepts, charter | "why / what's the idea?" |
-| `decisions/` | (ADRs) | architecture decision records | "why did we decide…?" (dev-facing) |
+## Diátaxis as a lens (the `type` field)
 
-**Every in-scope page** (under `guides/`, `reference/`, `explanation/`) **is linked from the README index.**
-When a README section outgrows a couple of paragraphs, it becomes a page in the matching folder and the
-README keeps a link. `decisions/` is excluded from the index.
+The four Diátaxis modes are a **lens to keep each page pure** — one page, one mode (mixing modes is the #1
+cause of confusing docs). In v2 the mode lives in `type`, not in a folder:
 
-## The project surface (community-health files)
+- **tutorial** — learning-oriented, a guided first run.
+- **how-to** — task-oriented recipes (getting-things-done).
+- **reference** — information-oriented facts, one capability per page.
+- **explanation** — understanding-oriented; the why, concepts, charter.
+- **decision** — ADRs (dev-facing; a series under `docs/decisions/`, out of the indexed map).
 
-The files GitHub recognizes and surfaces in a repo's *Community Standards* profile. The standard defines a
-**mandatory** set (enforced by `docs-check`) and an **optional** set (recommended, not enforced). A file
-counts as present in any location GitHub recognizes — repo root, `.github/`, or `docs/`.
+Diátaxis's own authors say it is *"a guide, a map to check you're in the right place,"* and *not* a mandate to
+create empty folders. So **folders are a convenience**: stay flat while small; a surface is promoted to its own
+folder only when it grows (~3+ pages) — the structure *emerges*.
 
-| File | Status | Purpose / anchor |
-|------|--------|------------------|
-| `README.md` | mandatory | the lean index (see above) — already covered by the link/index check |
-| `LICENSE` | **mandatory** | the terms of use; without it the project is "all rights reserved" by default |
-| `SECURITY.md` | **mandatory** | how to report a vulnerability — pairs with [safe-controls](safe-controls.md) / [base-skills](base-skills.md) |
-| `CONTRIBUTING.md` | **mandatory** | how to contribute; place it where GitHub auto-links it (root / `.github/` / `docs/`), **not** buried under `docs/guides/` |
-| `CHANGELOG.md` | **mandatory** | notable changes — [Keep a Changelog](https://keepachangelog.com/) + [SemVer](https://semver.org/) |
-| `CODE_OF_CONDUCT.md` | optional | community expectations (e.g. Contributor Covenant) |
-| issue / PR templates (`.github/`) | optional | `ISSUE_TEMPLATE/`, `PULL_REQUEST_TEMPLATE.md` |
-| `CODEOWNERS`, `SUPPORT.md`, `FUNDING.yml` | optional | review routing, support channels, sponsorship |
+## The README as a map (product-shaped)
 
-> **Placement matters.** GitHub auto-detects `CONTRIBUTING.md` in the root, `.github/`, or `docs/` — but
-> **not** in `docs/guides/`. Keep the GitHub-discoverable file at a recognized path; depth (a full dev guide)
-> can still live under `docs/guides/` and be linked from it.
+The root `README.md` is the **map**, not a flat link list. Organized by **surface/journey** (Stripe-style),
+it gives — in order — what a developer needs to get oriented fast:
+
+1. **At a glance** — what it is · who it's for · why, in 2–3 sentences.
+2. **An architecture diagram** — a Mermaid/C4 "at a glance" picture (see Diagrams).
+3. **Quickstart** — install → first useful result, fast.
+4. **The surface** — a routed index: *new here* → *the pillars* → *go deeper*.
+
+The README never inlines long-form content that belongs in a page.
+
+## The dev-quality bar (Stripe-drawn)
+
+A page earns its place when it: leads with the answer; shows **real, runnable examples** where applicable; is
+**layered** (a newcomer path and a maintainer depth, via `audience`); and keeps reference **scannable** (tables,
+one mode per page). *Documentation is a product.*
 
 ## Diagrams (Mermaid + C4)
 
-Use [Mermaid](https://mermaid.js.org/) (GitHub-native) and **match the diagram type to the story**, one idea
-per diagram: **flowchart** for a process/decision, **sequence** for interactions over time, **C4** for
-architecture (Context → Container → Component), **class/erDiagram** for code/data structure, **stateDiagram**
-for lifecycles. Add a diagram only when it's clearer than prose — not as decoration.
+Use [Mermaid](https://mermaid.js.org/) (GitHub-native), **one idea per diagram**: **C4** for architecture
+(Context → Container), **flowchart** for a process, **sequence** for interactions over time, **class/erDiagram**
+for structure, **stateDiagram** for lifecycles. For an unfamiliar project, delegate the read-only derivation to
+the **`codebase-cartographer`** agent and adapt its proposal — you place and confirm it.
 
-## Activation routing
+## The two-layer guarantee (deterministic gate + AI diagnostic)
 
-Living docs is the **passive** end of eunomai's knowledge-activation spectrum (the
-[KDD lens](../explanation/knowledge-driven-development.md)). Not everything that ends up as prose belongs there:
-a refresh sometimes finds knowledge that would be better *activated* in another pillar. The skill applies a
-lightweight **review lens** — it surfaces such content with the owning pillar named and **delegates** the move,
-never performing it:
+The reliability of the docs comes from **two layers that must stay separate**:
 
-| If a refresh finds… | …it belongs in | Activation state |
-|---------------------|----------------|------------------|
-| a recurring convention | `AGENTS.md` | 🟡 semi-active |
-| an enforceable policy | a hook ([safe-controls](safe-controls.md)) | 🔴 enforced |
-| a repeatable procedure | a skill (via [skill-finder](skill-finder.md)) | 🔴 active |
-| a trackable requirement | an OpenSpec spec ([SDD](sdd.md)) | 🟡 traceable |
+| Guarantee | Mechanism | Blocks? |
+|-----------|-----------|---------|
+| Pages are **routable** (frontmatter shape) + links/index resolve | `docs-check` (**deterministic**) | ✅ gate |
+| Docs **tell the truth** about the code (coherence, stale versions) | the `coherence-auditor` agent (**AI, one-shot**) | ❌ human resolves |
+| The `type`/mode is *apt* (not just present) | the `eunomai-living-docs` skill (lens, suggests) | ❌ judgment |
 
-It is a **suggestion, not a check and not an automatic move**: the author accepts or declines, and the owning
-pillar enacts it. Genuinely explanatory or reference content stays passive — its correct state. See the
-[KDD explanation](../explanation/knowledge-driven-development.md) for the full activation spectrum.
+**AI judgment never enters the gate** — that would be non-deterministic (a flaky gate guarantees nothing) and
+the abandoned governance tower. The deterministic part *gates*; the AI part *diagnoses*.
+
+## `docs-check` (the deterministic floor)
+
+```bash
+node tools/dist/cli.cjs docs-check
+```
+
+Read-only; non-zero on divergence. It verifies: every README→`docs/` link resolves; every in-scope page is
+reachable from the map; **every in-scope page has valid frontmatter shape** (`type` in the allowed set,
+non-empty `title`/`description`); and the mandatory community-health files are present. It checks **shape, not
+prose** — `docs/decisions/` (ADRs) are out of scope. Part of the gate.
+
+## The project surface (community-health files)
+
+Alongside the content, the standard requires the files GitHub recognizes (anchored to GitHub Community
+Standards), enforced by `docs-check`: **mandatory** `README.md` · `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
+(at a GitHub-detectable path — root / `.github/` / `docs/`) · `CHANGELOG.md`; the rest (`CODE_OF_CONDUCT.md`,
+issue/PR templates, `CODEOWNERS`, …) optional.
 
 ## Keeping it fresh
 
-Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check):
-
-- **`eunomai-living-docs` skill** — invoke it to refresh project docs toward the standard: update the README
-  summary, sync the index with what exists under `docs/`, and split overgrown sections into topic pages. It
-  keeps you in control; it never silently rewrites docs. In a **workspace** with nested or multiple repos it
-  first runs a read-only **workspace survey**, operates on a chosen **project root** (running `docs-check`
-  from that root), and reports doc state per repo — it never assumes the workspace root is the project. A
-  plain single repo adds no extra ceremony. When a project's docs are **thin or missing**, it recovers the
-  knowledge with a **structured interview** (one question at a time, recommend a default, explore the codebase
-  first — the same technique `eunomai-onboard` uses), human-in-control.
-- **`docs-check`** — a read-only integrity check (no writes, non-zero exit on divergence):
-
-  ```bash
-  node tools/dist/cli.cjs docs-check
-  ```
-
-  It verifies every README→`docs/` link resolves, every in-scope `docs/` page is reachable from the README
-  index, and the **mandatory community-health files are present** (in any recognized location). It enforces
-  *structure*, not prose accuracy — that is the skill's job. It runs as part of the gate.
+The **`eunomai-living-docs`** skill refreshes docs toward this standard (human-in-control, never auto-rewrites):
+updates the README map, keeps frontmatter and the index honest, applies the `type` lens, and surfaces knowledge
+that belongs at a higher activation state. In a workspace with nested/multiple repos it surveys first, operates
+per **project root**, and reports per repo. Thin/missing docs are recovered via the **structured interview**.

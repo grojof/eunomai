@@ -1,3 +1,11 @@
+---
+type: reference
+title: "Onboard (connector / bootstrap)"
+description: "The one-shot connector that applies eunomai to a project."
+tags: [onboard, bootstrap]
+updated: 2026-06-25
+---
+
 # Onboard (connector / bootstrap)
 
 The one-shot starting point that applies eunomai to a new or existing project, then steps aside. It is the

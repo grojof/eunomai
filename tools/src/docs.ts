@@ -1,10 +1,20 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
+import { parse } from "yaml";
 
 const DOCS_DIR = "docs";
 
 /** Dev-docs directories excluded from the project-docs standard (out of scope). */
 const DEV_DOC_DIRS = ["docs/decisions"];
+
+/**
+ * The allowed Diátaxis modes for a page's required `type` frontmatter field (living-docs v2).
+ * The mode is a lens carried in frontmatter, not a folder — see docs/reference/living-docs.md.
+ */
+const DOC_TYPES = new Set(["tutorial", "how-to", "reference", "explanation", "decision"]);
+
+/** Leading YAML frontmatter block (between the opening and closing `---` fences). */
+const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
 
 /**
  * The mandatory community-health files (the "project surface" layer of the living-docs
@@ -28,6 +38,8 @@ export type DocsCheckResult = {
   orphaned: string[];
   /** Mandatory community-health files absent from every recognized location (by name). */
   missingHealth: string[];
+  /** In-scope docs/ pages whose frontmatter shape is missing or invalid (`page: reason`). */
+  frontmatterIssues: string[];
   /** Count of README links into docs/ that were checked. */
   checkedLinks: number;
   /** Count of in-scope project-doc pages scanned. */
@@ -77,6 +89,36 @@ function inScopePages(cwd: string): string[] {
   return pages;
 }
 
+/**
+ * Validate a page's frontmatter **shape** (not its prose): a leading YAML block with a
+ * `type` in {@link DOC_TYPES} and non-empty `title` and `description`. Returns a short
+ * reason string when the shape is wrong, or `null` when it is valid. Deterministic — it
+ * never judges whether the content truly matches its `type` (that is the coherence-auditor's
+ * one-shot, human-resolved job, deliberately not part of the gate).
+ */
+function frontmatterIssue(text: string): string | null {
+  const match = FRONTMATTER.exec(text);
+  if (!match || match[1] === undefined) return "missing frontmatter";
+
+  let data: unknown;
+  try {
+    data = parse(match[1]);
+  } catch {
+    return "unparseable frontmatter";
+  }
+  if (data === null || typeof data !== "object") return "empty frontmatter";
+
+  const fm = data as Record<string, unknown>;
+  if (typeof fm.type !== "string" || !DOC_TYPES.has(fm.type)) {
+    return `invalid 'type' (expected one of ${[...DOC_TYPES].join(", ")})`;
+  }
+  if (typeof fm.title !== "string" || fm.title.trim() === "") return "missing or empty 'title'";
+  if (typeof fm.description !== "string" || fm.description.trim() === "") {
+    return "missing or empty 'description'";
+  }
+  return null;
+}
+
 /** Mandatory community-health files with no recognized location present (by name). */
 function missingHealthFiles(cwd: string): string[] {
   return HEALTH_FILES.filter((f) => !f.candidates.some((c) => existsSync(resolve(cwd, c)))).map(
@@ -105,10 +147,18 @@ export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
   const pages = inScopePages(cwd);
   const orphaned = pages.filter((p) => !referenced.has(p)).sort();
 
+  const frontmatterIssues: string[] = [];
+  for (const page of pages) {
+    const issue = frontmatterIssue(readFileSync(resolve(cwd, page), "utf8"));
+    if (issue !== null) frontmatterIssues.push(`${page}: ${issue}`);
+  }
+  frontmatterIssues.sort();
+
   return {
     broken: [...new Set(broken)].sort(),
     orphaned,
     missingHealth: missingHealthFiles(cwd),
+    frontmatterIssues,
     checkedLinks: links.length,
     scannedPages: pages.length,
   };

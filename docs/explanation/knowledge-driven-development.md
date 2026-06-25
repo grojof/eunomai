@@ -1,3 +1,11 @@
+---
+type: explanation
+title: "Knowledge-driven development (the KDD lens)"
+description: "eunomai as a knowledge-activation spectrum, from passive docs to active skills and hooks."
+tags: [kdd, knowledge]
+updated: 2026-06-25
+---
+
 # Knowledge-driven development (the KDD lens)
 
 eunomai is best understood as a **knowledge-activation workspace**: it captures a project's knowledge and

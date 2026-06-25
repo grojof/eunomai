@@ -1,3 +1,11 @@
+---
+type: how-to
+title: "Refresh living docs"
+description: "Keep project docs fresh and structurally honest."
+tags: [living-docs, docs]
+updated: 2026-06-25
+---
+
 # Refresh the living docs
 
 How to keep a project's docs fresh and structurally honest. The standard (Diátaxis layout, the lean README

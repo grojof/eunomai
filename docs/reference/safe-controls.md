@@ -1,3 +1,11 @@
+---
+type: reference
+title: "Safe controls"
+description: "The PreToolUse hooks and the recommended permissions baseline."
+tags: [safe-controls, hooks, security]
+updated: 2026-06-25
+---
+
 # Safe controls
 
 eunomai turns its written safety conventions into **enforced** Claude Code guardrails. It reuses Claude

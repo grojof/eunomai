@@ -1,3 +1,11 @@
+---
+type: reference
+title: "Checks (the read-only CLI)"
+description: "The docs-check and provenance-check CLI."
+tags: [checks, gate]
+updated: 2026-06-25
+---
+
 # Checks (the read-only CLI)
 
 eunomai's two **read-only** structural checks, shipped as a single self-contained bundle in

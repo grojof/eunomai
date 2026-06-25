@@ -1,3 +1,11 @@
+---
+type: reference
+title: "Base skills"
+description: "The standards-anchored base set and the admission filter."
+tags: [base-skills, security]
+updated: 2026-06-25
+---
+
 # Base skills
 
 A tiny, **standards-anchored** set of skills shipped in the base — the universal, undisputed practices that

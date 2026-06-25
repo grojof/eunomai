@@ -7,6 +7,15 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+### Changed
+
+- **Living-docs v2** (ADR-0005): Diátaxis becomes a **lens** via a `type` frontmatter field (not a folder
+  mandate); docs gain an **OKF-routable substrate** (frontmatter + path-as-identity + link-graph); the README
+  becomes a **product-shaped map** with an architecture diagram; and `docs-check` gains a **deterministic
+  frontmatter-shape gate** (AI coherence-auditing stays out of the gate). Piloted on eunomai's own docs —
+  frontmatter on every page, a new README map, and the first architecture diagram (closing the zero-diagram
+  dogfooding gap).
+
 ## [0.1.0] - 2026-06-25
 
 ### Changed

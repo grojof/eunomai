@@ -1,3 +1,11 @@
+---
+type: tutorial
+title: "Using eunomai"
+description: "Install eunomai and apply it to a new or existing project, end to end."
+tags: [getting-started, install, onboard]
+updated: 2026-06-25
+---
+
 # Using eunomai
 
 How to install eunomai and apply it to a new or existing project, end to end. This is the spine; the

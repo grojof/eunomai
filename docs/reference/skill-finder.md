@@ -1,3 +1,11 @@
+---
+type: reference
+title: "Skill finder"
+description: "The skill trust gate, provenance, and provenance-check."
+tags: [skills, trust, provenance]
+updated: 2026-06-25
+---
+
 # Skill finder
 
 The judgment layer for a project's skills. Anthropic's **skill-creator** authors/improves/evaluates skills

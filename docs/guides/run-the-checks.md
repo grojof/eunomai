@@ -1,3 +1,11 @@
+---
+type: how-to
+title: "Run the checks"
+description: "The read-only gate: docs-check and provenance-check."
+tags: [checks, gate]
+updated: 2026-06-25
+---
+
 # Run the checks (the gate)
 
 eunomai ships two **read-only** checks in the [checks](../reference/checks.md) CLI. Together they are the

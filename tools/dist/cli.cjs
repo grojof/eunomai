@@ -7257,7 +7257,7 @@ var require_public_api = __commonJS({
       }
       return doc;
     }
-    function parse2(src, reviver, options) {
+    function parse3(src, reviver, options) {
       let _reviver = void 0;
       if (typeof reviver === "function") {
         _reviver = reviver;
@@ -7298,7 +7298,7 @@ var require_public_api = __commonJS({
         return value.toString(options);
       return new Document.Document(value, _replacer, options).toString(options);
     }
-    exports2.parse = parse2;
+    exports2.parse = parse3;
     exports2.parseAllDocuments = parseAllDocuments;
     exports2.parseDocument = parseDocument;
     exports2.stringify = stringify;
@@ -7360,8 +7360,11 @@ var require_dist = __commonJS({
 // src/docs.ts
 var import_node_fs = require("fs");
 var import_node_path = require("path");
+var import_yaml = __toESM(require_dist(), 1);
 var DOCS_DIR = "docs";
 var DEV_DOC_DIRS = ["docs/decisions"];
+var DOC_TYPES = /* @__PURE__ */ new Set(["tutorial", "how-to", "reference", "explanation", "decision"]);
+var FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
 var HEALTH_FILES = [
   { name: "LICENSE", candidates: ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", ".github/LICENSE", "docs/LICENSE"] },
   { name: "SECURITY.md", candidates: ["SECURITY.md", ".github/SECURITY.md", "docs/SECURITY.md"] },
@@ -7405,6 +7408,26 @@ function inScopePages(cwd) {
   walk(root);
   return pages;
 }
+function frontmatterIssue(text) {
+  const match = FRONTMATTER.exec(text);
+  if (!match || match[1] === void 0) return "missing frontmatter";
+  let data;
+  try {
+    data = (0, import_yaml.parse)(match[1]);
+  } catch {
+    return "unparseable frontmatter";
+  }
+  if (data === null || typeof data !== "object") return "empty frontmatter";
+  const fm = data;
+  if (typeof fm.type !== "string" || !DOC_TYPES.has(fm.type)) {
+    return `invalid 'type' (expected one of ${[...DOC_TYPES].join(", ")})`;
+  }
+  if (typeof fm.title !== "string" || fm.title.trim() === "") return "missing or empty 'title'";
+  if (typeof fm.description !== "string" || fm.description.trim() === "") {
+    return "missing or empty 'description'";
+  }
+  return null;
+}
 function missingHealthFiles(cwd) {
   return HEALTH_FILES.filter((f) => !f.candidates.some((c) => (0, import_node_fs.existsSync)((0, import_node_path.resolve)(cwd, c)))).map(
     (f) => f.name
@@ -7422,10 +7445,17 @@ function checkDocs(cwd = process.cwd()) {
   }
   const pages = inScopePages(cwd);
   const orphaned = pages.filter((p) => !referenced.has(p)).sort();
+  const frontmatterIssues = [];
+  for (const page of pages) {
+    const issue = frontmatterIssue((0, import_node_fs.readFileSync)((0, import_node_path.resolve)(cwd, page), "utf8"));
+    if (issue !== null) frontmatterIssues.push(`${page}: ${issue}`);
+  }
+  frontmatterIssues.sort();
   return {
     broken: [...new Set(broken)].sort(),
     orphaned,
     missingHealth: missingHealthFiles(cwd),
+    frontmatterIssues,
     checkedLinks: links.length,
     scannedPages: pages.length
   };
@@ -7434,7 +7464,7 @@ function checkDocs(cwd = process.cwd()) {
 // src/provenance.ts
 var import_node_fs2 = require("fs");
 var import_node_path2 = require("path");
-var import_yaml = __toESM(require_dist(), 1);
+var import_yaml2 = __toESM(require_dist(), 1);
 
 // node_modules/zod/v3/external.js
 var external_exports = {};
@@ -11497,7 +11527,7 @@ function frontmatter(text) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
   if (!match) return void 0;
   try {
-    return (0, import_yaml.parse)(match[1] ?? "");
+    return (0, import_yaml2.parse)(match[1] ?? "");
   } catch {
     return void 0;
   }
@@ -11558,16 +11588,17 @@ function run(argv) {
   }
   const [cmd] = args;
   if (cmd === "docs-check") {
-    const { broken, orphaned, missingHealth, checkedLinks, scannedPages } = checkDocs();
-    if (broken.length > 0 || orphaned.length > 0 || missingHealth.length > 0) {
+    const { broken, orphaned, missingHealth, frontmatterIssues, checkedLinks, scannedPages } = checkDocs();
+    if (broken.length > 0 || orphaned.length > 0 || missingHealth.length > 0 || frontmatterIssues.length > 0) {
       console.error("docs-check failed:");
       for (const b of broken) console.error(`  broken README link -> ${b}`);
       for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
       for (const h of missingHealth) console.error(`  missing community-health file: ${h}`);
+      for (const f of frontmatterIssues) console.error(`  frontmatter: ${f}`);
       return 1;
     }
     console.log(
-      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed, community-health files present.`
+      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed + frontmatter valid, community-health files present.`
     );
     return 0;
   }

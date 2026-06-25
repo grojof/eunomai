@@ -1,3 +1,11 @@
+---
+type: reference
+title: "SDD (spec-driven development)"
+description: "The spec-driven flow on OpenSpec: explore, propose, apply, archive."
+tags: [sdd, openspec]
+updated: 2026-06-25
+---
+
 # SDD/SPDD (spec-driven development)
 
 The first pillar: non-trivial change flows **spec-first**. eunomai does **not** build an SDD framework — it
