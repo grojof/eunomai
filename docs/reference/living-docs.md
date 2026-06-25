@@ -59,6 +59,25 @@ per diagram: **flowchart** for a process/decision, **sequence** for interactions
 architecture (Context → Container → Component), **class/erDiagram** for code/data structure, **stateDiagram**
 for lifecycles. Add a diagram only when it's clearer than prose — not as decoration.
 
+## Activation routing
+
+Living docs is the **passive** end of eunomai's knowledge-activation spectrum (the
+[KDD lens](../explanation/knowledge-driven-development.md)). Not everything that ends up as prose belongs there:
+a refresh sometimes finds knowledge that would be better *activated* in another pillar. The skill applies a
+lightweight **review lens** — it surfaces such content with the owning pillar named and **delegates** the move,
+never performing it:
+
+| If a refresh finds… | …it belongs in | Activation state |
+|---------------------|----------------|------------------|
+| a recurring convention | `AGENTS.md` | 🟡 semi-active |
+| an enforceable policy | a hook ([safe-controls](safe-controls.md)) | 🔴 enforced |
+| a repeatable procedure | a skill (via [skill-finder](skill-finder.md)) | 🔴 active |
+| a trackable requirement | an OpenSpec spec ([SDD](sdd.md)) | 🟡 traceable |
+
+It is a **suggestion, not a check and not an automatic move**: the author accepts or declines, and the owning
+pillar enacts it. Genuinely explanatory or reference content stays passive — its correct state. See the
+[KDD explanation](../explanation/knowledge-driven-development.md) for the full activation spectrum.
+
 ## Keeping it fresh
 
 Two pieces, mirroring the rest of eunomai (human-in-control + a read-only check):

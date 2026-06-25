@@ -54,6 +54,23 @@ first** when a question is answerable from code — don't ask what you can detec
 write the recovered knowledge into the docs standard (and, for non-trivial choices, an ADR). This is the same
 technique `eunomai-onboard` uses to create docs from scratch.
 
+## Activation routing (knowledge that belongs at a higher state)
+
+Docs are the **passive** end of eunomai's knowledge-activation spectrum (the KDD lens — see
+`docs/explanation/knowledge-driven-development.md`). Some prose found in a refresh is really knowledge sitting
+at the **wrong** state: it would be better *activated* in another pillar.
+While refreshing, **notice and surface** such content — naming the owning pillar — then **delegate** the move:
+
+- a recurring **convention** ("always do X / never do Y") → `AGENTS.md` (🟡 semi-active)
+- an enforceable **policy** ("block force-push to main") → a hook via **safe-controls** (🔴 enforced)
+- a repeatable **procedure** (step-by-step know-how an agent could run) → a skill via **`eunomai-skill-finder`**
+  (🔴 active)
+- a trackable **requirement** → an **OpenSpec** spec (🟡 traceable)
+
+This is a **review lens, not a new check**, and not an automatic move. You **suggest and point**; the author
+accepts or declines, and the owning pillar performs the actual move. Content that is genuinely explanatory or
+reference — its correct passive state — stays where it is; don't route it.
+
 ## Flow
 
 1. **Survey.** (Workspace first if relevant — see above.) For the chosen project root, read its `README.md`
@@ -75,4 +92,7 @@ technique `eunomai-onboard` uses to create docs from scratch.
 
 - **Structure, not invention.** Keep docs authored; do not generate API docs from code.
 - **Project-docs only.** Do not edit ADRs here — those follow the SDD / handoff flow.
+- **Suggest and delegate, don't activate.** When routing knowledge to a higher activation state, you only
+  surface the suggestion and name the owning pillar — you never write `AGENTS.md`, author a hook or a skill, or
+  create a spec yourself, and you never auto-apply the move. The author decides; the pillar enacts.
 - **No auto-rewrite hook.** This is invoked deliberately, consistent with eunomai's ask-by-default posture.
