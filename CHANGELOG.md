@@ -7,6 +7,8 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-06-25
+
 ### Added
 
 - Living-docs **project-surface layer**: the standard now defines the community-health files (anchored to
@@ -15,11 +17,13 @@ and the public surface may still change.
 - Community-health files: `LICENSE` (MIT), `SECURITY.md`, `CONTRIBUTING.md`, and this `CHANGELOG.md`.
 - Reference pages for previously undocumented pillars/components: `sdd`, `base-skills`, `projection`.
 - How-to guides: `manage-skills`, `refresh-living-docs`, `run-the-checks`, `contributing`.
+- Explanation: the **KDD lens** (eunomai as a knowledge-activation spectrum) + ADR 0002.
 
 ### Changed
 
 - `docs-check` now also verifies the mandatory community-health files are present (fails if any is missing),
-  in addition to README↔`docs/` link and index integrity.
+  in addition to README↔`docs/` link and index integrity. **This can make a previously-green gate fail** for
+  projects missing these files.
 - `README.md` index reorganized into Guides (how-to) and Reference (one page per pillar/component); base
   skills surfaced.
 
@@ -42,6 +46,7 @@ and the public surface may still change.
 - Project docs **restructured by Diátaxis** (`guides/` · `reference/` · `explanation/` · `decisions/`);
   dev-docs dropped in favour of OpenSpec for SDD artifacts.
 
-[Unreleased]: https://github.com/grojof/eunomai/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/grojof/eunomai/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/grojof/eunomai/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/grojof/eunomai/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/grojof/eunomai/releases/tag/v0.0.1
