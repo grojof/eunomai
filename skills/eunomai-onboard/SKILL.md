@@ -38,10 +38,13 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    **`coherence-auditor`** pass to surface doc↔code drift and stale versions. Both are read-only — they report,
    you confirm. Change nothing yet.
 2. **Establish docs** (at the project root) → the living-docs standard:
-   - Existing docs → restructure into a lean `README.md` index + `docs/` topic pages.
-   - No docs → create a lean README + `docs/` pages from the analysis and the structured interview, capturing
-     non-trivial choices as **ADRs** (`docs/decisions/`) and the domain vocabulary as a **glossary**
-     explanation page (indexed in the README).
+   - **Propose the structure, don't assume it** — present **2–3 folder-structure options** with a recommended
+     default by the project's size/shape (flat `docs/*.md` while small · by-surface `docs/<surface>/` once a
+     surface has ~3+ pages · hybrid) and seed the one the author chooses. **Never** organize folders by Diátaxis
+     type — the mode lives in each page's `type` frontmatter.
+   - Existing docs → restructure into a routable `README.md` map + `docs/` pages (each with frontmatter).
+   - No docs → create the README map + `docs/` pages from the analysis and the structured interview, capturing
+     non-trivial choices as **ADRs** (`docs/decisions/`) and the domain vocabulary as a **glossary** page.
    - (After this, the `eunomai-living-docs` skill maintains them.)
 3. **Seed conventions** (at the project root) — derive each from eunomai's own live conventions and adapt to
    the target (do not drop verbatim):

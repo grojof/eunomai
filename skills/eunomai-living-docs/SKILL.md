@@ -25,6 +25,21 @@ Docs are a **routable substrate**, dev-loved and AI-legible. Four ideas:
 
 ADRs under `docs/decisions/` are dev-facing (`type: decision`), a series excluded from the indexed map.
 
+## Choosing the structure (propose, never assume)
+
+Don't assume the folder layout — **propose 2–3 options** with trade-offs and a **recommended default** by the
+project's size/shape, then let the author choose (infer-then-confirm, skippable):
+
+- **Flat** `docs/*.md` — recommended while small (~< 15 pages); navigation is the README map + the `type` field.
+- **By surface** `docs/<surface>/` — once a surface reaches ~3+ pages; nest by **semantics/product** (Stripe/OKF
+  style), letting the folder *emerge*.
+- **Hybrid** — a flat core plus a folder for a surface that has grown.
+
+**Hard rule:** folders are **never** organized by Diátaxis *type* — the mode lives in `type`. If you find
+content-type folders (`guides/`/`reference/`/`explanation/`), **flag them as an anti-pattern** and propose
+migrating (flatten, or re-nest by surface). The deterministic `docs-check` gate never judges structure — this
+is a guided choice, not enforcement.
+
 ## Diagrams (Mermaid + C4)
 
 Use [**Mermaid**](https://mermaid.js.org/) for diagrams (GitHub renders it natively). **Match the diagram type
