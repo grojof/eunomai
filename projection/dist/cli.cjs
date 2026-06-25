@@ -77944,6 +77944,12 @@ var import_node_fs6 = require("fs");
 var import_node_path8 = require("path");
 var DOCS_DIR = "docs";
 var DEV_DOC_DIRS = ["docs/decisions"];
+var HEALTH_FILES = [
+  { name: "LICENSE", candidates: ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", ".github/LICENSE", "docs/LICENSE"] },
+  { name: "SECURITY.md", candidates: ["SECURITY.md", ".github/SECURITY.md", "docs/SECURITY.md"] },
+  { name: "CONTRIBUTING.md", candidates: ["CONTRIBUTING.md", ".github/CONTRIBUTING.md", "docs/CONTRIBUTING.md"] },
+  { name: "CHANGELOG.md", candidates: ["CHANGELOG.md", "docs/CHANGELOG.md"] }
+];
 var DocsError = class extends Error {
 };
 var MD_LINK = /\[[^\]]*\]\(([^)]+)\)/g;
@@ -77981,6 +77987,11 @@ function inScopePages(cwd) {
   walk2(root);
   return pages;
 }
+function missingHealthFiles(cwd) {
+  return HEALTH_FILES.filter((f) => !f.candidates.some((c) => (0, import_node_fs6.existsSync)((0, import_node_path8.resolve)(cwd, c)))).map(
+    (f) => f.name
+  );
+}
 function checkDocs(cwd = process.cwd()) {
   const readmePath = (0, import_node_path8.resolve)(cwd, "README.md");
   if (!(0, import_node_fs6.existsSync)(readmePath)) throw new DocsError(`No README.md found at ${cwd}.`);
@@ -77996,6 +78007,7 @@ function checkDocs(cwd = process.cwd()) {
   return {
     broken: [...new Set(broken)].sort(),
     orphaned,
+    missingHealth: missingHealthFiles(cwd),
     checkedLinks: links.length,
     scannedPages: pages.length
   };
@@ -78092,14 +78104,17 @@ async function run(argv) {
   }
   const [cmd, ...rest] = args;
   if (cmd === "docs-check") {
-    const { broken, orphaned, checkedLinks, scannedPages } = checkDocs();
-    if (broken.length > 0 || orphaned.length > 0) {
+    const { broken, orphaned, missingHealth, checkedLinks, scannedPages } = checkDocs();
+    if (broken.length > 0 || orphaned.length > 0 || missingHealth.length > 0) {
       console.error("docs-check failed:");
       for (const b of broken) console.error(`  broken README link -> ${b}`);
       for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
+      for (const h of missingHealth) console.error(`  missing community-health file: ${h}`);
       return 1;
     }
-    console.log(`docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed.`);
+    console.log(
+      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed, community-health files present.`
+    );
     return 0;
   }
   if (cmd === "provenance-check") {

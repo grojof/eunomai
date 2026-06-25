@@ -30,14 +30,17 @@ async function run(argv: string[]): Promise<number> {
   const [cmd, ...rest] = args;
 
   if (cmd === "docs-check") {
-    const { broken, orphaned, checkedLinks, scannedPages } = checkDocs();
-    if (broken.length > 0 || orphaned.length > 0) {
+    const { broken, orphaned, missingHealth, checkedLinks, scannedPages } = checkDocs();
+    if (broken.length > 0 || orphaned.length > 0 || missingHealth.length > 0) {
       console.error("docs-check failed:");
       for (const b of broken) console.error(`  broken README link -> ${b}`);
       for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
+      for (const h of missingHealth) console.error(`  missing community-health file: ${h}`);
       return 1;
     }
-    console.log(`docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed.`);
+    console.log(
+      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed, community-health files present.`,
+    );
     return 0;
   }
 

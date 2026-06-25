@@ -11,6 +11,14 @@ const write = (rel: string, body: string): void => {
   writeFileSync(abs, body);
 };
 
+/** Seed the mandatory community-health files so checkDocs reports none missing. */
+const writeHealthFiles = (): void => {
+  write("LICENSE", "MIT\n");
+  write("SECURITY.md", "# Security\n");
+  write("CONTRIBUTING.md", "# Contributing\n");
+  write("CHANGELOG.md", "# Changelog\n");
+};
+
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), "eunomai-docs-"));
 });
@@ -22,11 +30,37 @@ describe("checkDocs", () => {
   it("passes when every link resolves and every in-scope page is indexed", () => {
     write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
     write("docs/guide.md", "# Guide\n");
+    writeHealthFiles();
     const r = checkDocs(dir);
     expect(r.broken).toEqual([]);
     expect(r.orphaned).toEqual([]);
+    expect(r.missingHealth).toEqual([]);
     expect(r.checkedLinks).toBe(1);
     expect(r.scannedPages).toBe(1);
+  });
+
+  it("flags every mandatory community-health file when none are present", () => {
+    write("README.md", "# P\n");
+    const r = checkDocs(dir);
+    expect(r.missingHealth).toEqual(["LICENSE", "SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md"]);
+  });
+
+  it("accepts community-health files in any GitHub-recognized location", () => {
+    write("README.md", "# P\n");
+    write("LICENSE.md", "MIT\n"); // root alias
+    write(".github/SECURITY.md", "# Security\n"); // .github/
+    write("docs/CONTRIBUTING.md", "# Contributing\n"); // docs/
+    write("CHANGELOG.md", "# Changelog\n");
+    const r = checkDocs(dir);
+    expect(r.missingHealth).toEqual([]);
+  });
+
+  it("reports only the community-health files that are missing", () => {
+    write("README.md", "# P\n");
+    write("LICENSE", "MIT\n");
+    write("CHANGELOG.md", "# Changelog\n");
+    const r = checkDocs(dir);
+    expect(r.missingHealth).toEqual(["SECURITY.md", "CONTRIBUTING.md"]);
   });
 
   it("flags a README link into docs/ that does not resolve", () => {

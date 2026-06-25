@@ -6,6 +6,18 @@ const DOCS_DIR = "docs";
 /** Dev-docs directories excluded from the project-docs standard (out of scope). */
 const DEV_DOC_DIRS = ["docs/decisions"];
 
+/**
+ * The mandatory community-health files (the "project surface" layer of the living-docs
+ * standard), each with the locations GitHub recognizes. A file is present if any candidate
+ * exists. Anchored to GitHub Community Standards; see docs/reference/living-docs.md.
+ */
+const HEALTH_FILES: ReadonlyArray<{ name: string; candidates: readonly string[] }> = [
+  { name: "LICENSE", candidates: ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", ".github/LICENSE", "docs/LICENSE"] },
+  { name: "SECURITY.md", candidates: ["SECURITY.md", ".github/SECURITY.md", "docs/SECURITY.md"] },
+  { name: "CONTRIBUTING.md", candidates: ["CONTRIBUTING.md", ".github/CONTRIBUTING.md", "docs/CONTRIBUTING.md"] },
+  { name: "CHANGELOG.md", candidates: ["CHANGELOG.md", "docs/CHANGELOG.md"] },
+];
+
 /** Raised when the docs structure cannot be checked (e.g. no README). */
 export class DocsError extends Error {}
 
@@ -14,6 +26,8 @@ export type DocsCheckResult = {
   broken: string[];
   /** In-scope docs/ pages not reachable from the README index (repo-relative). */
   orphaned: string[];
+  /** Mandatory community-health files absent from every recognized location (by name). */
+  missingHealth: string[];
   /** Count of README links into docs/ that were checked. */
   checkedLinks: number;
   /** Count of in-scope project-doc pages scanned. */
@@ -63,9 +77,17 @@ function inScopePages(cwd: string): string[] {
   return pages;
 }
 
+/** Mandatory community-health files with no recognized location present (by name). */
+function missingHealthFiles(cwd: string): string[] {
+  return HEALTH_FILES.filter((f) => !f.candidates.some((c) => existsSync(resolve(cwd, c)))).map(
+    (f) => f.name,
+  );
+}
+
 /**
  * Read-only README↔docs/ integrity check. Verifies every README link into docs/
- * resolves, and every in-scope docs/ page is referenced by the README index.
+ * resolves, every in-scope docs/ page is referenced by the README index, and the
+ * mandatory community-health files (the project-surface layer) are present.
  * Writes nothing. Dev-docs (docs/decisions — ADRs) are out of scope.
  */
 export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
@@ -86,6 +108,7 @@ export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
   return {
     broken: [...new Set(broken)].sort(),
     orphaned,
+    missingHealth: missingHealthFiles(cwd),
     checkedLinks: links.length,
     scannedPages: pages.length,
   };
