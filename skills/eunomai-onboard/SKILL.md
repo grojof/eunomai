@@ -41,8 +41,10 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    - (After this, the `eunomai-living-docs` skill maintains them.)
 3. **Seed conventions** (at the project root) — derive each from eunomai's own live conventions and adapt to
    the target (do not drop verbatim):
-   - a lean `CLAUDE.md` (the single authored source) that **declares this project's boundary + paths** (the
-     `openspec/` and `docs/` locations and what is tracked), so config and agents operate within it,
+   - a lean `CLAUDE.md` (the single authored source) with two halves: the **structural** half that
+     **declares this project's boundary + paths** (the `openspec/` and `docs/` locations and what is tracked),
+     and the **activator block** — a principle-level statement of the base disciplines that points to the
+     skills as *accelerators* (see below and `docs/reference/onboard.md`),
    - an `openspec/config.yaml` layer (run `openspec update`),
    - the **permissions baseline** (`docs/reference/safe-controls.md`),
    - **hooks wiring** — if the project installs the eunomai *plugin*, hooks come from it; if it uses eunomai
@@ -65,6 +67,21 @@ consent, it may receive at most a **minimal delegating `CLAUDE.md`** — pointin
 marking the root as environment, with **no per-project conventions** (Claude Code always loads the parent
 `CLAUDE.md` when working in a child, so keep it tiny). No workspace manifest file is introduced; scope rides on
 hierarchical `CLAUDE.md`.
+
+## The activator block (the behavioural seed)
+
+The seeded `CLAUDE.md` carries an **activator block**: plain-language base disciplines (spec-first change ·
+honest docs · vet third-party skills/tools before adopting · secure-by-default · deliberate dependency changes
+· pause on irreversible/sensitive actions), each naming its skill as a **parenthetical accelerator**. **Adapt**
+the canonical block in `docs/reference/onboard.md` to the project — do not paste it verbatim. Honour three
+invariants:
+
+- **Self-sufficient** — each principle reads as actionable prose on its own; the skill is an accelerator, not a
+  prerequisite (it must still guide a collaborator with only OpenSpec, or nothing, and survive skill removal).
+- **Capabilities, not brand** — name capabilities/skills, never the "eunomai" framework.
+- **Activate, don't duplicate** — state the *principle*; leave the *procedure* in the skill.
+
+Seed it **once and disown it** — no back-sync, no new check.
 
 ## The structured interview (gathering input)
 

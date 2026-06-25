@@ -52,3 +52,39 @@ standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the dom
 
 The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `CLAUDE.md`,
 `openspec/config.yaml`, `docs/reference/safe-controls.md`) and adapted to the target — not copies that could drift.
+
+## The activator block (the behavioural seed)
+
+The seeded `CLAUDE.md` has two halves: the **structural** half (boundary + paths) and the **behavioural**
+half — a plain-language **activator block** that makes any agent follow the base. In KDD terms `CLAUDE.md` is
+the *semi-active* layer; the block **activates** the base by pointing at the skills. onboard **adapts** this
+canonical block to the project (it does not paste it verbatim):
+
+```markdown
+## How to work in this project
+
+- Non-trivial changes are spec-first: capture intent and a short plan before code, and keep a record of what
+  changed and why. (The OpenSpec `/opsx:*` flow automates this.)
+- Keep docs honest: when behaviour changes, update the README index and the affected docs page in the same
+  change. (A living-docs refresh helps.)
+- Third-party skills and tools are untrusted until vetted — check provenance and scan before adopting. (A
+  skill-vetting capability automates this.)
+- Secure by default: validate input at boundaries, never hardcode secrets, parameterise queries. (A
+  secure-coding capability covers this.)
+- Add dependencies deliberately: pin, scan for known CVEs, read the changelog, run the tests. (A
+  dependency-upgrade capability covers this.)
+- Some actions are irreversible or sensitive — force-push, history rewrite, secret access, version bumps:
+  pause and confirm first. (Safe-controls hooks enforce this when installed.)
+```
+
+Three invariants keep it honest:
+
+- **Self-sufficient** — each line is actionable *prose* on its own; the parenthetical skill is an accelerator,
+  not a prerequisite. So it still guides a collaborator who has only OpenSpec, or nothing (the audience
+  gradient), and survives the skills being removed (dispensability).
+- **Capabilities, not brand** — the block names *capabilities*, never the "eunomai" framework, so the project
+  reads as its own and removing eunomai leaves it coherent.
+- **Activate, don't duplicate** — it states the *principle*; the *procedure* stays in the skill. That keeps the
+  block lean and avoids a second source of truth.
+
+Seeded **once and disowned** — no back-sync, no new check.
