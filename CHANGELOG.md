@@ -7,6 +7,8 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-25
+
 ### Changed
 
 - **Reoriented to Claude-only** (ADR-0004): Claude Code is the only host and **OpenSpec** is the sole external
