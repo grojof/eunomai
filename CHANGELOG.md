@@ -7,6 +7,8 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-25
+
 ### Changed
 
 - **Docs single-source-of-truth** (ADR-0006): adopt *one fact, one home — everything else links* as the
