@@ -20,6 +20,17 @@ and the public surface may still change.
   `.github/copilot-instructions.md`, and the `compile` / `compile --check` projection commands.
 - The safe-controls **authored-source guard** — moot once there is no generated instruction file.
 
+### Added
+
+- onboard now seeds a self-sufficient **activator block** into the project's `CLAUDE.md` (principle-level base
+  disciplines pointing to the skills as accelerators) — see [docs/reference/onboard.md](docs/reference/onboard.md).
+
+### Security
+
+- Upgraded the `tools/` dev toolchain (`vitest` 2→4, `vite` 5→8, `esbuild` → 0.27.7), clearing the critical /
+  high / moderate advisories in the test chain. The remaining single **low** advisory affects only the esbuild
+  dev-server (never run here) and is not in the shipped bundle (which inlines only `yaml` + `zod`).
+
 ## [0.0.3] - 2026-06-25
 
 ### Added
