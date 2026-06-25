@@ -54,7 +54,7 @@ eunomai/
   docs/                        ← project docs, organized by Diátaxis:
     guides/                    ←   how-to (getting-started, manage-skills, refresh-living-docs, run-the-checks, contributing)
     reference/                 ←   per-pillar facts (sdd, living-docs, safe-controls, skill-finder, base-skills, onboard, projection)
-    explanation/               ←   the why (vision)
+    explanation/               ←   the why (vision, knowledge-driven-development)
     decisions/                 ←   ADRs (e.g. why we adopted OpenSpec for SDD)
 ```
 
@@ -66,7 +66,9 @@ eunomai/
   - **[docs/guides/refresh-living-docs.md](docs/guides/refresh-living-docs.md)** — keep the docs fresh and structurally honest.
   - **[docs/guides/run-the-checks.md](docs/guides/run-the-checks.md)** — the read-only gate (`docs-check`, `provenance-check`, `compile --check`).
   - **[docs/guides/contributing.md](docs/guides/contributing.md)** — the dev loop for working **on** eunomai.
-- **Explanation** → **[docs/explanation/vision.md](docs/explanation/vision.md)** — the charter: what eunomai is, principles, pillars, architecture.
+- **Explanation**:
+  - **[docs/explanation/vision.md](docs/explanation/vision.md)** — the charter: what eunomai is, principles, pillars, architecture.
+  - **[docs/explanation/knowledge-driven-development.md](docs/explanation/knowledge-driven-development.md)** — the KDD lens: eunomai as a knowledge-activation spectrum (passive docs → active skills/hooks).
 - **Reference** — one page per pillar / component:
   - **[docs/reference/sdd.md](docs/reference/sdd.md)** — the spec-driven flow (explore → propose → apply → archive) on OpenSpec.
   - **[docs/reference/living-docs.md](docs/reference/living-docs.md)** — the project-docs structure standard + `docs-check`.

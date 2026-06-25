@@ -49,6 +49,15 @@ projects, then **steps aside**. It is the starting point, not a dependency: ever
 output, so removing eunomai leaves a working project (zero lock-in). Deliberately **not** a continuous sync
 engine — seed-and-step-aside, never re-govern N projects over time.
 
+## The unifying lens (knowledge activation)
+
+The four pillars cohere under one idea: eunomai is a **knowledge-activation workspace** — it moves a project's
+knowledge from *passive* (docs a human reads) to *active* (skills an agent runs, hooks a runtime enforces).
+That is the **KDD lens** — adopted as vocabulary, **not** as the heavyweight methodology (no knowledge graph,
+no conformance engine — that would be the abandoned tower). See
+[knowledge-driven-development.md](knowledge-driven-development.md) and
+[decisions/0002-adopt-kdd-as-lens](../decisions/0002-adopt-kdd-as-lens/).
+
 ## Architecture
 
 - **eunomai = a Claude Code plugin:** `.claude-plugin/plugin.json` + `skills/` (+ `agents/`, `hooks/`).
