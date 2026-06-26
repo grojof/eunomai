@@ -7,6 +7,18 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-26
+
+### Added
+
+- **KDD knowledge-domain capture lens** (living-docs): a second, orthogonal axis — the six knowledge domains
+  (business · product · technical · operational · historical · AI-ready) from the AWS Builder KDD article —
+  applied by the `eunomai-living-docs` skill as a **coverage lens** alongside the seven KDD principles, plus an
+  explicit **ownership** and **doc↔code drift** framing (the latter reusing the existing `coherence-auditor`).
+  Adopted as a **lens only**: no new frontmatter field, no `docs-check` rule, no scope cascade / multi-tool
+  projection, no toolkit — consistent with ADR-0002 (KDD as a lens) and ADR-0004 (Claude-only). Adds two
+  requirements to the `living-docs` spec.
+
 ## [0.2.0] - 2026-06-25
 
 ### Changed
@@ -92,7 +104,10 @@ and the public surface may still change.
 - Project docs **restructured by Diátaxis** (`guides/` · `reference/` · `explanation/` · `decisions/`);
   dev-docs dropped in favour of OpenSpec for SDD artifacts.
 
-[Unreleased]: https://github.com/grojof/eunomai/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/grojof/eunomai/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/grojof/eunomai/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/grojof/eunomai/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/grojof/eunomai/compare/v0.0.3...v0.1.0
 [0.0.3]: https://github.com/grojof/eunomai/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/grojof/eunomai/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/grojof/eunomai/releases/tag/v0.0.1
