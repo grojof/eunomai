@@ -1,9 +1,9 @@
 ---
 type: explanation
 title: "Knowledge-driven development (the KDD lens)"
-description: "eunomai as a knowledge-activation spectrum, from passive docs to active skills and hooks."
+description: "eunomai as a knowledge-activation spectrum, crossed with the six KDD knowledge domains — from passive docs to active skills and hooks."
 tags: [kdd, knowledge]
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # Knowledge-driven development (the KDD lens)
@@ -48,6 +48,37 @@ knowledge in different states of activation. A skill is documentation that an ag
 that the runtime *applies*; a spec is a requirement that the flow *tracks*. That progression — passive →
 active — is what makes eunomai knowledge-*driven* rather than merely knowledge-*storing*.
 
+## A second axis: the knowledge *domain*
+
+Activation state answers *how executable* a piece of knowledge is. It says nothing about *what the knowledge is
+about*. The AWS Builder article ["¿Qué es Knowledge-Driven Development y por qué la IA lo
+necesita?"](https://builder.aws.com/content/3Euh1e1W8NQquMJZM2LTCtsbABQ/que-es-knowledge-driven-development-y-por-que-la-ia-lo-necesita)
+names that second axis — six **knowledge domains** — and frames KDD as *"converting project knowledge into
+living, versioned, actionable context"* held as **minimal sufficient information, not heavy documentation**
+(exactly eunomai's "earns its place" posture). The domains:
+
+| Domain | What it captures | Often lives in |
+|--------|------------------|----------------|
+| **business** | needs, objectives, rules, constraints, processes, priorities | `explanation` docs, glossary |
+| **product** | what's being built, scope, roadmap, acceptance criteria | `explanation`/`reference` docs, OpenSpec specs |
+| **technical** | architecture, integrations, patterns, conventions, ADRs, contracts | `reference` docs, `CLAUDE.md`, ADRs |
+| **operational** | deploy, monitoring, observability, security, ownership, support | `how-to`/`reference` docs, safe-controls |
+| **historical** | past decisions, trade-offs, lessons learned (the most overlooked) | ADRs, agent memory |
+| **AI-ready** | context curated and kept fresh specifically for agents | the routable substrate as a whole |
+
+**Domain is orthogonal to both mode and activation.** Diátaxis (the `type` field) says a page's *shape*;
+activation says how *executable* it is; domain says what it is *about*. The same fact can be re-expressed across
+modes and activated to different states — the domain is invariant. (Note the partial overlap of **AI-ready**
+with the *semi-active* state: AI-ready is best read as a *domain goal* — "is this curated for an agent to use?"
+— rather than a distinct activation state. We keep it as a sixth domain, faithful to the article, and flag the
+overlap here rather than collapsing the two axes.)
+
+The article's **seven principles** — knowledge lives near the code · capture is selective (minimal sufficient) ·
+decisions matter as much as code · dual utility for humans *and* agents · knowledge needs an **owner** ·
+knowledge **evolves** with the system · AI needs context, not guesses — are the operating frame the
+`eunomai-living-docs` skill applies. The domain axis is its **coverage lens**: *which domains has this project
+left under-captured?* — a judgement, never a gate rule and never a new frontmatter field.
+
 ## Parallels worth noticing
 
 Some of KDD-the-methodology's ideas already appear in eunomai, organically and lightweight:
@@ -69,6 +100,16 @@ The one genuinely missing piece relative to KDD — **cross-cutting traceability
 test → doc) — is acknowledged but only pursued **incrementally and link-first** (e.g. explicit cross-refs
 between a spec, its doc, and the skill that enacts it), never as a graph engine. See the ADR for the rejected
 "build traceability now" option.
+
+We take the article's **vocabulary and its domain lens**, not its tooling. Specifically out of scope:
+
+- **A KDD toolkit** (the article's *Kaddo*, or anything like it). We already have `docs-check` (deterministic
+  shape gate) and the read-only `coherence-auditor` — *don't reinvent*, *low maintenance over reach*.
+- **A scope cascade** (universal → language → framework → environment → company → project), as in the earlier
+  `ai-workspace-generator`. That layering was bound to **multi-tool projection** (`AGENTS.md` →
+  Copilot/Codex/OpenCode) and a config-driven generator — precisely what [ADR-0004](decisions/0004-claude-only/)
+  (Claude-only) and the abandoned governance tower rejected. We keep the *insight that layering adds robustness*
+  and apply it on the **domain** axis as a lens, not by resurrecting the **scope** axis as an engine.
 
 ## Why this matters
 

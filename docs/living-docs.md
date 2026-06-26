@@ -1,9 +1,9 @@
 ---
 type: reference
 title: "Living docs"
-description: "The v2 project-docs standard: Diátaxis as a lens via type, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
-tags: [living-docs, docs, okf, diataxis]
-updated: 2026-06-25
+description: "The v2 project-docs standard: Diátaxis as a lens via type, a knowledge-domain coverage lens, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
+tags: [living-docs, docs, okf, diataxis, kdd]
+updated: 2026-06-26
 ---
 
 # Living docs
@@ -74,6 +74,31 @@ cause of confusing docs). In v2 the mode lives in `type`, not in a folder:
 Diátaxis's own authors say it is *"a guide, a map to check you're in the right place,"* and *not* a mandate to
 create empty folders. So **folders are a convenience**: stay flat while small; a surface is promoted to its own
 folder only when it grows (~3+ pages) — the structure *emerges*.
+
+## Knowledge domains (a second, orthogonal lens)
+
+Diátaxis classifies a page's **mode** (*how* it is written). It says nothing about **domain** (*what it is
+about*). The [KDD lens](knowledge-driven-development.md) adds that second axis — the six knowledge domains from
+the AWS Builder article: **business · product · technical · operational · historical · AI-ready**. The
+`eunomai-living-docs` skill uses them as a **coverage lens**: *which domains has this project left
+under-captured?* The classic failure is rich **technical** how-to with **operational** (deploy/observability),
+**historical** (why we chose this), and **AI-ready** knowledge missing — the very context an agent needs.
+
+This lens is **judgement, not structure**: it adds **no required frontmatter field**, mandates **no
+page-or-folder-per-domain**, and is **never a `docs-check` rule**. A page still declares exactly one Diátaxis
+`type`; domain is a completeness check the skill surfaces as suggestions, governed by the *minimal sufficient
+information* rule — the **"earns its place" test** under [Single source of truth](#single-source-of-truth-one-fact-one-home)
+— so it never pushes toward heavy documentation.
+
+Two KDD principles ride alongside the domains:
+
+- **Ownership.** System-critical knowledge needs a named owner or it degrades. During a refresh the skill
+  **surfaces unowned critical areas** as a suggestion to assign — recorded lightly (free-form in the page), not
+  a registry. It never invents or assigns owners, and ownership is never gated.
+- **Evolve / detect drift.** Knowledge must move with the system. Drift detection is **not** net-new: it is the
+  existing one-shot, read-only [`coherence-auditor`](#the-two-layer-guarantee-deterministic-gate--ai-diagnostic)
+  delegation — *"has the code changed without the knowledge updating?"* — surfaced for the human, never a
+  continuous engine.
 
 ## The README as a map (product-shaped)
 

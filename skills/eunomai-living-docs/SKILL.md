@@ -1,6 +1,6 @@
 ---
 name: eunomai-living-docs
-description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (ADRs are out of scope).
+description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, a knowledge-domain coverage lens (the six KDD domains), an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (ADRs are out of scope).
 ---
 
 # eunomai-living-docs
@@ -84,6 +84,38 @@ first** when a question is answerable from code — don't ask what you can detec
 write the recovered knowledge into the docs standard (and, for non-trivial choices, an ADR). This is the same
 technique `eunomai-onboard` uses to create docs from scratch.
 
+## Knowledge-domain coverage (the KDD capture lens)
+
+Diátaxis tells you a page's **mode**; it never asks whether the project's **knowledge domains** are covered.
+Apply this second, orthogonal lens (see [`docs/knowledge-driven-development.md`](../../docs/knowledge-driven-development.md))
+when establishing or refreshing docs — a **coverage checklist**, surfaced as suggestions, not a gate:
+
+- **business** — needs, rules, constraints, processes, priorities.
+- **product** — what's being built, scope, roadmap, acceptance criteria.
+- **technical** — architecture, integrations, patterns, conventions, ADRs, contracts.
+- **operational** — deploy, monitoring, observability, security, ownership, support.
+- **historical** — past decisions, trade-offs, lessons (the most overlooked).
+- **AI-ready** — context curated and kept fresh for agents.
+
+Ask: *which domains has this project left materially under-captured for the work an agent must do?* Surface
+the gaps as suggestions for the author. The lens is governed by the **seven KDD principles**:
+
+1. **Near the code** — knowledge lives in the repo, not a far wiki.
+2. **Minimal sufficient** — capture enough for good decisions, never heavy documentation (the "earns its place"
+   test below is this principle).
+3. **Decisions matter as much as code** — record the *why*, not only the *what* (→ ADRs).
+4. **Dual utility** — written for humans *and* agents.
+5. **Ownership** — system-critical knowledge needs a named owner; surface unowned critical areas as a
+   suggestion to assign (recorded lightly, free-form — never a registry, never invented, never gated).
+6. **Evolve / detect drift** — knowledge moves with the system; surface doc↔code drift via the one-shot
+   [`coherence-auditor`](#surfacing-stale-docs) delegation, never a continuous check.
+7. **Context, not guesses** — give the agent reliable context rather than letting it fill gaps.
+
+**Boundaries of this lens (hold them):** it adds **no required frontmatter field**, mandates **no
+page-or-folder-per-domain**, and is **never a `docs-check` rule** (the deterministic gate stays shape-only). A
+page still declares exactly one Diátaxis `type`; domain and ownership are judgement, surfaced for the author to
+accept or decline. Sufficient coverage raises **no** suggestion — don't push toward heavy docs.
+
 ## Activation routing (knowledge that belongs at a higher state)
 
 Docs are the **passive** end of eunomai's knowledge-activation spectrum (the KDD lens — see
@@ -124,6 +156,9 @@ deterministic gate is unaffected (duplication is judgement, not a gate rule).
      set `type` by the page's Diátaxis mode (the lens — one page, one mode).
    - **Split** — if a README section is long-form, move it into a `docs/` page (flat while small) and leave a
      link; let folders emerge only when a surface grows.
+   - **Review lenses** (judgement, suggestion-only) — apply the three lenses and surface their findings:
+     **domain coverage** (under-captured knowledge domains + unowned critical areas), **activation routing**
+     (knowledge that belongs at a higher state), and **single source of truth** (duplicates to merge or link).
 4. **Confirm before applying.** Show the proposed edits; apply them with the user's agreement.
 5. **Verify.** Re-run `docs-check` until it exits 0.
 
