@@ -42,7 +42,11 @@ structured. The calling skill mediates; the human confirms.
    - Use a **sequence diagram** when inter-component timing is the key insight.
    Keep it to **one diagram, one idea**. Output a fenced ` ```mermaid ``` ` block in the report.
 6. **Mark confidence** — for each section, note `HIGH` (read directly from manifests/code), `MEDIUM`
-   (inferred from conventions), or `LOW` (sparse signals; flag the ambiguity explicitly). Never fabricate
+   (inferred from conventions), or `LOW` (sparse signals; flag the ambiguity explicitly). For the **module
+   map** and **data flow** — which are graphs of edges, not prose — mark confidence **per edge**, naming the
+   *method*: `extracted` (read from a real import/manifest = HIGH), `inferred` (deduced from naming/structure
+   conventions = MEDIUM), or `ambiguous` (thin or conflicting signal = LOW). A coarse section label hides that
+   one dependency was read from an `import` while the next was guessed from a folder name. Never fabricate
    architecture — if signals are thin, say so.
 
 ## Output (return this; it is your whole purpose)
@@ -51,8 +55,9 @@ Return a structured comprehension map the calling skill can act on:
 
 - **Architecture** — directory layout and top-level concerns (prose + tree, ≤ 10 lines).
 - **Entry points** — list with file path and role.
-- **Module map** — key modules/packages, their responsibility, and primary dependencies.
-- **Data flow** — the dominant path in one short paragraph.
+- **Module map** — key modules/packages, their responsibility, and primary dependencies; tag each dependency
+  edge `extracted` | `inferred` | `ambiguous`.
+- **Data flow** — the dominant path in one short paragraph; tag each hop `extracted` | `inferred` | `ambiguous`.
 - **Stack + versions** — language · runtime · frameworks, each with its pinned or declared version.
 - **Proposed diagram** — the Mermaid fenced block with a one-line caption explaining the diagram type chosen.
 
