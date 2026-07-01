@@ -38,15 +38,28 @@ After onboarding, `docs-check` SHALL pass on the project.
 
 The onboard skill SHALL seed the project's conventions by **adapting** templates — a lean `CLAUDE.md`, an
 `openspec/config.yaml` layer, the permissions baseline, and the hooks wiring (`.claude/settings.json`) — to
-the project, not dropping them verbatim.
+the project, not dropping them verbatim. Each seed SHALL be **individually skippable** based on the
+coexistence assessment: OpenSpec is seeded as the default SDD engine **only where no SDD process exists**;
+the permissions baseline and hooks wiring are offered, not imposed, where governance already exists. An
+existing `CLAUDE.md` SHALL be **merged into** — the activator block appended under its own heading, existing
+content preserved — never replaced.
 
 #### Scenario: Seed authoring + SDD config
-- **WHEN** onboard seeds scaffolding
+- **WHEN** onboard seeds scaffolding on a project with no SDD process
 - **THEN** it writes a lean `CLAUDE.md` and an `openspec/config.yaml` adapted to the project
 
 #### Scenario: Seed safe controls
-- **WHEN** onboard seeds safe-controls
+- **WHEN** onboard seeds safe-controls on a project with no existing hooks/permissions governance
 - **THEN** it adds the permissions baseline and wires the hooks via `.claude/settings.json`
+
+#### Scenario: Existing CLAUDE.md is merged, not replaced
+- **WHEN** the project already has a `CLAUDE.md` with its own rules
+- **THEN** onboard appends the adapted activator block under its own heading and changes no existing content
+  without the author's explicit choice
+
+#### Scenario: A seed is declined
+- **WHEN** the author declines one seed (e.g. keeps the org's own permissions)
+- **THEN** onboard skips that seed, seeds the rest, and records the decision
 
 ### Requirement: Audit existing skills via skill-finder
 
@@ -84,23 +97,17 @@ SHALL leave a working project — everything it seeds lives in the generated out
 - **WHEN** eunomai is later removed from the project
 - **THEN** the seeded files remain and the project still works
 
-### Requirement: onboard carries provenance
-
-The `eunomai-onboard` skill SHALL carry a `PROVENANCE.md` (`origin: authored`) so `provenance-check` passes on
-this repository.
-
-#### Scenario: Provenance present on this repo
-- **WHEN** `provenance-check` runs on this repository
-- **THEN** it exits zero with `eunomai-onboard` included
-
 ### Requirement: Survey the workspace and confirm scope before onboarding
 
 The onboard skill SHALL, before analyzing or changing any project, perform a read-only **workspace survey**
 (delegated to a subagent) that discovers all git repositories (the root and any nested) and their remotes and
-detects code manifests and existing `CLAUDE.md`/`AGENTS.md`. It SHALL classify each repository as *environment*
-or *project* by heuristic, present the workspace map with the proposed classification, and require the user to
-confirm which repositories are in scope and where the eunomai layer anchors. It SHALL NOT decide scope
-silently, and the survey SHALL change nothing.
+detects code manifests and existing `CLAUDE.md`/`AGENTS.md`. The survey SHALL also **enumerate existing
+governance** per repository — hooks and `permissions` blocks in `.claude/settings.json`, skills under
+`.claude/skills/`, an existing `eunomai-skills-audit.md` registry, and other installed plugins' visible
+markers — as facts (presence + location), without assessing them. It SHALL classify each repository as
+*environment* or *project* by heuristic, present the workspace map with the proposed classification, and
+require the user to confirm which repositories are in scope and where the eunomai layer anchors. It SHALL NOT
+decide scope silently, and the survey SHALL change nothing.
 
 #### Scenario: Nested project under an environment root
 - **WHEN** onboard runs in a workspace whose root repo holds work-environment config and a nested subfolder is a project repo with a GitHub remote
@@ -113,6 +120,10 @@ silently, and the survey SHALL change nothing.
 #### Scenario: Detect, don't assume
 - **WHEN** the survey completes
 - **THEN** onboard presents the detected map plus proposed classification and proceeds only on the user's confirmation
+
+#### Scenario: Existing governance is enumerated
+- **WHEN** a surveyed repository carries hooks, a permissions block, skills, or a provenance registry
+- **THEN** the survey lists each with its location, so the coexistence assessment starts from facts
 
 ### Requirement: Anchor the eunomai layer at each project root
 
@@ -198,8 +209,10 @@ changes, pausing on irreversible/sensitive actions). The block SHALL name the re
 **accelerators** (parenthetically), never as prerequisites, and SHALL honour three invariants: it SHALL remain
 meaningful if the skills are absent (**self-sufficient**), SHALL reference capabilities rather than the eunomai
 brand/framework (**capabilities, not brand**), and SHALL state the principle rather than the procedure
-(**activate, don't duplicate**). onboard SHALL adapt the canonical block to the project rather than copying it
-verbatim, and SHALL add no new check.
+(**activate, don't duplicate**). The canonical block SHALL be carried **inside the onboard skill itself** (so
+it resolves in installed-plugin mode); `docs/onboard.md` links to it rather than holding a second copy.
+onboard SHALL adapt the canonical block to the project rather than copying it verbatim, and SHALL add no new
+check.
 
 #### Scenario: The seeded CLAUDE.md carries the activator block
 - **WHEN** onboard seeds a confirmed project root
@@ -220,6 +233,10 @@ verbatim, and SHALL add no new check.
 #### Scenario: Adapted, not copied
 - **WHEN** onboard writes the block for a specific project
 - **THEN** it adapts the canonical block to that project's stack and conventions rather than pasting it verbatim
+
+#### Scenario: Canonical block resolves when installed as a plugin
+- **WHEN** onboard runs from the installed plugin (not a repo clone)
+- **THEN** the canonical block is available from the skill's own content without needing a repo-relative path
 
 ### Requirement: Delegate codebase comprehension and coherence auditing to read-only agents
 
@@ -256,4 +273,58 @@ layout, and SHALL NOT organize folders by Diátaxis type (the mode lives in `typ
 #### Scenario: Onboard does not impose content-type folders
 - **WHEN** onboard creates the docs layout
 - **THEN** it does not create `guides/`/`reference/`/`explanation/` by Diátaxis type; the mode is carried by each page's `type` field
+
+### Requirement: From-scratch interviews are scaffolded by the six knowledge domains
+
+When creating docs from scratch, the onboard skill SHALL scaffold the structured interview by the six KDD
+knowledge domains — business, product, technical, operational, historical, AI-ready — so coverage is a
+property of creation, not later repair. The scaffold is for the interviewer: domains answerable from the
+codebase SHALL be explored, not asked (explore-first), the interview remains one-question-at-a-time and
+skippable, and no domain questionnaire form SHALL be introduced.
+
+#### Scenario: Domain coverage by construction
+- **WHEN** onboard creates docs from scratch via the interview
+- **THEN** the interview walks the six domains, skipping those the codebase already answers, and the
+  resulting docs cover the domains the author confirmed as relevant
+
+#### Scenario: Still an interview, not a form
+- **WHEN** the domain scaffold is applied
+- **THEN** questions remain one at a time with recommended defaults, and the author can skip any domain
+
+### Requirement: The cartographer reports domain signals
+
+The codebase-cartographer's comprehension map SHALL include a **domain signals** section — artifacts already
+encountered during the walk, listed per KDD domain (e.g. CI/CD configs, IaC, Dockerfiles → operational;
+ADR directories, CHANGELOG → historical; README claims, glossary → business/product), each tagged with the
+map's confidence taxonomy. Signals are **observed, not assessed**: the agent SHALL NOT judge coverage or
+recommend action — the calling skill's lens does.
+
+#### Scenario: Operational evidence is surfaced
+- **WHEN** the cartographer encounters CI configuration or Dockerfiles during its walk
+- **THEN** the map lists them as operational-domain signals with a confidence tag, without any assessment
+
+### Requirement: Coexistence assessment before seeding
+
+After the analyze step and before establishing docs or seeding conventions, the onboard skill SHALL run a
+**coexistence assessment** per confirmed project root: classify each surface — `CLAUDE.md` · docs standard ·
+SDD process · permissions · hooks · skills — as **absent**, **present-compatible**, or
+**present-conflicting**. Absent surfaces are seeded normally; present-compatible surfaces are left in place
+and referenced; present-conflicting surfaces SHALL go through the structured interview with **"adapt to what
+exists" as the recommended default**. The assessment SHALL follow the coexistence contract and SHALL NOT be
+skipped when the survey reports any existing governance.
+
+#### Scenario: Project already has a docs standard
+- **WHEN** the target project's docs are governed by an existing standard or toolchain (e.g. a static-site
+  source tree with its own frontmatter schema)
+- **THEN** onboard classifies docs as present-conflicting, asks the author whether to adapt to the incumbent
+  standard or migrate, and recommends adapting
+
+#### Scenario: Project already runs another SDD process
+- **WHEN** the target project has an established change/spec process that is not OpenSpec
+- **THEN** onboard does not seed `openspec/`, records the incumbent process as the project's SDD in
+  `CLAUDE.md`, and offers OpenSpec only as an opt-in
+
+#### Scenario: Nothing exists
+- **WHEN** all six surfaces are absent
+- **THEN** onboard proceeds with the full default seed (OpenSpec as the default SDD engine)
 

@@ -1,14 +1,11 @@
-# living-docs Specification (delta)
-
 ## ADDED Requirements
 
 ### Requirement: Foreign frontmatter coexists
 
-When operating on a project whose docs already carry frontmatter owned by another toolchain (static-site
-generators, publishing pipelines), the skill SHALL **preserve foreign keys untouched** when adding the
-standard's required fields. If the `type` key is already used with different semantics, the skill SHALL
-surface the collision to the author (adapt, rename, or exclude those pages from scope) rather than
-overwriting it.
+The skill SHALL preserve foreign frontmatter keys untouched when adding the standard's required fields to
+pages whose frontmatter is also owned by another toolchain (static-site generators, publishing pipelines).
+If the `type` key is already used with different semantics, the skill SHALL surface the collision to the
+author (adapt, rename, or exclude those pages from scope) rather than overwriting it.
 
 #### Scenario: SSG keys are preserved
 - **WHEN** a page carries e.g. `sidebar_position` or `layout` keys owned by another tool
@@ -20,8 +17,8 @@ overwriting it.
 
 ### Requirement: ADRs — create from interview, never edit
 
-The skill MAY **create** ADRs when structured-interview answers crystallize a non-trivial decision, and
-SHALL NOT **edit** existing ADRs (they are immutable decision records; superseding is a new ADR).
+The skill SHALL NOT edit existing ADRs (immutable decision records — superseding is a new ADR), and it MAY
+create ADRs when structured-interview answers crystallize a non-trivial decision.
 
 #### Scenario: Interview answer becomes a new ADR
 - **WHEN** the interview settles a non-trivial choice during docs recovery
