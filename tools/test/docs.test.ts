@@ -125,6 +125,35 @@ describe("checkDocs", () => {
     expect(r.orphaned).toEqual([]);
   });
 
+  it("strips a leading UTF-8 BOM from the README and from pages (Windows editors)", () => {
+    write("README.md", "\uFEFF# P\n\n- [Guide](docs/guide.md)\n");
+    write("docs/guide.md", `\uFEFF${page("how-to", "Guide")}`);
+    writeHealthFiles();
+    const r = checkDocs(dir);
+    expect(r.broken).toEqual([]);
+    expect(r.orphaned).toEqual([]);
+    expect(r.frontmatterIssues).toEqual([]);
+    expect(r.missingHealth).toEqual([]);
+  });
+
+  it("resolves titled links, stripping the title part", () => {
+    write("README.md", `# P\n\n- [Guide](docs/guide.md "The guide") [Also](docs/also.md 'Alt')\n`);
+    write("docs/guide.md", page("how-to", "Guide"));
+    write("docs/also.md", page("reference", "Also"));
+    const r = checkDocs(dir);
+    expect(r.broken).toEqual([]);
+    expect(r.orphaned).toEqual([]);
+    expect(r.checkedLinks).toBe(2);
+  });
+
+  it("percent-decodes link targets (%20) and falls back to the raw string on malformed escapes", () => {
+    write("README.md", "# P\n\n- [My Page](docs/my%20page.md)\n- [Bad](docs/bad%2.md)\n");
+    write("docs/my page.md", page("how-to", "My Page"));
+    const r = checkDocs(dir);
+    expect(r.orphaned).toEqual([]);
+    expect(r.broken).toEqual(["docs/bad%2.md"]); // malformed escape: checked as-is, missing
+  });
+
   it("ignores external URLs and anchors, and strips ./ and #fragments", () => {
     write("README.md", "# P\n\n[ext](https://x.y) [a](#top) [Guide](./docs/guide.md#sec)\n");
     write("docs/guide.md", "# Guide\n");

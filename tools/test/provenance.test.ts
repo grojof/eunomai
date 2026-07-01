@@ -83,6 +83,63 @@ describe("checkSkillsAudit", () => {
     expect(r.gaps).toEqual([".claude/skills/vendored: unpinned"]);
   });
 
+  it("flags a stale registry entry whose skill folder no longer exists", () => {
+    skill("a");
+    registry([{ name: "a" }, { name: "ghost" }]);
+    const r = checkSkillsAudit(dir);
+    expect(r.uncovered).toEqual([]);
+    expect(r.invalid).toEqual([
+      ".claude/skills/eunomai-skills-audit.md: stale entry 'ghost' (skill folder .claude/skills/ghost not found)",
+    ]);
+  });
+
+  it("flags stale entries even when no skill folders remain", () => {
+    registry([{ name: "gone" }]);
+    const r = checkSkillsAudit(dir);
+    expect(r.invalid.length).toBe(1);
+    expect(r.invalid[0]).toContain("stale entry 'gone'");
+    expect(r.checked).toBe(0);
+  });
+
+  it("flags duplicate registry entries instead of letting the last one win silently", () => {
+    skill("a");
+    registry([{ name: "a" }, { name: "a" }]);
+    const r = checkSkillsAudit(dir);
+    expect(r.uncovered).toEqual([]);
+    expect(r.invalid).toEqual([".claude/skills/eunomai-skills-audit.md: duplicate entry 'a'"]);
+  });
+
+  it("treats English unpinned phrasings as gaps, and matches TBD only as a whole word", () => {
+    skill("a");
+    skill("b");
+    skill("c");
+    skill("d");
+    registry([
+      { name: "a", ref: "not recorded", verdict: "adopt" },
+      { name: "b", ref: "no sha available", verdict: "adopt" },
+      { name: "c", ref: "TBD", verdict: "adopt" },
+      { name: "d", ref: "9TBDf00d", verdict: "adopt" }, // TBD inside a SHA-like word: pinned
+    ]);
+    const r = checkSkillsAudit(dir);
+    expect([...r.gaps].sort()).toEqual([
+      ".claude/skills/a: unpinned ref",
+      ".claude/skills/b: unpinned ref",
+      ".claude/skills/c: unpinned ref",
+    ]);
+  });
+
+  it("parses a registry written with a leading UTF-8 BOM", () => {
+    skill("a");
+    write(
+      ".claude/skills/eunomai-skills-audit.md",
+      "\uFEFF---\ngenerated: 2026-06-24\nskills:\n  - name: a\n    origin: authored\n" +
+        "    ref: authored\n    verdict: authored\n    rubric: t\n---\n",
+    );
+    const r = checkSkillsAudit(dir);
+    expect(r.invalid).toEqual([]);
+    expect(r.uncovered).toEqual([]);
+  });
+
   it("checks the top-level skills/ root too (the eunomai plugin)", () => {
     skill("own", "skills");
     registry([{ name: "own" }], "skills");

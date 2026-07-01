@@ -50,8 +50,26 @@ const MD_LINK = /\[[^\]]*\]\(([^)]+)\)/g;
 
 const toPosix = (p: string): string => p.split("\\").join("/");
 
+/** Read a UTF-8 text file, stripping a leading BOM (common from Windows editors). */
+const readText = (abs: string): string => readFileSync(abs, "utf8").replace(/^\uFEFF/, "");
+
 const isDevDoc = (relPosix: string): boolean =>
   DEV_DOC_DIRS.some((d) => relPosix === d || relPosix.startsWith(`${d}/`));
+
+/** Strip an optional Markdown link title (`docs/page.md "Title"` / `… 'Title'`). */
+function stripLinkTitle(target: string): string {
+  const match = /^(<[^>]*>|\S+)\s+("[^"]*"|'[^']*')$/.exec(target);
+  return match?.[1] ?? target;
+}
+
+/** Percent-decode a link target (`%20` → space); malformed escapes fall back to the raw string. */
+function decodeTarget(target: string): string {
+  try {
+    return decodeURIComponent(target);
+  } catch {
+    return target;
+  }
+}
 
 /** README link targets that point into docs/ (relative, non-anchor, non-URL). */
 function docsLinks(readme: string): string[] {
@@ -59,11 +77,11 @@ function docsLinks(readme: string): string[] {
   for (const match of readme.matchAll(MD_LINK)) {
     const captured = match[1];
     if (captured === undefined) continue;
-    let target = captured.trim().replace(/^<|>$/g, "");
+    let target = stripLinkTitle(captured.trim()).replace(/^<|>$/g, "");
     const hash = target.indexOf("#");
     if (hash >= 0) target = target.slice(0, hash);
     if (target === "" || /^[a-z]+:/i.test(target)) continue; // skip empty, http:, mailto:, …
-    target = toPosix(target.replace(/^\.\//, ""));
+    target = toPosix(decodeTarget(target).replace(/^\.\//, ""));
     if (target === DOCS_DIR || target.startsWith(`${DOCS_DIR}/`)) targets.push(target);
   }
   return targets;
@@ -78,7 +96,9 @@ function inScopePages(cwd: string): string[] {
     for (const entry of readdirSync(absDir)) {
       const abs = join(absDir, entry);
       const rel = toPosix(relative(cwd, abs));
-      if (statSync(abs).isDirectory()) {
+      const stat = statSync(abs, { throwIfNoEntry: false }); // undefined for broken symlinks
+      if (stat === undefined) continue;
+      if (stat.isDirectory()) {
         if (!isDevDoc(rel)) walk(abs);
       } else if (entry.toLowerCase().endsWith(".md") && !isDevDoc(rel)) {
         pages.push(rel);
@@ -136,7 +156,7 @@ export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
   const readmePath = resolve(cwd, "README.md");
   if (!existsSync(readmePath)) throw new DocsError(`No README.md found at ${cwd}.`);
 
-  const links = docsLinks(readFileSync(readmePath, "utf8"));
+  const links = docsLinks(readText(readmePath));
   const broken: string[] = [];
   const referenced = new Set<string>();
   for (const target of links) {
@@ -149,7 +169,7 @@ export function checkDocs(cwd: string = process.cwd()): DocsCheckResult {
 
   const frontmatterIssues: string[] = [];
   for (const page of pages) {
-    const issue = frontmatterIssue(readFileSync(resolve(cwd, page), "utf8"));
+    const issue = frontmatterIssue(readText(resolve(cwd, page)));
     if (issue !== null) frontmatterIssues.push(`${page}: ${issue}`);
   }
   frontmatterIssues.sort();

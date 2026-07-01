@@ -1,4 +1,9 @@
+import { readFileSync } from "node:fs";
 import { defineConfig } from "tsup";
+
+const { version } = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
+  version: string;
+};
 
 export default defineConfig({
   entry: ["src/cli.ts", "src/index.ts"],
@@ -10,4 +15,6 @@ export default defineConfig({
   target: "node20",
   clean: true,
   dts: true,
+  // Bake the package.json version into the bundle (`--version`); vitest.config.ts mirrors this.
+  define: { __CLI_VERSION__: JSON.stringify(version) },
 });

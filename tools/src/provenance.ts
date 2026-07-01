@@ -27,7 +27,7 @@ const RegistrySchema = z.object({
 export type SkillsAuditResult = {
   /** `<root>/<dir>` for a skill with `SKILL.md` but no registry entry. */
   uncovered: string[];
-  /** `<root>: <reason>` for a missing or invalid registry. */
+  /** `<root>: <reason>` for a missing/invalid registry or a drifted entry (stale, duplicate). */
   invalid: string[];
   /** `<root>/<name>: <gap>` for entries carrying trust gaps (e.g. `unpinned`). */
   gaps: string[];
@@ -36,6 +36,9 @@ export type SkillsAuditResult = {
   /** Skill roots that were scanned. */
   roots: string[];
 };
+
+/** Read a UTF-8 text file, stripping a leading BOM (common from Windows editors). */
+const readText = (abs: string): string => readFileSync(abs, "utf8").replace(/^\uFEFF/, "");
 
 /** Extract and parse leading YAML frontmatter (between `---` fences). */
 function frontmatter(text: string): unknown {
@@ -48,13 +51,15 @@ function frontmatter(text: string): unknown {
   }
 }
 
-const isUnpinned = (ref: string): boolean => /^unpinned$|no registrado|sin sha|\bTBD\b/i.test(ref);
+/** Heuristic for a ref that records no real pin (SHA/version) — a trust gap, not a failure. */
+const isUnpinned = (ref: string): boolean =>
+  /^unpinned$|\bnot recorded\b|\bno sha\b|\bunknown\b|\bTBD\b/i.test(ref);
 
 /**
  * Read-only check that every skill under the skill roots (`.claude/skills/` and
  * `skills/`) is covered by that root's `eunomai-skills-audit.md` registry. Reports
- * uncovered skills and invalid registries (failures) and trust gaps (warnings).
- * Writes nothing.
+ * uncovered skills and missing/invalid/drifted registries — stale entries whose skill
+ * folder is gone, duplicate names — (failures) and trust gaps (warnings). Writes nothing.
  */
 export function checkSkillsAudit(cwd: string = process.cwd()): SkillsAuditResult {
   const result: SkillsAuditResult = { uncovered: [], invalid: [], gaps: [], checked: 0, roots: [] };
@@ -64,25 +69,40 @@ export function checkSkillsAudit(cwd: string = process.cwd()): SkillsAuditResult
     if (!existsSync(root)) continue;
 
     const skillDirs = readdirSync(root).filter(
-      (e) => statSync(join(root, e)).isDirectory() && existsSync(join(root, e, "SKILL.md")),
+      (e) =>
+        // throwIfNoEntry keeps a broken symlink from crashing the scan (it is skipped)
+        statSync(join(root, e), { throwIfNoEntry: false })?.isDirectory() === true &&
+        existsSync(join(root, e, "SKILL.md")),
     );
-    if (skillDirs.length === 0) continue;
+    const registryPath = join(root, REGISTRY);
+    if (skillDirs.length === 0 && !existsSync(registryPath)) continue;
     result.roots.push(rel);
     result.checked += skillDirs.length;
 
-    const registryPath = join(root, REGISTRY);
     if (!existsSync(registryPath)) {
       result.invalid.push(`${rel}: missing ${REGISTRY}`);
       for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
     }
 
-    const parsed = RegistrySchema.safeParse(frontmatter(readFileSync(registryPath, "utf8")));
+    const parsed = RegistrySchema.safeParse(frontmatter(readText(registryPath)));
     if (!parsed.success) {
       const detail = parsed.error.issues.map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`).join("; ");
       result.invalid.push(`${rel}/${REGISTRY}: ${detail}`);
       for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
+    }
+
+    const names = parsed.data.skills.map((s) => s.name);
+    for (const dup of new Set(names.filter((n, i) => names.indexOf(n) !== i))) {
+      result.invalid.push(`${rel}/${REGISTRY}: duplicate entry '${dup}'`);
+    }
+
+    const present = new Set(skillDirs);
+    for (const name of new Set(names)) {
+      if (!present.has(name)) {
+        result.invalid.push(`${rel}/${REGISTRY}: stale entry '${name}' (skill folder ${rel}/${name} not found)`);
+      }
     }
 
     const byName = new Map(parsed.data.skills.map((s) => [s.name, s]));

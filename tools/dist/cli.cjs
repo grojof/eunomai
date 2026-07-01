@@ -7375,17 +7375,29 @@ var DocsError = class extends Error {
 };
 var MD_LINK = /\[[^\]]*\]\(([^)]+)\)/g;
 var toPosix = (p) => p.split("\\").join("/");
+var readText = (abs) => (0, import_node_fs.readFileSync)(abs, "utf8").replace(/^\uFEFF/, "");
 var isDevDoc = (relPosix) => DEV_DOC_DIRS.some((d) => relPosix === d || relPosix.startsWith(`${d}/`));
+function stripLinkTitle(target) {
+  const match = /^(<[^>]*>|\S+)\s+("[^"]*"|'[^']*')$/.exec(target);
+  return match?.[1] ?? target;
+}
+function decodeTarget(target) {
+  try {
+    return decodeURIComponent(target);
+  } catch {
+    return target;
+  }
+}
 function docsLinks(readme) {
   const targets = [];
   for (const match of readme.matchAll(MD_LINK)) {
     const captured = match[1];
     if (captured === void 0) continue;
-    let target = captured.trim().replace(/^<|>$/g, "");
+    let target = stripLinkTitle(captured.trim()).replace(/^<|>$/g, "");
     const hash = target.indexOf("#");
     if (hash >= 0) target = target.slice(0, hash);
     if (target === "" || /^[a-z]+:/i.test(target)) continue;
-    target = toPosix(target.replace(/^\.\//, ""));
+    target = toPosix(decodeTarget(target).replace(/^\.\//, ""));
     if (target === DOCS_DIR || target.startsWith(`${DOCS_DIR}/`)) targets.push(target);
   }
   return targets;
@@ -7398,7 +7410,9 @@ function inScopePages(cwd) {
     for (const entry of (0, import_node_fs.readdirSync)(absDir)) {
       const abs = (0, import_node_path.join)(absDir, entry);
       const rel = toPosix((0, import_node_path.relative)(cwd, abs));
-      if ((0, import_node_fs.statSync)(abs).isDirectory()) {
+      const stat = (0, import_node_fs.statSync)(abs, { throwIfNoEntry: false });
+      if (stat === void 0) continue;
+      if (stat.isDirectory()) {
         if (!isDevDoc(rel)) walk(abs);
       } else if (entry.toLowerCase().endsWith(".md") && !isDevDoc(rel)) {
         pages.push(rel);
@@ -7436,7 +7450,7 @@ function missingHealthFiles(cwd) {
 function checkDocs(cwd = process.cwd()) {
   const readmePath = (0, import_node_path.resolve)(cwd, "README.md");
   if (!(0, import_node_fs.existsSync)(readmePath)) throw new DocsError(`No README.md found at ${cwd}.`);
-  const links = docsLinks((0, import_node_fs.readFileSync)(readmePath, "utf8"));
+  const links = docsLinks(readText(readmePath));
   const broken = [];
   const referenced = /* @__PURE__ */ new Set();
   for (const target of links) {
@@ -7447,7 +7461,7 @@ function checkDocs(cwd = process.cwd()) {
   const orphaned = pages.filter((p) => !referenced.has(p)).sort();
   const frontmatterIssues = [];
   for (const page of pages) {
-    const issue = frontmatterIssue((0, import_node_fs.readFileSync)((0, import_node_path.resolve)(cwd, page), "utf8"));
+    const issue = frontmatterIssue(readText((0, import_node_path.resolve)(cwd, page)));
     if (issue !== null) frontmatterIssues.push(`${page}: ${issue}`);
   }
   frontmatterIssues.sort();
@@ -11523,6 +11537,7 @@ var RegistrySchema = external_exports.object({
   generated: external_exports.string().optional(),
   skills: external_exports.array(EntrySchema)
 });
+var readText2 = (abs) => (0, import_node_fs2.readFileSync)(abs, "utf8").replace(/^\uFEFF/, "");
 function frontmatter(text) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
   if (!match) return void 0;
@@ -11532,30 +11547,43 @@ function frontmatter(text) {
     return void 0;
   }
 }
-var isUnpinned = (ref) => /^unpinned$|no registrado|sin sha|\bTBD\b/i.test(ref);
+var isUnpinned = (ref) => /^unpinned$|\bnot recorded\b|\bno sha\b|\bunknown\b|\bTBD\b/i.test(ref);
 function checkSkillsAudit(cwd = process.cwd()) {
   const result = { uncovered: [], invalid: [], gaps: [], checked: 0, roots: [] };
   for (const rel of SKILL_ROOTS) {
     const root = (0, import_node_path2.resolve)(cwd, rel);
     if (!(0, import_node_fs2.existsSync)(root)) continue;
     const skillDirs = (0, import_node_fs2.readdirSync)(root).filter(
-      (e) => (0, import_node_fs2.statSync)((0, import_node_path2.join)(root, e)).isDirectory() && (0, import_node_fs2.existsSync)((0, import_node_path2.join)(root, e, "SKILL.md"))
+      (e) => (
+        // throwIfNoEntry keeps a broken symlink from crashing the scan (it is skipped)
+        (0, import_node_fs2.statSync)((0, import_node_path2.join)(root, e), { throwIfNoEntry: false })?.isDirectory() === true && (0, import_node_fs2.existsSync)((0, import_node_path2.join)(root, e, "SKILL.md"))
+      )
     );
-    if (skillDirs.length === 0) continue;
+    const registryPath = (0, import_node_path2.join)(root, REGISTRY);
+    if (skillDirs.length === 0 && !(0, import_node_fs2.existsSync)(registryPath)) continue;
     result.roots.push(rel);
     result.checked += skillDirs.length;
-    const registryPath = (0, import_node_path2.join)(root, REGISTRY);
     if (!(0, import_node_fs2.existsSync)(registryPath)) {
       result.invalid.push(`${rel}: missing ${REGISTRY}`);
       for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
     }
-    const parsed = RegistrySchema.safeParse(frontmatter((0, import_node_fs2.readFileSync)(registryPath, "utf8")));
+    const parsed = RegistrySchema.safeParse(frontmatter(readText2(registryPath)));
     if (!parsed.success) {
       const detail = parsed.error.issues.map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`).join("; ");
       result.invalid.push(`${rel}/${REGISTRY}: ${detail}`);
       for (const dir of skillDirs) result.uncovered.push(`${rel}/${dir}`);
       continue;
+    }
+    const names = parsed.data.skills.map((s) => s.name);
+    for (const dup of new Set(names.filter((n, i) => names.indexOf(n) !== i))) {
+      result.invalid.push(`${rel}/${REGISTRY}: duplicate entry '${dup}'`);
+    }
+    const present = new Set(skillDirs);
+    for (const name of new Set(names)) {
+      if (!present.has(name)) {
+        result.invalid.push(`${rel}/${REGISTRY}: stale entry '${name}' (skill folder ${rel}/${name} not found)`);
+      }
     }
     const byName = new Map(parsed.data.skills.map((s) => [s.name, s]));
     for (const dir of skillDirs) {
@@ -11573,17 +11601,23 @@ function checkSkillsAudit(cwd = process.cwd()) {
   return result;
 }
 
-// src/cli.ts
-var HELP = `eunomai \u2014 read-only checks for a Claude Code AI workspace
+// src/run.ts
+var CLI_VERSION = true ? "0.4.0" : "0.0.0-dev";
+var HELP = `eunomai ${CLI_VERSION} \u2014 read-only checks for a Claude Code AI workspace
 
 Usage:
   eunomai docs-check           Read-only: verify README<->docs/ links, index coverage, community-health files.
   eunomai provenance-check     Read-only: verify every skill is covered by the skills-audit registry.
+  eunomai --version            Print the CLI version.
   eunomai --help               Show this help.`;
 function run(argv) {
   const args = argv.slice(2);
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
     console.log(HELP);
+    return 0;
+  }
+  if (args.includes("--version")) {
+    console.log(CLI_VERSION);
     return 0;
   }
   const [cmd] = args;
@@ -11620,6 +11654,8 @@ function run(argv) {
 ${HELP}`);
   return 1;
 }
+
+// src/cli.ts
 try {
   process.exit(run(process.argv));
 } catch (err) {
