@@ -7,6 +7,8 @@
     {
       "name": "eunomai",
       "source": ".",
+      "version": "0.4.0",
+      "license": "MIT",
       "description": "A Claude-only AI workspace: SDD/SPDD, living docs, safe controls, and trust-gated skills — built on existing tools, not reinventing them."
     }
   ]
