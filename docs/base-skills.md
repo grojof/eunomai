@@ -3,7 +3,7 @@ type: reference
 title: "Base skills"
 description: "The standards-anchored base set and the admission filter."
 tags: [base-skills, security]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # Base skills
@@ -16,11 +16,16 @@ every project benefits from. They are distinct from the [skill-finder](skill-fin
 
 | Skill | Anchored to | Does | Defers to |
 |-------|-------------|------|-----------|
-| **`eunomai-secure-coding`** | [OWASP Top 10](https://owasp.org/www-project-top-ten/) + CWE Top 25 | proactive, **writing-time** secure-coding directives (injection, broken access control, crypto/auth failures, SSRF, unsafe deserialization) | `/security-review` for a **diff audit**; [safe-controls](safe-controls.md) for **runtime** blocking |
+| **`eunomai-secure-coding`** | [OWASP Top 10:2025](https://owasp.org/Top10/2025/) + CWE Top 25 | proactive, **writing-time** secure-coding directives (injection, broken access control, crypto/auth failures, SSRF, unsafe deserialization) | `/security-review` for a **diff audit**; [safe-controls](safe-controls.md) for **runtime** blocking |
 | **`eunomai-dependency-upgrade`** | [OWASP A03:2025](https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/) + [SLSA](https://slsa.dev/) | universal hygiene for adding/upgrading deps: lockfile pin · SCA/CVE scan · changelog · incremental breaking changes · licenses | your package manager (it's the checklist around it, not a replacement) |
 
 Three non-overlapping planes for security: **secure-coding** (write-time) → **`/security-review`**
 (diff-time) → **safe-controls** (run-time).
+
+Both base skills end with a lightweight **capture step** for the decisions their own flow forces — a
+non-obvious trust boundary, a CVE exploitability waiver (id, rationale, revisit date) — recorded where the
+project keeps decisions (an ADR, or the location its rules designate). Suggestion-level, never enforced:
+the KDD historical domain captured at the moment it exists.
 
 ## The admission filter
 

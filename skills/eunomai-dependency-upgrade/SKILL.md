@@ -16,8 +16,8 @@ and [SLSA](https://slsa.dev/). It does not replace your package manager — it's
   attack surface.
 - **Vet it:** maintained (recent commits/releases), reputable author, healthy usage, and an **acceptable
   license** for your project.
-- **Check it's clean:** run an **SCA / CVE scan** (e.g. `npm audit`, `osv-scanner`, `pip-audit`) before
-  committing it.
+- **Check it's clean:** run an **SCA / CVE scan** (e.g. `npm audit`, `osv-scanner`, `pip-audit` — or the
+  scanner/registry the project's rules designate) before committing it.
 
 ## When upgrading
 
@@ -25,7 +25,9 @@ and [SLSA](https://slsa.dev/). It does not replace your package manager — it's
 2. **Read the changelog / release notes.** Note breaking changes and deprecations.
 3. **One major at a time.** Don't jump several majors at once; upgrade, build, test, repeat.
 4. **Scan again (SCA).** Confirm the new version (and its **transitive** deps) has no known critical/high CVE;
-   if one exists, check exploitability before shipping.
+   if one exists, check exploitability before shipping. Deciding to ship anyway is a **risk acceptance** —
+   record the waiver (CVE id, rationale, revisit date) where the project keeps decisions (an ADR, or the
+   location its rules designate).
 5. **Run the full test suite.** Treat a dependency upgrade like any other change — green tests before merge.
 6. **Track licenses.** Record/respect the dependency's license (an SBOM — SPDX/CycloneDX — captures name,
    version, supplier, and license); a new dep must not introduce an incompatible license.

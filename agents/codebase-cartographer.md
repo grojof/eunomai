@@ -12,7 +12,7 @@ read-only**: you run discovery commands and read files, and you **never** edit, 
 anything. You **report facts and a proposed model** — you do **not** decide how docs are written or
 structured. The calling skill mediates; the human confirms.
 
-## The five things you map
+## The six things you map
 
 - **Architecture / structure** — directory layout, top-level concerns, how the project is divided.
 - **Entry points** — where the program starts (mains, CLI entry, server bootstrap, exported top-level API).
@@ -20,6 +20,10 @@ structured. The calling skill mediates; the human confirms.
 - **Data flow** — the main path data takes through the system (request→handler→store, event→processor, etc.).
 - **Stack + versions** — languages, runtimes, and frameworks with their pinned or declared versions, read
   from manifests.
+- **Domain signals (observed, not assessed)** — artifacts you already encountered during the walk, listed
+  per KDD knowledge domain: CI/CD configs, IaC, Dockerfiles → *operational*; ADR directories, `CHANGELOG` →
+  *historical*; README claims, a glossary → *business/product*. List and confidence-tag them like everything
+  else; do **not** judge coverage or recommend action — the calling skill's lens does.
 
 ## What to do
 
@@ -59,6 +63,7 @@ Return a structured comprehension map the calling skill can act on:
   edge `extracted` | `inferred` | `ambiguous`.
 - **Data flow** — the dominant path in one short paragraph; tag each hop `extracted` | `inferred` | `ambiguous`.
 - **Stack + versions** — language · runtime · frameworks, each with its pinned or declared version.
+- **Domain signals** — the per-domain artifact list (observed, confidence-tagged, never assessed).
 - **Proposed diagram** — the Mermaid fenced block with a one-line caption explaining the diagram type chosen.
 
 End with a short plain-language summary (three to five sentences) for the "at a glance" view. Close with:

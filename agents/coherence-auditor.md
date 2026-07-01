@@ -45,7 +45,9 @@ mediates; the human decides.
 
 Return a prioritized coherence report the calling skill can present to the human:
 
-- **Summary** — one paragraph: overall coherence health, count of findings by severity.
+- **Summary** — one paragraph: overall coherence health, count of findings by severity, and a facts-only
+  **domain-coverage** line: which of the six KDD knowledge domains had **no** doc coverage found (e.g. "no
+  operational docs, no ADR directory") — evidence for the living-docs lens, never a score.
 - **Findings** — a numbered list, each entry containing:
   - Category: `drift` | `stale-version` | `undocumented`
   - Severity: `HIGH` | `MEDIUM` | `LOW`
