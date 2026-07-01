@@ -3,7 +3,7 @@ type: explanation
 title: "Vision / Charter"
 description: "What eunomai is, its principles, pillars, and architecture."
 tags: [vision, charter]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # eunomai — Vision / Charter
@@ -44,9 +44,10 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
    - a **lean root `README.md`** as index + summary + links (the front door),
    - extending into **`docs/`** for deeper docs, by topic, only when needed.
 3. **Safe controls** — hooks (`PreToolUse` deny / ask) + settings permissions; commit-policy guardrails.
-4. **Skills** — **our own skills only** — today **`eunomai-skill-finder`**, a trust gate by *criteria* fused
-   with skill-creator (find a trustworthy skill → adopt; else create; always improve). Third-party skills of
-   any origin are brought by the user/org and secured via the project's **rules**, not bundled here.
+4. **Skills** — **our own skills only** — **`eunomai-skill-finder`** as the trust-gated steward (a *criteria*
+   gate fused with skill-creator: find a trustworthy skill → adopt; else create; always improve), plus a tiny
+   **standards-anchored base set** (see [base-skills.md](base-skills.md)). Third-party skills of any origin
+   are brought by the user/org and secured via the project's **rules**, not bundled here.
 
 ## Connector / bootstrap (how the pillars travel)
 
@@ -68,7 +69,7 @@ no conformance engine — that would be the abandoned tower). See
 ## Architecture
 
 - **eunomai = a Claude Code plugin:** `.claude-plugin/plugin.json` + `skills/` (+ `agents/`, `hooks/`).
-  Distributed via a private/team marketplace (git).
+  Distributed via the **public marketplace** (the repository itself); orgs can mirror/fork and pin.
 - **Claude support is native (verified):** plugins bundle skills/agents/hooks/MCP; hooks enforce
   (`PreToolUse` → `deny`/`ask`); the marketplace gives provenance (commit-SHA pin, `author`) plus
   `claude plugin validate` and automated safety screening — the primitives the skill-trust gate builds on.
@@ -84,7 +85,9 @@ no conformance engine — that would be the abandoned tower). See
 
 ## Status
 
-Clean restart **2026-06-24**; reoriented to **Claude-only** on 2026-06-25 (ADR-0004). The read-only checks
-CLI (`tools/`) is implemented and verified. **SDD** (pillar 1, on OpenSpec) and **safe controls** (pillar 3,
-`PreToolUse` hooks — verified live) are done; living docs and skills are built incrementally as plugin skills
-via the SDD flow.
+All four pillars are shipped. **SDD** runs on OpenSpec; **safe controls** (`PreToolUse` hooks) are live;
+**living docs** and **skills** ship as plugin skills — five in total (`onboard`, `living-docs`,
+`skill-finder`, plus the base pair `secure-coding` / `dependency-upgrade`), with three read-only subagents
+(`workspace-survey`, `codebase-cartographer`, `coherence-auditor`) and the checks CLI (`tools/` —
+`docs-check` + `provenance-check`). The decision history lives in the [ADR series](decisions/) and
+`openspec/`.

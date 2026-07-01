@@ -3,7 +3,7 @@ type: tutorial
 title: "Using eunomai"
 description: "Install eunomai and apply it to a new or existing project, end to end."
 tags: [getting-started, install, onboard]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # Using eunomai
@@ -13,7 +13,7 @@ per-pillar reference pages alongside it (under `docs/`) are the detail.
 
 ## Prerequisites
 
-- **Node ≥ 20** (for the `projection/` tooling and the hooks).
+- **Node ≥ 20** (for the `tools/` CLI and the hooks).
 - **Claude Code** (the plugin host).
 - **OpenSpec CLI** for the SDD pillar — installed separately (eunomai reuses it, doesn't bundle it):
   ```bash
@@ -22,11 +22,11 @@ per-pillar reference pages alongside it (under `docs/`) are the detail.
 
 ## Install eunomai as a plugin
 
-eunomai is a Claude Code plugin published through a marketplace. Install it from the **git repository**
-(you need access to the private repo):
+eunomai is a Claude Code plugin published through its own **public marketplace** — the repository itself
+carries `.claude-plugin/marketplace.json`, so adding the repo *is* adding the marketplace:
 
 ```text
-/plugin marketplace add grojof/eunomai        # the marketplace (contains .claude-plugin/marketplace.json)
+/plugin marketplace add grojof/eunomai        # the public marketplace
 /plugin install eunomai@eunomai               # plugin@marketplace
 /reload-plugins                               # activate without restarting
 ```
@@ -39,13 +39,23 @@ Or, for local development, from a **clone** — point at the directory instead:
 
 This makes available, in the target project:
 
-- the **skills** — `eunomai-onboard`, `eunomai-living-docs`, `eunomai-skill-finder` (namespaced by the plugin);
+- the **skills** — `eunomai-onboard`, `eunomai-living-docs`, `eunomai-skill-finder`, plus the
+  standards-anchored base pair `eunomai-secure-coding` and `eunomai-dependency-upgrade`
+  (see [base-skills.md](base-skills.md)) — all namespaced by the plugin;
 - the **safe-controls hooks** — `PreToolUse` guardrails (they resolve via `${CLAUDE_PLUGIN_ROOT}`).
 
 > **Everything ships with the plugin.** The skills, the safe-controls hooks, **and** the read-only checks CLI
 > (`docs-check`, `provenance-check`) all install with eunomai — the CLI as a single self-contained bundle
-> (`tools/dist/cli.cjs`), so there is no build step. Run it via
-> `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" <command>`.
+> (`tools/dist/cli.cjs`), so there is no build step. Inside a Claude Code session the skills invoke it via the
+> plugin root automatically; `${CLAUDE_PLUGIN_ROOT}` resolves **only** in plugin hook/skill contexts, never in
+> your terminal. To run the checks yourself, use a clone of this repo, from your project root:
+> `node <clone>/tools/dist/cli.cjs docs-check`.
+
+### Updating / pinning
+
+Third-party marketplaces do **not** auto-update by default — run `/plugin marketplace update eunomai` to pull
+the latest, then `/reload-plugins`. Orgs that need a fixed version can pin by installing from a fork/mirror at
+a fixed tag instead of the moving repository.
 
 ## Apply eunomai to a project (new or existing)
 
@@ -77,8 +87,9 @@ It will, with you in control:
   [living-docs.md](living-docs.md).
 - **Skills:** use `eunomai-skill-finder` to adopt/create/audit skills behind the trust gate. See
   [skill-finder.md](skill-finder.md).
-- **Checks:** `node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" docs-check` and `… provenance-check` are
-  read-only and belong in your gate.
+- **Checks:** `docs-check` and `provenance-check` are read-only and belong in your gate. Inside Claude Code
+  the skills run them via the plugin root; to run them yourself, use a clone of this repo from your project
+  root — `node <clone>/tools/dist/cli.cjs docs-check`. See [checks.md](checks.md).
 
 ## Authoring note
 

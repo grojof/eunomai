@@ -64,4 +64,4 @@ lock-in.
 - Treat Claude Code as the only host; do not add multi-tool projection back.
 - Keep new knowledge in open Markdown + frontmatter (ADR-0003) so the standard stays portable despite the
   single host.
-- When the rebase lands, `AGENTS.md` is the authored source; the checks live as a small standalone CLI.
+- When the rebase lands, `CLAUDE.md` is the authored source; the checks live as a small standalone CLI.

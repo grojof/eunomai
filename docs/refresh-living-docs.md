@@ -3,13 +3,14 @@ type: how-to
 title: "Refresh living docs"
 description: "Keep project docs fresh and structurally honest."
 tags: [living-docs, docs]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # Refresh the living docs
 
-How to keep a project's docs fresh and structurally honest. The standard (Diátaxis layout, the lean README
-index) is in the [living-docs](living-docs.md) reference; this is the recipe.
+How to keep a project's docs fresh and structurally honest. The v2 standard (frontmatter with a Diátaxis
+`type` lens, a product-shaped README map, single source of truth) is in the [living-docs](living-docs.md)
+reference; this is the recipe.
 
 ## Refresh the content (the skill)
 
@@ -21,37 +22,33 @@ Invoke the skill — it never silently rewrites; it proposes and keeps you in co
 
 It will:
 
-1. Update the **README** summary to match reality.
-2. **Sync the index** with what actually exists under `docs/` (add missing links, drop dead ones).
-3. **Split overgrown sections** — when a README section outgrows a couple of paragraphs, move it to a page in
-   the matching Diátaxis folder (`guides/` · `reference/` · `explanation/`) and leave a link.
+1. **Survey the scope** — pick the project root (in a nested/multirepo workspace it surveys first and asks;
+   never assumes the workspace root), then read the README and the pages under `docs/` (ADRs in
+   `docs/decisions/` are out of scope).
+2. **Run a coherence pass** — `docs-check` for structure, plus the review lenses (type aptness, domain
+   coverage, duplication, knowledge that belongs at a higher activation state).
+3. **Propose the edits** — README map, frontmatter, splits, and lens findings, as suggestions.
+4. **You confirm** — nothing is applied without your agreement.
+5. **Apply, then verify** — re-run `docs-check` until it exits 0.
 
 ## Where a new page goes
 
-Match the page to **one** Diátaxis purpose (mixing kinds is the main cause of confusing docs):
-
-| The page answers… | Folder |
-|-------------------|--------|
-| "how do I…?" (task recipe) | `guides/` |
-| "what exactly is…?" (the facts) | `reference/` |
-| "why / what's the idea?" | `explanation/` |
-| "why did we decide…?" (ADR, dev-facing) | `decisions/` — **not** indexed |
-
-Every in-scope page (under `guides/`, `reference/`, `explanation/`) **must be linked from the README index**,
-or `docs-check` will flag it as orphaned.
+A page declares its Diátaxis mode in the **`type` frontmatter field**
+(`tutorial | how-to | reference | explanation | decision`) — never in a content-type folder tree
+(`guides/`/`reference/`/`explanation/` folders are a v2 anti-pattern). Stay **flat** while small; promote a
+*surface* to its own folder only when it grows. Every in-scope page must be linked from the README map, or
+`docs-check` flags it as orphaned.
 
 ## Verify the structure (the check)
 
+`${CLAUDE_PLUGIN_ROOT}` resolves only inside plugin hook/skill contexts — within a Claude Code session the
+skill runs the check via the plugin root automatically. To run it yourself, use a clone of this repo, from
+your project root:
+
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/projection/dist/cli.cjs" docs-check
+node <clone>/tools/dist/cli.cjs docs-check
 ```
 
-Read-only; non-zero exit on drift. It checks **structure** — every README→`docs/` link resolves and every
-in-scope page is indexed — not prose accuracy (that's the skill's job). See
+Read-only; non-zero exit on drift. It checks **structure and frontmatter shape** — every README→`docs/` link
+resolves, every in-scope page is indexed — never prose accuracy (that's the skill's job). See
 [checks](checks.md).
-
-## Diagrams
-
-Use [Mermaid](https://mermaid.js.org/) (GitHub-native), one idea per diagram, and only when it's clearer than
-prose: flowchart (process), sequence (interactions), C4 (architecture), class/erDiagram (structure),
-stateDiagram (lifecycle).

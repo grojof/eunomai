@@ -3,7 +3,7 @@ type: reference
 title: "Checks (the read-only gate)"
 description: "The docs-check and provenance-check CLI, and how to run it as a gate."
 tags: [checks, gate]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # Checks (the read-only gate)
@@ -14,11 +14,13 @@ nothing** and belong in your gate (CI / pre-merge) so structure and provenance c
 
 ## The commands
 
-Run from a clone, or via `${CLAUDE_PLUGIN_ROOT}` inside a project that installed the plugin:
+Inside a Claude Code session the skills invoke the CLI via `${CLAUDE_PLUGIN_ROOT}` — that variable resolves
+**only** in plugin hook/skill contexts, never in your terminal. To run the checks yourself, use a **clone of
+this repo** and run from your project root:
 
 ```bash
-node tools/dist/cli.cjs docs-check          # README↔docs/ links + frontmatter + community-health files
-node tools/dist/cli.cjs provenance-check    # every skill covered by the audit registry
+node <clone>/tools/dist/cli.cjs docs-check          # README↔docs/ links + frontmatter + community-health files
+node <clone>/tools/dist/cli.cjs provenance-check    # every skill covered by the audit registry
 ```
 
 | Check | Passes when | Fails on |
@@ -31,12 +33,22 @@ Both run with plain `node` and no `node_modules` (dependencies are inlined into 
 
 ## Run it as a gate
 
-```bash
-node tools/dist/cli.cjs docs-check \
-  && node tools/dist/cli.cjs provenance-check
+In CI / pre-merge, check out a **pinned** clone of eunomai next to your project and run the CLI from the
+project root (GitHub Actions shown; any CI translates directly):
+
+```yaml
+- uses: actions/checkout@v4                 # your project
+- uses: actions/checkout@v4                 # a pinned clone of eunomai
+  with:
+    repository: grojof/eunomai
+    ref: v0.2.0                             # pin a released tag (or a commit SHA)
+    path: .eunomai
+- run: |
+    node .eunomai/tools/dist/cli.cjs docs-check
+    node .eunomai/tools/dist/cli.cjs provenance-check
 ```
 
-This is the same gate eunomai runs on itself — wire it into CI / pre-merge.
+This is the same gate eunomai runs on itself (from its own root: `node tools/dist/cli.cjs docs-check`).
 
 ## Fixing failures
 

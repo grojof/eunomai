@@ -2,6 +2,9 @@
 
 **Date:** 2026-06-25 · **Status:** accepted · **Pillar:** Living docs (cross-cutting / substrate)
 
+> **Editor's note:** the projection architecture referenced below was retired the same day by
+> [ADR-0004 (Claude-only)](../0004-claude-only/DECISION.md); the OKF-substrate decision itself stands.
+
 ## Decision
 
 Treat Google's **Open Knowledge Format (OKF)** as evidence of a **convergent open substrate** that eunomai
