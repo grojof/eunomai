@@ -3,7 +3,7 @@ type: reference
 title: "Onboard (connector / bootstrap)"
 description: "The one-shot connector that applies eunomai to a project."
 tags: [onboard, bootstrap]
-updated: 2026-06-25
+updated: 2026-07-01
 ---
 
 # Onboard (connector / bootstrap)
@@ -23,18 +23,22 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
 
 ```
   workspace (may be an env repo + nested project repos, or multirepo)
-    0. survey → workspace-survey subagent maps repos (root + nested), remotes, manifests;
+    0. survey → workspace-survey subagent maps repos (root + nested), remotes, manifests,
+               existing governance (hooks · permissions · skills · registries);
                proposes env vs project; USER confirms scope + where the layer anchors
     1. analyze (stack, docs, skills) + gather input via a structured interview — per confirmed project root
-    2. docs   → living-docs standard: content tree (Diátaxis) + project surface
+    2. coexist → classify each surface (CLAUDE.md · docs standard · SDD · permissions · hooks · skills)
+               as absent / compatible / conflicting; conflicts go through the interview,
+               "adapt to what exists" recommended; declined seeds are skipped
+    3. docs   → living-docs standard: content tree (Diátaxis) + project surface
                (the mandatory community-health files), restructured or created from scratch;
                from-scratch interviews crystallize into ADRs + a glossary explanation page
-    3. seed   → lean CLAUDE.md (declares the project's boundary + paths) · openspec/config.yaml ·
-               permissions baseline · hooks wiring
-    4. skills → invoke eunomai-skill-finder (audit)
-    5. drive docs-check + provenance-check to green  — run from the project root
-    6. hand off to the steady-state pillars → step aside
-       (multirepo: steps 1–6 run independently per project; env root gets at most a
+    4. seed   → lean CLAUDE.md (merged into if one exists) · openspec/config.yaml (only where
+               no SDD process exists) · permissions baseline · hooks wiring — each skippable
+    5. skills → invoke eunomai-skill-finder (audit)
+    6. drive docs-check + provenance-check to green  — run from the project root
+    7. hand off to the steady-state pillars → step aside
+       (multirepo: steps 1–7 run independently per project; env root gets at most a
         minimal delegating CLAUDE.md, with consent)
 ```
 
@@ -49,6 +53,9 @@ standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the dom
 
 ## Principles it honours
 
+- **Coexist, don't supplant** — additive, never replacing; on conflict the incumbent wins unless the author
+  decides otherwise (the [coexistence contract](org-adoption.md)); OpenSpec is the default SDD engine only
+  where none exists.
 - **Establish, don't maintain** — ongoing work belongs to the per-pillar skills; onboard delegates.
 - **One-shot, dispensable** — everything it seeds lives in the project's own files; remove eunomai and the
   project still works (zero lock-in).
@@ -65,25 +72,10 @@ The conventions onboard drops in are **derived from eunomai's own live, dogfoode
 
 The seeded `CLAUDE.md` has two halves: the **structural** half (boundary + paths) and the **behavioural**
 half — a plain-language **activator block** that makes any agent follow the base. In KDD terms `CLAUDE.md` is
-the *semi-active* layer; the block **activates** the base by pointing at the skills. onboard **adapts** this
-canonical block to the project (it does not paste it verbatim):
-
-```markdown
-## How to work in this project
-
-- Non-trivial changes are spec-first: capture intent and a short plan before code, and keep a record of what
-  changed and why. (The OpenSpec `/opsx:*` flow automates this.)
-- Keep docs honest: when behaviour changes, update the README index and the affected docs page in the same
-  change. (A living-docs refresh helps.)
-- Third-party skills and tools are untrusted until vetted — check provenance and scan before adopting. (A
-  skill-vetting capability automates this.)
-- Secure by default: validate input at boundaries, never hardcode secrets, parameterise queries. (A
-  secure-coding capability covers this.)
-- Add dependencies deliberately: pin, scan for known CVEs, read the changelog, run the tests. (A
-  dependency-upgrade capability covers this.)
-- Some actions are irreversible or sensitive — force-push, history rewrite, secret access, version bumps:
-  pause and confirm first. (Safe-controls hooks enforce this when installed.)
-```
+the *semi-active* layer; the block **activates** the base by pointing at the skills. The canonical block
+lives **inside the `eunomai-onboard` skill** (so it ships with the plugin and resolves wherever the skill
+runs); onboard **adapts** it to the project — it does not paste it verbatim. When the project already has a
+`CLAUDE.md`, the block is **appended under its own heading** and the existing content is preserved.
 
 Three invariants keep it honest:
 

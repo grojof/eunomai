@@ -3,7 +3,7 @@ type: reference
 title: "Living docs"
 description: "The v2 project-docs standard: Diátaxis as a lens via type, a knowledge-domain coverage lens, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
 tags: [living-docs, docs, okf, diataxis, kdd]
-updated: 2026-06-26
+updated: 2026-07-01
 ---
 
 # Living docs
@@ -59,6 +59,9 @@ updated: 2026-06-25        # optional — freshness
 ```
 
 `type` is **required** and machine-checked; `tags` is recommended; `audience`/`related`/`updated` are optional.
+**Foreign frontmatter coexists**: keys owned by another toolchain (a site generator's `sidebar_position`,
+`layout`, …) are preserved untouched, and a `type` key already used with different semantics is surfaced for
+the author to resolve — never overwritten (the [coexistence contract](org-adoption.md)).
 
 ## Diátaxis as a lens (the `type` field)
 

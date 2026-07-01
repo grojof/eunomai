@@ -1,6 +1,6 @@
 ---
 name: eunomai-living-docs
-description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, a knowledge-domain coverage lens (the six KDD domains), an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (ADRs are out of scope).
+description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, a knowledge-domain coverage lens (the six KDD domains), an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (may create ADRs from interview answers; never edits existing ones).
 ---
 
 # eunomai-living-docs
@@ -128,6 +128,9 @@ While refreshing, **notice and surface** such content — naming the owning pill
 - a repeatable **procedure** (step-by-step know-how an agent could run) → a skill via **`eunomai-skill-finder`**
   (🔴 active)
 - a trackable **requirement** → an **OpenSpec** spec (🟡 traceable)
+- knowledge **already owned by an org skill, plugin, or rule** → **link to the owner and defer** — never
+  restate it in project prose (the coexistence contract's incumbent-wins clause, applied to knowledge; it
+  also keeps the SSoT lens honest)
 
 This is a **review lens, not a new check**, and not an automatic move. You **suggest and point**; the author
 accepts or declines, and the owning pillar performs the actual move. Content that is genuinely explanatory or
@@ -153,7 +156,10 @@ deterministic gate is unaffected (duplication is judgement, not a gate rule).
    - **Map** — keep the README's at-a-glance summary, diagram, quickstart, and surface-organized index in line
      with reality; ensure every in-scope `docs/` page is reachable and remove links to pages that no longer exist.
    - **Frontmatter** — every `docs/` page carries valid frontmatter (required `type`/`title`/`description`);
-     set `type` by the page's Diátaxis mode (the lens — one page, one mode).
+     set `type` by the page's Diátaxis mode (the lens — one page, one mode). **Coexist with foreign
+     frontmatter**: keys owned by another toolchain (`sidebar_position`, `layout`, …) are preserved
+     untouched; if `type` is already taken with different semantics, surface the collision (adapt, rename,
+     or exclude those pages from scope) — never overwrite it silently.
    - **Split** — if a README section is long-form, move it into a `docs/` page (flat while small) and leave a
      link; let folders emerge only when a surface grows.
    - **Review lenses** (judgement, suggestion-only) — apply the three lenses and surface their findings:
@@ -165,7 +171,9 @@ deterministic gate is unaffected (duplication is judgement, not a gate rule).
 ## Boundaries
 
 - **Structure, not invention.** Keep docs authored; do not generate API docs from code.
-- **Project-docs only.** Do not edit ADRs here — those follow the SDD / handoff flow.
+- **Project-docs only.** ADRs: this skill may **create** one when a structured-interview answer crystallizes
+  a non-trivial decision; it never **edits** existing ADRs (immutable records — superseding is a new ADR
+  via the SDD / handoff flow).
 - **Suggest and delegate, don't activate.** When routing knowledge to a higher activation state, you only
   surface the suggestion and name the owning pillar — you never write `CLAUDE.md`, author a hook or a skill, or
   create a spec yourself, and you never auto-apply the move. The author decides; the pillar enacts.

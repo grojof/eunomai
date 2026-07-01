@@ -32,6 +32,11 @@ In a plain single repo these coincide; your job matters when they diverge (neste
    - **code manifests** — `package.json`, `pyproject.toml`/`setup.py`, `go.mod`, `Cargo.toml`, `pom.xml`,
      `Gemfile`, etc.
    - **existing eunomai/agent config** — `AGENTS.md`, `CLAUDE.md`, `openspec/`, `docs/`, `.claude/`.
+   - **existing governance** (facts only, no assessment) — in `.claude/settings.json`: `hooks` and
+     `permissions` blocks (present? which events/paths); skills under `.claude/skills/` (names); an existing
+     provenance registry (`eunomai-skills-audit.md` at a skills root); visible markers of other installed
+     plugins or an org-managed settings layer. This feeds the caller's coexistence assessment — a project
+     that already has a governance layer is adapted to, not seeded over.
 3. **Propose a classification** per repo using the heuristic below — but mark confidence and flag ambiguity.
 
 ## Classification heuristic (propose, never decide)
@@ -51,6 +56,8 @@ Return a structured map the calling skill can act on — for each repository:
 - `remotes` (name → url)
 - `manifests` (the ones found)
 - `existingConfig` (`AGENTS.md`/`CLAUDE.md`/`openspec/`/`docs/` present?)
+- `existingGovernance` — hooks / permissions blocks in `.claude/settings.json` (with location), skills under
+  `.claude/skills/` (names), a provenance registry if present, other plugin markers; empty list if none
 - `proposed`: `project` | `environment` | `ambiguous`, with a one-line reason and a confidence note
 
 End with a short summary: how many repos, which look like projects, which look like environment, and the

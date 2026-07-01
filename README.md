@@ -54,6 +54,8 @@ Full walkthrough → **[Getting started](docs/getting-started.md)**.
 **How-to**
 - **[Manage skills](docs/manage-skills.md)** — add or audit a skill behind the trust gate.
 - **[Refresh living docs](docs/refresh-living-docs.md)** — keep docs fresh and structurally honest.
+- **[Adopt in an organization](docs/org-adoption.md)** — the coexistence contract, org rollout, pinning,
+  extension seams, removal.
 
 **The pillars** (reference)
 - **[SDD](docs/sdd.md)** — the spec-driven flow on OpenSpec (explore → propose → apply → archive).

@@ -21,6 +21,9 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 - **`CLAUDE.md` is the single authored instruction file** (zero lock-in) — no generated copies, no projection.
 - **Open substrate** — knowledge is plain Markdown + frontmatter (see ADR-0003); Claude-only is the host, not
   lock-in.
+- **Coexist, don't supplant** — a removable complement: additive next to an existing personal/org layer; on
+  conflict the incumbent wins unless the author decides otherwise; the project's rules are an input to every
+  gate. Canonical statement: `docs/org-adoption.md`.
 
 ## Structure
 - `.claude-plugin/` (`plugin.json` + `marketplace.json`) + `skills/` + `hooks/` (+ `agents/`) — the Claude
