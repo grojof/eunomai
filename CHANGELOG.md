@@ -7,6 +7,53 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-02
+
+### Added
+
+- **Coexistence contract** (org-coexistence): eunomai is now explicitly a **removable complement** to an
+  existing personal/org layer — additive, incumbent-wins-on-conflict, detect-before-seeding, and the
+  project's rules as input to every gate. Canonical home: the new [docs/org-adoption.md](docs/org-adoption.md)
+  (rollout via managed settings/marketplaces, pinning, extension seams, removal), plus a `CLAUDE.md`
+  principle. onboard gains a **coexistence assessment** with per-seed opt-out (OpenSpec is the default SDD
+  engine only where none exists; an existing `CLAUDE.md` is merged into, never replaced) and carries the
+  canonical activator block inline; `workspace-survey` enumerates existing governance; skill-finder gains
+  org-trust gate input, audit verdicts (`keep` · `keep-with-gaps` · `flag-for-removal`), human confirmation
+  before vendoring, and an honest plugin-skill coverage boundary; living-docs gains org-owned routing,
+  foreign-frontmatter coexistence, and the ADR create-vs-edit boundary.
+- **Safety-gate org override seam** (fail-open, no fork): `EUNOMAI_TRAILER_RULE` (`deny`|`ask`|`off`) and
+  `EUNOMAI_EXTRA_GATES` (JSON gate list), settable via managed settings.
+- **KDD across the pillars** (kdd-native): the from-scratch onboard interview is scaffolded by the six
+  knowledge domains; `codebase-cartographer` maps **domain signals** (observed, not assessed);
+  `coherence-auditor` reports a facts-only domain-coverage line; the base skills end with a
+  decision-capture step (trust boundaries, CVE waivers); skill-finder records rejection rationale +
+  harvested ideas in the registry narrative.
+- Minimal **CI** (GitHub Actions): tools typecheck/lint/test + dist-freshness, hooks tests, and both checks.
+- `--version` on the checks CLI (injected at build; `tools/package.json` now versioned with the plugin and
+  `private`).
+
+### Fixed
+
+- **Safe-controls guard**: the PowerShell tool is now routed through the guard (was a whole-channel bypass
+  on Windows); `git -C`/`-c` global options no longer skip the trailer/push rules; force-push short/refspec
+  forms, split/long `rm` flags, `git clean -f`, `Remove-Item -Recurse -Force`, and `id_ed25519` are gated;
+  `process.env` and `credential.helper` false positives removed; the dead `Edit|Write` matcher dropped.
+- **Checks CLI**: UTF-8 BOMs no longer break the frontmatter gate; titled/percent-encoded links resolve;
+  broken symlinks are skipped; `provenance-check` flags stale registry entries and duplicate names.
+- **Docs drift**: getting-started (public marketplace, `tools/` not `projection/`, all five skills,
+  update/pinning notes), refresh-living-docs rewritten to v2 (dead command and Diátaxis-folder table
+  removed), vision/status refreshed, `skills/README.md` provenance-model fix, ADR-0004 typo, ADR-0003
+  superseded-in-part note, honest `${CLAUDE_PLUGIN_ROOT}` guidance + a working CI recipe in checks.
+- `eunomai-secure-coding` re-anchored to **OWASP Top 10:2025** with explicit year tags (its A03 numbering
+  no longer collides with `eunomai-dependency-upgrade`'s A03:2025 anchor).
+
+### Changed
+
+- Plugin metadata: `plugin.json` gains `homepage`/`repository`/`license`; the marketplace entry declares
+  `version` + `license`. Release tags are the pinnable refs (`v0.3.0` backfilled; `v0.4.0` cut).
+- The authored-skills registry now pins `ref` to the attested plugin version and carries the
+  evaluated-and-rejected history (rationale + harvested ideas).
+
 ## [0.3.0] - 2026-06-26
 
 ### Added
@@ -104,10 +151,10 @@ and the public surface may still change.
 - Project docs **restructured by Diátaxis** (`guides/` · `reference/` · `explanation/` · `decisions/`);
   dev-docs dropped in favour of OpenSpec for SDD artifacts.
 
-[Unreleased]: https://github.com/grojof/eunomai/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/grojof/eunomai/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/grojof/eunomai/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/grojof/eunomai/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/grojof/eunomai/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/grojof/eunomai/compare/v0.0.3...v0.1.0
-[0.0.3]: https://github.com/grojof/eunomai/compare/v0.0.2...v0.0.3
-[0.0.2]: https://github.com/grojof/eunomai/compare/v0.0.1...v0.0.2
-[0.0.1]: https://github.com/grojof/eunomai/releases/tag/v0.0.1
+[0.1.0]: https://github.com/grojof/eunomai/releases/tag/v0.1.0
+
+The 0.0.x entries predate release tagging; they are kept above as history without compare links.
