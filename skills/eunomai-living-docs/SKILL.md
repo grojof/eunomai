@@ -1,6 +1,6 @@
 ---
 name: eunomai-living-docs
-description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, a knowledge-domain coverage lens (the six KDD domains), an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (may create ADRs from interview answers; never edits existing ones).
+description: Refresh a project's user-facing docs (root README + docs/) toward eunomai's v2 standard — Diátaxis as a lens via a `type` frontmatter field, a knowledge-domain coverage lens (the six KDD domains), an OKF-routable substrate (frontmatter + path-as-identity + a product-shaped README map), doc-set profiles by repo destination (library, API, CLI, framework, firmware, app — or custom), and a deterministic frontmatter gate. Use when docs have drifted, after shipping a feature, or when docs-check reports drift. Project-docs only (may create ADRs from interview answers; never edits existing ones).
 ---
 
 # eunomai-living-docs
@@ -24,6 +24,40 @@ Docs are a **routable substrate**, dev-loved and AI-legible. Four ideas:
 - **Dev-quality bar:** lead with the answer · real examples · layered (`audience`) · scannable reference.
 
 ADRs under `docs/decisions/` are dev-facing (`type: decision`), a series excluded from the indexed map.
+
+## README quality and prose register (always)
+
+Two bars apply to everything this skill authors or refreshes, whatever the profile or structure:
+
+- **The root README is always user-friendly.** It describes the repository for a first-time reader — what it
+  is, who it is for, why it exists — with a diagram when a picture carries the story better than prose, and
+  **references onward** instead of inlining depth. The `docs/` pages may be as technical and structured as the
+  destination demands; the README never is.
+- **Self-contained, timeless register** for all authored prose (README + `docs/`): no conversational or
+  session references ("as you said", "as discussed", allusions to a chat or review), no meta-commentary about
+  how the document was produced, no filler — logical, direct, every sentence earns its place. Dated records
+  (CHANGELOG, ADRs) stay dated by design. During a refresh, **surface violations** and propose self-contained
+  wording; this is authoring judgement, never a `docs-check` rule.
+
+## Choosing the doc set (profiles by repo destination)
+
+When **establishing** docs (or restructuring thin/missing ones), first offer the **doc-set profile** — which
+starter README skeleton + `docs/` page set the repo's destination calls for. The canonical catalog lives in
+[`references/doc-profiles.md`](references/doc-profiles.md): **library/SDK · service/API · CLI tool ·
+framework/platform · firmware/embedded · end-user app/internal tool**, plus a first-class **custom** option.
+Offer it through the structured interview:
+
+- **Recommend a default** inferred from detected signals (manifests, cartographer output, repo shape) — don't
+  ask what you can detect.
+- **Show the previews** (README skeleton + starter pages with their `type`s) so the author can intuit the
+  resulting shape before choosing.
+- **Custom** → follow-up questions one at a time (see the catalog) until the intended doc set is clear.
+- **Skippable**, and where an incumbent docs standard/toolchain governs, the coexistence contract applies —
+  the incumbent wins and profiles stand down.
+
+Profiles are presets over the same v2 standard — previews are **starting points** trimmed or extended by the
+earns-its-place test; `docs-check` never checks profile conformance. A plain refresh of healthy docs needs no
+profile question.
 
 ## Choosing the structure (propose, never assume)
 
@@ -82,7 +116,8 @@ When a project root's docs are **thin or missing**, recover its knowledge with a
 a form dump: ask **one question at a time**, **recommend a default** per question, and **explore the codebase
 first** when a question is answerable from code — don't ask what you can detect. Keep it human-in-control;
 write the recovered knowledge into the docs standard (and, for non-trivial choices, an ADR). This is the same
-technique `eunomai-onboard` uses to create docs from scratch.
+technique `eunomai-onboard` uses to create docs from scratch. Lead the recovery with the **doc-set profile**
+question (above) so the interview fills a shape the author has already seen and chosen.
 
 ## Knowledge-domain coverage (the KDD capture lens)
 
@@ -155,6 +190,8 @@ deterministic gate is unaffected (duplication is judgement, not a gate rule).
 3. **Refresh, in order:**
    - **Map** — keep the README's at-a-glance summary, diagram, quickstart, and surface-organized index in line
      with reality; ensure every in-scope `docs/` page is reachable and remove links to pages that no longer exist.
+     **Same-pass sync:** any page you add, remove, or rename gets its README-map update in the *same* set of
+     proposed edits — the page set and the map are never left divergent for a later pass.
    - **Frontmatter** — every `docs/` page carries valid frontmatter (required `type`/`title`/`description`);
      set `type` by the page's Diátaxis mode (the lens — one page, one mode). **Coexist with foreign
      frontmatter**: keys owned by another toolchain (`sidebar_position`, `layout`, …) are preserved
@@ -162,9 +199,10 @@ deterministic gate is unaffected (duplication is judgement, not a gate rule).
      or exclude those pages from scope) — never overwrite it silently.
    - **Split** — if a README section is long-form, move it into a `docs/` page (flat while small) and leave a
      link; let folders emerge only when a surface grows.
-   - **Review lenses** (judgement, suggestion-only) — apply the three lenses and surface their findings:
+   - **Review lenses** (judgement, suggestion-only) — apply the four lenses and surface their findings:
      **domain coverage** (under-captured knowledge domains + unowned critical areas), **activation routing**
-     (knowledge that belongs at a higher state), and **single source of truth** (duplicates to merge or link).
+     (knowledge that belongs at a higher state), **single source of truth** (duplicates to merge or link),
+     and **prose register** (README friendliness + conversational/session prose to make self-contained).
 4. **Confirm before applying.** Show the proposed edits; apply them with the user's agreement.
 5. **Verify.** Re-run `docs-check` until it exits 0.
 

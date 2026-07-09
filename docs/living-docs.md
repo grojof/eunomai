@@ -1,9 +1,9 @@
 ---
 type: reference
 title: "Living docs"
-description: "The v2 project-docs standard: Diátaxis as a lens via type, a knowledge-domain coverage lens, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
-tags: [living-docs, docs, okf, diataxis, kdd]
-updated: 2026-07-01
+description: "The v2 project-docs standard: Diátaxis as a lens via type, doc-set profiles by repo destination, a knowledge-domain coverage lens, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
+tags: [living-docs, docs, okf, diataxis, kdd, profiles]
+updated: 2026-07-09
 ---
 
 # Living docs
@@ -113,7 +113,34 @@ it gives — in order — what a developer needs to get oriented fast:
 3. **Quickstart** — install → first useful result, fast.
 4. **The surface** — a routed index: *new here* → *the pillars* → *go deeper*.
 
-The README never inlines long-form content that belongs in a page.
+The README never inlines long-form content that belongs in a page. It is **always user-friendly**, whatever
+the doc-set profile: it describes the repository for a first-time reader and references onward — the
+technical depth lives in `docs/`. And it is **synchronized in the same pass**: any flow that adds, removes,
+or renames a `docs/` page updates the map in that same set of edits (`docs-check` remains the deterministic
+backstop).
+
+## Doc-set profiles (by repo destination)
+
+One level above the folder question sits the **doc-set** question: a library, an HTTP API, a CLI, a
+framework, a firmware project, and an end-user app each want a different README skeleton and starter page
+set. The `eunomai-living-docs` skill offers a small catalog of **profiles** — *presets over this same
+standard* (same frontmatter, same shape-only gate): **library/SDK · service/API · CLI tool ·
+framework/platform · firmware/embedded · end-user app/internal tool**, plus a first-class **custom** option
+that triggers follow-up questions. Each profile is a visible **preview** (README skeleton + starter pages
+with their `type`s); the skill recommends a default from detected signals and proceeds only on the author's
+choice — skippable, and stood down where an incumbent docs standard governs (the
+[coexistence contract](org-adoption.md)). Previews are starting points trimmed by the earns-its-place test;
+`docs-check` never checks profile conformance. The canonical catalog lives **inside the skill**
+(`skills/eunomai-living-docs/references/doc-profiles.md`) so it resolves in installed-plugin mode — this page
+only summarizes it.
+
+## The prose register (self-contained, timeless)
+
+All authored doc prose — README and `docs/` pages — is **self-contained and timeless**: no conversational or
+session references ("as you said", "as discussed"), no meta-commentary about how the document was produced,
+no filler. Logical, direct prose where every sentence earns its place. Dated records (CHANGELOG, ADRs) stay
+dated by design. The skill surfaces violations as suggestions during a refresh; the register is authoring
+judgement, never a gate rule.
 
 ## The dev-quality bar (Stripe-drawn)
 

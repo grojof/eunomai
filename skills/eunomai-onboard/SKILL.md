@@ -53,6 +53,15 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
      restructure over it silently.
    Record each decision; declined seeds are skipped in the steps below.
 3. **Establish docs** (at the project root) → the living-docs standard:
+   - **Offer the doc-set profile first** — which starter README skeleton + `docs/` page set the repo's
+     destination calls for. Delegate to the living-docs catalog
+     (`eunomai-living-docs/references/doc-profiles.md`: library/SDK · service/API · CLI tool ·
+     framework/platform · firmware/embedded · end-user app/internal tool · **custom** with follow-ups —
+     never carry a copy here): recommend a default from the analysis signals, show the previews, proceed on
+     the author's choice. Skippable, and stood down where an incumbent docs standard governs (step 2). A
+     non-obvious profile decision may crystallize into an ADR like any other interview outcome. Whatever the
+     profile, the root README stays **user-friendly** (what · for whom · why · a diagram when it helps);
+     technical depth lands in `docs/`.
    - **Propose the structure, don't assume it** — present **2–3 folder-structure options** with a recommended
      default by the project's size/shape (flat `docs/*.md` while small · by-surface `docs/<surface>/` once a
      surface has ~3+ pages · hybrid) and seed the one the author chooses. **Never** organize folders by Diátaxis
