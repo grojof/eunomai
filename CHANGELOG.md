@@ -7,6 +7,25 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-09
+
+### Added
+
+- **Doc-set profiles by repo destination** (living-docs): a canonical catalog inside the
+  `eunomai-living-docs` skill (`references/doc-profiles.md`) — **library/SDK · service/API · CLI tool ·
+  framework/platform · firmware/embedded · end-user app/internal tool**, plus a first-class **custom** option
+  with one-at-a-time follow-ups. Each profile is a visible preview (README skeleton + starter `docs/` pages
+  with their Diátaxis `type`s) offered through the structured interview with a default recommended from
+  detected signals; skippable, presets over the unchanged v2 standard (the gate stays shape-only), and stood
+  down where an incumbent docs standard governs. onboard's establish-docs step delegates to the same catalog
+  (profile decisions may crystallize into ADRs).
+- **README quality bar + prose register** (living-docs): the root README is required to stay user-friendly
+  regardless of profile (what · for whom · why · a diagram when it helps; technical depth in `docs/`), and
+  all authored doc prose uses a self-contained, timeless register — no conversational/session references, no
+  meta-commentary, no filler. Surfaced as a fourth review lens; never a `docs-check` rule.
+- **Same-pass README↔docs sync** (living-docs): adding, removing, or renaming a `docs/` page updates the
+  README map in the same set of edits; `docs-check` remains the deterministic backstop.
+
 ## [0.4.0] - 2026-07-02
 
 ### Added
@@ -151,7 +170,8 @@ and the public surface may still change.
 - Project docs **restructured by Diátaxis** (`guides/` · `reference/` · `explanation/` · `decisions/`);
   dev-docs dropped in favour of OpenSpec for SDD artifacts.
 
-[Unreleased]: https://github.com/grojof/eunomai/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/grojof/eunomai/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/grojof/eunomai/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/grojof/eunomai/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/grojof/eunomai/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/grojof/eunomai/compare/v0.1.0...v0.2.0
