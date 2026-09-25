@@ -55,9 +55,10 @@ matching versions, plus its tags.
    and update the compare links at the bottom. Every breaking change is marked **BREAKING**.
 4. **Check.**
    - the dev loop above;
-   - `claude plugin validate .claude-plugin/plugin.json` and `claude plugin validate .`;
-   - `claude plugin tag --dry-run`, which confirms the plugin and the marketplace declare the same version.
-5. **Merge.** Commit `chore(release): cut X.Y.Z`, open a pull request, and squash-merge it once CI is green.
+   - `claude plugin validate .claude-plugin/plugin.json` and `claude plugin validate .`.
+5. **Merge.** Commit `chore(release): cut X.Y.Z`, then run `claude plugin tag --dry-run`: it needs the
+   version committed, and confirms the plugin and the marketplace declare the same one. Open a pull request,
+   and squash-merge it once CI is green.
 6. **Tag the merge commit on `main`.**
    ```bash
    git tag vX.Y.Z && git push origin vX.Y.Z
