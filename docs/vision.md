@@ -18,7 +18,7 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 
 - **Is:** a curated Claude Code plugin (skills + hooks + subagents) empowering four pillars. It
   works as a **one-shot connector / bootstrap**: it seeds a project with conventions (OpenSpec config + a lean
-  `CLAUDE.md` + skills + rules) and then **steps aside** — dispensable, because everything it seeds lives in the
+  `AGENTS.md` + skills + rules) and then **steps aside** — dispensable, because everything it seeds lives in the
   project's own files (zero lock-in).
 - **Is not:** a cross-tool *governance control plane* (abandoned 2026-06-24 — irreducible gaps + high
   maintenance); a **continuous cross-project sync / conformance engine** (that *is* the abandoned tower — the
@@ -52,7 +52,7 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 ## Connector / bootstrap (how the pillars travel)
 
 eunomai is also the **one-shot connector** that distributes a team's or individual's **templates** (OpenSpec
-config + a lean `CLAUDE.md` that references per-project MDs) + skills + rules into new or existing projects,
+config + a lean `AGENTS.md` that references per-project MDs) + skills + rules into new or existing projects,
 then **steps aside**. It is the starting point, not a dependency: everything it seeds lives in the project's
 own files, so removing eunomai leaves a working project (zero lock-in). Deliberately **not** a continuous sync
 engine — seed-and-step-aside, never re-govern N projects over time.

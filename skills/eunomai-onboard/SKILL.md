@@ -1,6 +1,6 @@
 ---
 name: eunomai-onboard
-description: Cold-start orchestrator that applies eunomai to a new or existing project. Use when bringing a foreign project up to eunomai's standards — analyze it, assess what already exists (coexistence-first), establish/restructure docs (or create them), seed conventions (CLAUDE.md, OpenSpec config, permissions, hooks — each skippable), audit existing skills, then hand off. One-shot and dispensable; orchestrates the pillars, does not reimplement them.
+description: Cold-start orchestrator that applies eunomai to a new or existing project. Use when bringing a foreign project up to eunomai's standards — analyze it, assess what already exists (coexistence-first), establish/restructure docs (or create them), seed conventions (AGENTS.md, OpenSpec config, permissions, the guard settings and attribution policy — each skippable), audit existing skills, then hand off. One-shot and dispensable; orchestrates the pillars, does not reimplement them.
 ---
 
 # eunomai-onboard
@@ -26,7 +26,7 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
 
 0. **Survey the workspace + confirm scope.** Delegate a read-only survey to the **`workspace-survey`**
    subagent: it discovers all git repos (root + nested) and remotes, detects code manifests, existing
-   `CLAUDE.md`/`AGENTS.md`, and **existing governance** (hooks/permissions in `.claude/settings.json`,
+   `AGENTS.md`/`CLAUDE.md`, and **existing governance** (hooks/permissions in `.claude/settings.json`,
    skills under `.claude/skills/`, a provenance registry, other plugin markers), and returns a map with a
    proposed *environment vs project* classification. Present
    the map; **infer-then-confirm** — propose a classification, ask a single confirmation, and **ask** about
@@ -41,12 +41,12 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    you confirm. Change nothing yet.
 2. **Coexistence assessment** (the contract: *additive, never replacing; on conflict the incumbent wins
    unless the author decides otherwise* — see `docs/org-adoption.md` in this plugin). For each of the six
-   surfaces — `CLAUDE.md` · docs standard · SDD process · permissions · hooks · skills — classify what the
+   surfaces — `AGENTS.md` · docs standard · SDD process · permissions · hooks · skills — classify what the
    survey found as **absent** (seed normally), **present-compatible** (leave in place, reference it), or
    **present-conflicting** (run the structured interview on it, recommending **"adapt to what exists"** as
    the default). Two named cases:
    - *The project already runs another SDD/change process* → do **not** seed `openspec/`; record the
-     incumbent process in `CLAUDE.md` and offer OpenSpec only as an opt-in. OpenSpec is the **default where
+     incumbent process in `AGENTS.md` and offer OpenSpec only as an opt-in. OpenSpec is the **default where
      nothing exists**, never an imposition.
    - *Docs are governed by another standard/toolchain* (site generator, org template) → propose adapting the
      living-docs layer to it (frontmatter coexistence, see `eunomai-living-docs`) or standing down; never
@@ -72,19 +72,27 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    - (After this, the `eunomai-living-docs` skill maintains them.)
 4. **Seed conventions** (at the project root) — derive each from eunomai's own live conventions and adapt to
    the target (do not drop verbatim). **Each seed is individually skippable** per the coexistence assessment:
-   - a lean `CLAUDE.md` (the single authored source) with two halves: the **structural** half that
-     **declares this project's boundary + paths** (the `openspec/` and `docs/` locations and what is tracked),
-     and the **activator block** — a principle-level statement of the base disciplines that points to the
-     skills as *accelerators* (see below). **If a `CLAUDE.md` already exists, merge into it** — append the
-     adapted activator block under its own heading and preserve everything already there; never replace or
-     rewrite existing rules without the author's explicit choice,
+   - a lean `AGENTS.md` (the single authored instruction file, read by Claude Code from 2.1.277 and by other
+     agents) with two halves: the **structural** half that **declares this project's boundary + paths** (the
+     `openspec/` and `docs/` locations and what is tracked), and the **activator block** — a principle-level
+     statement of the base disciplines that points to the skills as *accelerators* (see below).
+     **If an `AGENTS.md` already exists, merge into it** — append the adapted activator block under its own
+     heading and preserve everything already there; never replace or rewrite existing rules without the
+     author's explicit choice. **If the project keeps its instructions in `CLAUDE.md`:**
+     - offer to rename it to `AGENTS.md`, content unchanged;
+     - if both files exist and `CLAUDE.md` is more than the one-line `@AGENTS.md` bridge, say that Claude
+       Code reads only `CLAUDE.md` in that directory, and propose merging the two into `AGENTS.md`;
+     - for an older Claude Code, offer a `CLAUDE.md` whose only line is `@AGENTS.md`;
+     - leave `CLAUDE.local.md` as it is (there is no `AGENTS.local.md`);
+     - if the author declines, merge the activator block into that `CLAUDE.md` instead,
    - an `openspec/config.yaml` layer (run `openspec update`) — only where no SDD process exists (step 2),
    - the **permissions baseline** (`docs/safe-controls.md`) — offered, not imposed, where permissions are
      already managed,
-   - **hooks wiring** — if the project installs the eunomai *plugin*, hooks come from it; if it uses eunomai
-     from source, copy `hooks/guard.mjs` + `hooks/decide.mjs` into the project and wire
-     `.claude/settings.json` (`$CLAUDE_PROJECT_DIR/hooks/guard.mjs`) so nothing dangles when the clone moves.
-     Detect which; where org hooks already exist, eunomai's compose alongside (most-restrictive-wins).
+   - **the guard** — its hooks come from the installed eunomai plugin; never copy hook scripts into the
+     project, because a copy never updates. When eunomai is used from a source clone, install the plugin from
+     that clone as a local marketplace (`/plugin marketplace add <clone>`, then install `eunomai`). Where org
+     hooks already exist, eunomai's compose alongside (most-restrictive-wins). Then invoke
+     **`eunomai-safe-controls`** for the project's guard settings and its AI-attribution policy.
 5. **Audit skills.** Invoke **`eunomai-skill-finder`** in audit mode over the project's existing skills; do
    not audit them yourself.
 6. **Drive the checks green — from the project root** (`cd` into it; the checks resolve relative to `cwd`):
@@ -93,21 +101,23 @@ surveying the workspace and letting the user confirm scope — *detect, don't as
    node "${CLAUDE_PLUGIN_ROOT}/tools/dist/cli.cjs" provenance-check
    ```
    (`${CLAUDE_PLUGIN_ROOT}` resolves only inside plugin contexts; when running eunomai from a source clone,
-   use `node <clone>/tools/dist/cli.cjs` instead.) Fix until both exit 0.
+   use `node <clone>/tools/dist/cli.cjs` instead.) Missing community-health files are warnings; for a public
+   repository add `--require-health`. Fix until both exit 0.
 7. **Hand off.** Point the author at the steady-state pillars and stop. No background or cross-project process.
 
 **Multirepo:** when several project repos are in scope, run steps 1–7 **independently per project** — each
 gets its own seed and its own green checks. There is **no shared conformance layer** across projects.
 
 **Environment root:** a repo classified as environment is **not** seeded as a project. With the user's
-consent, it may receive at most a **minimal delegating `CLAUDE.md`** — pointing at the project directories and
+consent, it may receive at most a **minimal delegating `AGENTS.md`** — pointing at the project directories and
 marking the root as environment, with **no per-project conventions** (Claude Code always loads the parent
-`CLAUDE.md` when working in a child, so keep it tiny). No workspace manifest file is introduced; scope rides on
-hierarchical `CLAUDE.md`.
+`AGENTS.md` when working in a child, so keep it tiny). No workspace manifest file is introduced; scope rides on
+hierarchical `AGENTS.md`, which Claude Code reads as it reads `CLAUDE.md`: parents at start, a
+subdirectory's on demand when it has no `CLAUDE.md` of its own.
 
 ## The activator block (the behavioural seed)
 
-The seeded `CLAUDE.md` carries an **activator block**: plain-language base disciplines, each naming its skill
+The seeded `AGENTS.md` carries an **activator block**: plain-language base disciplines, each naming its skill
 as a **parenthetical accelerator**. This is the canonical block — **adapt** it to the project (stack, tone,
 the seeds actually accepted); do not paste it verbatim:
 
@@ -169,12 +179,12 @@ the author skip any domain.
   silently which repo is "the project" or where the layer anchors.
 - **Coexist, don't supplant.** eunomai's layers are additive; where a convention, standard, or control
   already exists, the incumbent wins unless the author decides otherwise. Merge into an existing
-  `CLAUDE.md`, never replace it; skip any seed the author declines.
+  `AGENTS.md`, never replace it; skip any seed the author declines.
 - **Interview, don't interrogate.** Gather input one question at a time with a recommended default, exploring
   the codebase first; human-in-control and skippable.
 - **Anchor per project root.** Seed at each confirmed project root, never the workspace root by default; the
-  environment repo gets at most a minimal delegating `CLAUDE.md`, with consent.
-- **Boundaries are authored, not invented.** Scope is expressed via hierarchical `CLAUDE.md` — no
+  environment repo gets at most a minimal delegating `AGENTS.md`, with consent.
+- **Boundaries are authored, not invented.** Scope is expressed via hierarchical `AGENTS.md` — no
   workspace manifest, no registry.
 - **Establish, don't maintain.** Ongoing doc refresh is `eunomai-living-docs`; ongoing skill work is
   `eunomai-skill-finder`. Delegate.

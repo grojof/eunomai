@@ -5,8 +5,9 @@ the single source of the dev loop (there is no separate `docs/contributing.md`).
 
 ## Source of truth
 
-**`CLAUDE.md` is the single authored source of truth** for conventions (Claude-only — see ADR-0004; no
-generated instruction files, no projection). Edit `CLAUDE.md` directly; this page is the practical loop, not a
+**`AGENTS.md` is the single authored source of truth** for conventions (Claude-only host, ADR-0004; the file
+is `AGENTS.md` since ADR-0007; no generated instruction files, no projection). Edit `AGENTS.md` directly;
+this page is the practical loop, not a
 restatement of it.
 
 ## Conventions

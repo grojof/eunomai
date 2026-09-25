@@ -20,11 +20,11 @@ Every eunomai flow (onboard, living-docs, skill-finder, safe-controls) honours f
 1. **Additive, never replacing.** eunomai's layers sit alongside what exists; nothing is overwritten.
 2. **On conflict, the incumbent wins** — unless the author explicitly decides otherwise. Conflicts are
    surfaced (the structured interview), with *adapt to what exists* as the recommended default.
-3. **Detect before seeding.** The workspace survey enumerates the existing layer — `CLAUDE.md`, docs
-   standard, SDD process, permissions, hooks, skills — before anything is proposed.
+3. **Detect before seeding.** The workspace survey enumerates the existing layer — `AGENTS.md` or
+   `CLAUDE.md`, docs standard, SDD process, permissions, hooks, skills — before anything is proposed.
 4. **The project's rules are an input to every gate.** *The project's rules* means, mechanically: the
-   project's `CLAUDE.md` (plus any hierarchical parents Claude Code loads) and the `permissions` in its
-   `.claude/settings.json`. Org-trusted skill sources, mandated tooling, and stricter policies declared
+   project's `AGENTS.md`, or the `CLAUDE.md` it keeps (plus any hierarchical parents Claude Code loads), and
+   the `permissions` in its `.claude/settings.json`. Org-trusted skill sources, mandated tooling, and stricter policies declared
    there are consumed by the skill trust gate and respected by the base skills.
 
 ## Coexistence facts (what composes, verified)
@@ -51,7 +51,7 @@ Every eunomai flow (onboard, living-docs, skill-finder, safe-controls) honours f
 
 ## Extend without forking
 
-- **Your own rules** → the project's `CLAUDE.md` and permissions (they are the gates' input).
+- **Your own rules** → the project's `AGENTS.md` (or the `CLAUDE.md` it keeps) and permissions (they are the gates' input).
 - **Your own hooks** → ship them in your org plugin; they merge with eunomai's most-restrictive-wins.
 - **The guard** → a level for everyone, extra gates (protected branches, internal secret paths) and
   protected paths, in each project's committed `.claude/eunomai.json`, which may only tighten; or the
@@ -64,7 +64,7 @@ Every eunomai flow (onboard, living-docs, skill-finder, safe-controls) honours f
 
 ## Remove
 
-Uninstalling the plugin removes the skills, agents, hooks, and checks. Everything seeded — `CLAUDE.md` (with
+Uninstalling the plugin removes the skills, agents, hooks, and checks. Everything seeded — `AGENTS.md` (with
 its self-sufficient activator block), `docs/`, `openspec/`, the permissions baseline, the provenance
 registry — lives in the project's own files and keeps working. If the checks were wired into CI from a
 pinned eunomai clone, that gate survives the uninstall too ([checks](checks.md)).
