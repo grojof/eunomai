@@ -16,7 +16,7 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
 
 ## What eunomai is (and isn't)
 
-- **Is:** a curated Claude Code plugin (skills + commands + hooks + subagents) empowering four pillars. It
+- **Is:** a curated Claude Code plugin (skills + hooks + subagents) empowering four pillars. It
   works as a **one-shot connector / bootstrap**: it seeds a project with conventions (OpenSpec config + a lean
   `CLAUDE.md` + skills + rules) and then **steps aside** — dispensable, because everything it seeds lives in the
   project's own files (zero lock-in).
@@ -35,7 +35,7 @@ The name comes from **Eunomia** (Εὐνομία), the Greek personification of 
    else create; always improve.
 5. **Spec-first** for non-trivial change (SDD on **OpenSpec**, in `openspec/`).
 
-## The four pillars (as plugin skills/commands)
+## The four pillars (as plugin skills and hooks)
 
 1. **SDD/SPDD** — the spec-driven flow (explore → propose → apply → archive), running on **OpenSpec** with
    eunomai's tailoring in `openspec/config.yaml`.

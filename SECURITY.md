@@ -30,5 +30,6 @@ to their respective projects.
 
 ## Handling secrets
 
-Never paste secrets, tokens, or `.env` contents into a report. eunomai's permissions baseline denies reading
-common secret paths by default; if your report involves credentials, redact them.
+Never paste secrets, tokens, or `.env` contents into a report; if your report involves credentials, redact
+them. eunomai recommends an opt-in permissions baseline that denies reading common secret paths
+([safe controls](docs/safe-controls.md)); a plugin cannot set permissions for you.

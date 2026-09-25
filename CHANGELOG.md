@@ -7,6 +7,18 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`provenance-check` accepts the audit verdicts** (`keep` · `keep-with-gaps` · `flag-for-removal`) that
+  skill-finder records for installed skills; a registry written by an audit no longer fails the gate.
+- **The trailer deny names the trailer it found**, as the safe-controls spec requires.
+- **Docs match what ships.** SECURITY no longer claims the permissions baseline is on by default (it is an
+  opt-in copy); the `/opsx:*` commands are described as OpenSpec's, not the plugin's; the plugin is
+  described without commands; the ADR list includes 0006; the safe-controls spec no longer mentions the
+  retired authored-source guard.
+- **The repo's own hook wiring** covers `Bash|PowerShell` and drops the dead `Edit|Write` matcher; the skills
+  registry attests 0.5.0.
+
 ## [0.5.0] - 2026-07-09
 
 ### Added

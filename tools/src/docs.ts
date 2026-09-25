@@ -9,7 +9,7 @@ const DEV_DOC_DIRS = ["docs/decisions"];
 
 /**
  * The allowed Diátaxis modes for a page's required `type` frontmatter field (living-docs v2).
- * The mode is a lens carried in frontmatter, not a folder — see docs/reference/living-docs.md.
+ * The mode is a lens carried in frontmatter, not a folder — see docs/living-docs.md.
  */
 const DOC_TYPES = new Set(["tutorial", "how-to", "reference", "explanation", "decision"]);
 
@@ -19,7 +19,7 @@ const FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
 /**
  * The mandatory community-health files (the "project surface" layer of the living-docs
  * standard), each with the locations GitHub recognizes. A file is present if any candidate
- * exists. Anchored to GitHub Community Standards; see docs/reference/living-docs.md.
+ * exists. Anchored to GitHub Community Standards; see docs/living-docs.md.
  */
 const HEALTH_FILES: ReadonlyArray<{ name: string; candidates: readonly string[] }> = [
   { name: "LICENSE", candidates: ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", ".github/LICENSE", "docs/LICENSE"] },

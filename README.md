@@ -72,7 +72,7 @@ Full walkthrough → **[Getting started](docs/getting-started.md)**.
   eunomai as a knowledge-activation spectrum (passive docs → active skills/hooks).
 
 **Decisions** → **[docs/decisions/](docs/decisions/)** — the ADR series (OpenSpec · KDD · OKF · Claude-only ·
-living-docs v2).
+living-docs v2 · docs single source of truth).
 
 ## One principle above all
 
