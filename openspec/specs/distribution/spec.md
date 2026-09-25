@@ -4,7 +4,9 @@
 Govern how eunomai is packaged and consumed: installable as a Claude Code plugin via the marketplace, with a
 coherent end-to-end usage guide, a README that leads with getting started, preserved README→docs integrity,
 and a self-contained CLI shipped inside the plugin (no external build step at install time).
+
 ## Requirements
+
 ### Requirement: Installable as a Claude Code plugin
 
 eunomai SHALL provide a `.claude-plugin/marketplace.json` listing the eunomai plugin (source = the repo root),
@@ -75,8 +77,9 @@ itself "projection", and SHALL be committed so it travels with the plugin. Skill
 
 eunomai SHALL target **Claude Code only**. It SHALL NOT project to or generate instruction files for other
 tools (no `rulesync` cross-tool projection, no `.github/copilot-instructions.md`, no `eunomai.yaml`). The
-authored agent-instruction source SHALL be a single `CLAUDE.md`; there SHALL be no separate `AGENTS.md` and no
-generated instruction files. **OpenSpec** SHALL be the sole external runtime dependency (the SDD engine and the
+authored agent-instruction source SHALL be a single `AGENTS.md`, the open standard Claude Code reads natively;
+a `CLAUDE.md` MAY exist only as a one-line `@AGENTS.md` bridge for older Claude Code versions, and there SHALL
+be no generated instruction files. **OpenSpec** SHALL be the sole external runtime dependency (the SDD engine and the
 historical record of decisions and development).
 
 #### Scenario: No cross-tool projection artifacts
@@ -85,9 +88,8 @@ historical record of decisions and development).
 
 #### Scenario: Single authored instruction source
 - **WHEN** agent instructions need editing
-- **THEN** `CLAUDE.md` is the one authored file; there is no separate `AGENTS.md` and no generated copy to sync
+- **THEN** `AGENTS.md` is the one authored file; there is no second copy and no generated file to sync
 
 #### Scenario: OpenSpec is the only external dependency
 - **WHEN** the dependencies of the distribution are listed
 - **THEN** OpenSpec is the sole external one; nothing else (e.g. `rulesync`) is required
-
