@@ -25,6 +25,32 @@ and the public surface may still change.
 
 ### Changed
 
+- **`AGENTS.md` is the instruction file** (ADR-0007, superseding that point of ADR-0004). eunomai's own
+  `CLAUDE.md` is now `AGENTS.md`, which Claude Code reads natively from 2.1.277. Onboard seeds `AGENTS.md`
+  and offers to migrate a project's `CLAUDE.md`: a rename with the content unchanged, a warning when both
+  exist, and a one-line `@AGENTS.md` bridge for older Claude Code. `CLAUDE.local.md` stays.
+- **`docs-check` follows the link graph.**
+  - A page is reachable through other docs pages, so nested indexes (`docs/<area>/README.md`) pass.
+  - Links inside pages and in `AGENTS.md` / `CLAUDE.md` are checked.
+  - **BREAKING:** broken links inside pages and in `AGENTS.md` / `CLAUDE.md` now fail the check, so a
+    repository that passed may turn red on a stale link; code spans, fences and HTML comments are ignored.
+  - **BREAKING:** missing community-health files are warnings, and fail only with `--require-health`,
+    which eunomai's own CI passes.
+  - Reference-style, HTML and root-absolute (`/docs/…`) links are followed, and a folder index may be named
+    `readme.md`.
+  - **BREAKING (output):** the messages read "orphaned page (not reachable from the README)" and
+    "N README link(s) resolve, N page(s) reachable"; health warnings go to stderr.
+- **The living-docs skill runs a short core flow.** Doc-set profiles, structure options, the interview,
+  knowledge-domain coverage and activation routing moved to `references/lenses.md`, applied on request or
+  when docs are being established.
+- **The living-docs standard leads with its five-rule core.** It also:
+  - says folders by area are fine;
+  - adds Mermaid colour guidance;
+  - states the OKF alignment precisely;
+  - anchors `CHANGELOG.md` to Keep a Changelog.
+- **Onboard no longer copies hook scripts into a project.** The hooks come from the installed plugin, from
+  a source clone through a local marketplace, and onboard offers the guard and attribution setup through
+  `eunomai-safe-controls`.
 - **The guard reads commands, not text.** Quoted data, heredoc bodies and redirections no longer trigger
   a gate; `sh -c`, `eval` and friends are still read as code.
   - Recursive deletes ask only for a scope whose loss cannot be a clean-up: a root, a system or home-level
