@@ -11677,7 +11677,7 @@ function checkSkillsAudit(cwd = process.cwd()) {
 }
 
 // src/run.ts
-var CLI_VERSION = true ? "0.6.0" : "0.0.0-dev";
+var CLI_VERSION = true ? "0.6.1" : "0.0.0-dev";
 var HELP = `eunomai ${CLI_VERSION} \u2014 read-only checks for a Claude Code AI workspace
 
 Usage:

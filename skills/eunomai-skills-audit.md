@@ -3,37 +3,37 @@ generated: 2026-09-25
 skills:
   - name: eunomai-living-docs
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (living-docs pillar); origin trusted (us), no third-party code.
     gaps: []
   - name: eunomai-skill-finder
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (skill-finder pillar); origin trusted (us), no third-party code.
     gaps: []
   - name: eunomai-onboard
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (connector/bootstrap axis); origin trusted (us), no third-party code.
     gaps: []
   - name: eunomai-secure-coding
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (base skill); universal secure-coding directives anchored to OWASP/CWE, no third-party code.
     gaps: []
   - name: eunomai-dependency-upgrade
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (base skill); universal dependency hygiene anchored to OWASP A03:2025/SLSA, no third-party code.
     gaps: []
   - name: eunomai-safe-controls
     origin: authored
-    ref: 0.6.0
+    ref: 0.6.1
     verdict: authored
     rubric: Authored in-repo (safe-controls pillar); instructions over the plugin's own guard, no third-party code.
     gaps: []
