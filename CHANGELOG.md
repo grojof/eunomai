@@ -7,6 +7,20 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+### Changed
+
+- **The README is a map again.** It gives what eunomai brings a project, two diagrams (the architecture, and
+  which pillar handles what once a project is onboarded), the quickstart with the update commands, and an
+  "I want to…" index that reaches every page.
+- **The pillars' flows are drawn.** The SDD cycle, onboard, the skill trust gate and the guard's decision each
+  have a compact diagram in the same semantic colours the living-docs standard describes. Onboard's flow
+  replaces a text block, and its details become a numbered list. The codebase-cartographer agent reuses a
+  project's colour classes when it proposes a diagram.
+- **The codebase-cartographer agent is leaner.** It keeps its output contract (the comprehension map,
+  per-edge confidence, domain signals, one proposed diagram) and drops the step-by-step reading recipe and
+  its fixed manifest list, which missed ecosystems such as Dart or PHP. Its tools are read-only (no
+  shell), and architecture is drawn as C4 levels in a flowchart, because Mermaid's C4 syntax is experimental.
+
 ## [0.6.0] - 2026-09-25
 
 ### Added
