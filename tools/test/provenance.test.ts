@@ -83,6 +83,20 @@ describe("checkSkillsAudit", () => {
     expect(r.gaps).toEqual([".claude/skills/vendored: unpinned"]);
   });
 
+  it("accepts the audit verdicts skill-finder records for installed skills", () => {
+    skill("a");
+    skill("b");
+    skill("c");
+    registry([
+      { name: "a", verdict: "keep" },
+      { name: "b", verdict: "keep-with-gaps", gaps: ["unpinned"] },
+      { name: "c", verdict: "flag-for-removal" },
+    ]);
+    const r = checkSkillsAudit(dir);
+    expect(r.invalid).toEqual([]);
+    expect(r.uncovered).toEqual([]);
+  });
+
   it("flags a stale registry entry whose skill folder no longer exists", () => {
     skill("a");
     registry([{ name: "a" }, { name: "ghost" }]);

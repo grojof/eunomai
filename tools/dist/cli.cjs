@@ -11529,7 +11529,16 @@ var EntrySchema = external_exports.object({
   origin: external_exports.string().min(1),
   ref: external_exports.string().min(1),
   // a real commit SHA / version, "authored", or "unpinned"
-  verdict: external_exports.enum(["adopt", "adopt-and-improve", "create", "authored"]),
+  // Acquisition verdicts, the authored marker, and the audit verdicts for installed skills.
+  verdict: external_exports.enum([
+    "adopt",
+    "adopt-and-improve",
+    "create",
+    "authored",
+    "keep",
+    "keep-with-gaps",
+    "flag-for-removal"
+  ]),
   rubric: external_exports.string().min(1),
   gaps: external_exports.array(external_exports.string()).optional().default([])
 });

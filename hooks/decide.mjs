@@ -88,12 +88,13 @@ function commandDecision(command, config) {
   const trailerRule = TRAILER_RULES.has(config.trailerRule) ? config.trailerRule : "deny";
   if (trailerRule !== "off" && GIT_COMMIT.test(command)) {
     for (const trailer of AI_TRAILERS) {
-      if (trailer.test(command)) {
+      const found = command.match(trailer);
+      if (found) {
         return {
           decision: trailerRule,
           reason:
-            "eunomai: commit message carries an AI-attribution trailer. Remove it — no " +
-            "co-author / 'Generated with Claude Code' lines (see CLAUDE.md conventions).",
+            `eunomai: commit message carries an AI-attribution trailer ("${found[0]}"). Remove it — ` +
+            "no co-author / 'Generated with Claude Code' lines (see CLAUDE.md conventions).",
         };
       }
     }

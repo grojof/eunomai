@@ -21,6 +21,7 @@ test("deny: commit with Co-Authored-By Claude trailer", () => {
   const r = bash(TRAILER_COMMIT);
   assert.equal(r.decision, "deny");
   assert.match(r.reason, /trailer/i);
+  assert.match(r.reason, /Co-Authored-By: Claude/i); // names the offending trailer
 });
 
 test("deny: commit with 'Generated with Claude Code' line", () => {

@@ -14,7 +14,8 @@ runs on [**OpenSpec**](https://github.com/Fission-AI/OpenSpec) and adds only a t
 
 ## The flow
 
-Four phases, each a Claude Code command (namespaced by the plugin). Artifacts live in
+Four phases, each a Claude Code command that `openspec init` installs in the project's
+`.claude/commands/opsx/` (they come from OpenSpec, not from the plugin). Artifacts live in
 `openspec/changes/<name>/` and graduate into `openspec/specs/` on archive.
 
 | Phase | Command | What it produces |
