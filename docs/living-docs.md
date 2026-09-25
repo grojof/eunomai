@@ -1,7 +1,7 @@
 ---
 type: reference
 title: "Living docs"
-description: "The v2 project-docs standard: Diátaxis as a lens via type, doc-set profiles by repo destination, a knowledge-domain coverage lens, an OKF-routable substrate, a product-shaped map, and a deterministic frontmatter gate."
+description: "The v2 project-docs standard: a five-rule core (frontmatter, the README as a map, one fact one home, relative links, timeless prose), Diátaxis as a lens via type, optional lenses, and a deterministic shape-only gate."
 tags: [living-docs, docs, okf, diataxis, kdd, profiles]
 updated: 2026-07-09
 ---
@@ -15,9 +15,23 @@ drawn from a real source:
 | Idea | From | What it means |
 |------|------|---------------|
 | **Diátaxis as a lens** | [Diátaxis](https://diataxis.fr/how-to-use-diataxis/) (its own guidance: a compass, not a blueprint) | the content *mode* is a page-level lens, carried in a `type` field — **not** a mandated folder tree |
-| **Routable substrate** | [OKF](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing) | frontmatter + path-as-identity + a link-graph → legible to humans **and** agents |
+| **Routable substrate** | [OKF](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing)'s habits | frontmatter + path-as-identity + a link-graph → legible to humans **and** agents. OKF itself targets data catalogs; the pages meet its minimal contract (a `type`, unknown keys kept), and nothing here consumes OKF |
 | **Product-shaped map** | Stripe docs | the README is a map organized by **surface/journey**, with a quickstart and real examples |
 | **Deterministic gate** | eunomai's own posture | `docs-check` enforces frontmatter **shape**, never prose; AI judgment stays out of the gate |
+
+## The core
+
+Five rules make a project's docs work. Everything else on this page is a lens applied when it helps.
+
+1. **Frontmatter on every `docs/` page:** `type` (its Diátaxis mode), `title`, `description`; `tags`
+   recommended.
+2. **The README is the map.** Every page is reachable from it, directly or through a folder's index.
+3. **One fact, one home.** Everything else links to it.
+4. **Relative links** between files, so they work on any platform and in any clone.
+5. **Timeless, self-contained prose.** A page reads the same whenever it is read.
+
+`docs-check` verifies 1, 2 and the links into `docs/` and from `AGENTS.md`; 3 and 5 are judgement, and the
+skill suggests.
 
 …governed by one principle above all (see [decisions/0006-docs-single-source-of-truth](decisions/0006-docs-single-source-of-truth/)):
 
@@ -28,13 +42,13 @@ best-practice (link out, don't duplicate), KDD (single source of truth), OKF (`p
 (structure emerges). The homes:
 
 - **README** — the front door / map: links, never restates.
-- **`CLAUDE.md`** — the authored conventions (Claude-only source of truth).
+- **`AGENTS.md`** — the authored conventions: one instruction file, read by Claude Code and other agents.
 - **ADRs** (`docs/decisions/`) — the decisions (the *why*).
 - **`docs/*.md`** — only user-facing content that doesn't fit the README **and** isn't a convention or a
   decision.
 - **community-health files** — the GitHub surface; exactly **one** `CONTRIBUTING.md`.
 
-**The "earns its place" test:** before writing a page, ask *is this fact already canonical in `CLAUDE.md`, an
+**The "earns its place" test:** before writing a page, ask *is this fact already canonical in `AGENTS.md`, an
 ADR, or the code?* → **link, don't restate**. A page earns its place only when it is the single home for its
 content. The `eunomai-living-docs` skill applies this as an **anti-duplication lens** — it surfaces pages or
 sections that duplicate another home and proposes a **merge or link** (human-in-control). This is judgement,
@@ -76,7 +90,10 @@ cause of confusing docs). In v2 the mode lives in `type`, not in a folder:
 
 Diátaxis's own authors say it is *"a guide, a map to check you're in the right place,"* and *not* a mandate to
 create empty folders. So **folders are a convenience**: stay flat while small; a surface is promoted to its own
-folder only when it grows (~3+ pages) — the structure *emerges*.
+folder only when it grows (~3+ pages) — the structure *emerges*. Folders by **area** (`docs/migration/`,
+`docs/host/`) are the natural shape of a growing project; folders by Diátaxis type are not. A project that
+adopted the v1 layout (`docs/guides/`, `docs/reference/`…) may keep it, because the mode lives in `type`
+either way.
 
 ## Knowledge domains (a second, orthogonal lens)
 
@@ -95,8 +112,8 @@ information* rule — the **"earns its place" test** under [Single source of tru
 
 Two KDD principles ride alongside the domains:
 
-- **Ownership.** System-critical knowledge needs a named owner or it degrades. During a refresh the skill
-  **surfaces unowned critical areas** as a suggestion to assign — recorded lightly (free-form in the page), not
+- **Ownership.** System-critical knowledge needs a named owner or it degrades. When this lens is applied (on
+  request, or while docs are established), the skill **surfaces unowned critical areas** as a suggestion to assign — recorded lightly (free-form in the page), not
   a registry. It never invents or assigns owners, and ownership is never gated.
 - **Evolve / detect drift.** Knowledge must move with the system. Drift detection is **not** net-new: it is the
   existing one-shot, read-only [`coherence-auditor`](#the-two-layer-guarantee-deterministic-gate--ai-diagnostic)
@@ -155,6 +172,24 @@ Use [Mermaid](https://mermaid.js.org/) (GitHub-native), **one idea per diagram**
 for structure, **stateDiagram** for lifecycles. For an unfamiliar project, delegate the read-only derivation to
 the **`codebase-cartographer`** agent and adapt its proposal — you place and confirm it.
 
+Keep a diagram compact: a single row or a short column where it fits. Where colour carries meaning, use a
+small set of **semantic classes** shared by the whole project — action, decision, safeguard, stop, data —
+each with a fill, a stroke and an explicit text colour that read in both light and dark themes. Labels still
+say what each node is: colour never carries meaning alone. Break label lines with `<br/>`.
+
+```mermaid
+flowchart LR
+    A([Request]) --> B{Allowed?}
+    B -- yes --> C[Apply]
+    B -- no --> D([Stop])
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef ask fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef stop fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    class A,C step
+    class B ask
+    class D stop
+```
+
 ## The two-layer guarantee (deterministic gate + AI diagnostic)
 
 The reliability of the docs comes from **two layers that must stay separate**:
@@ -174,21 +209,30 @@ the abandoned governance tower. The deterministic part *gates*; the AI part *dia
 node tools/dist/cli.cjs docs-check
 ```
 
-Read-only; non-zero on divergence. It verifies: every README→`docs/` link resolves; every in-scope page is
-reachable from the map; **every in-scope page has valid frontmatter shape** (`type` in the allowed set,
-non-empty `title`/`description`); and the mandatory community-health files are present. It checks **shape, not
-prose** — `docs/decisions/` (ADRs) are out of scope. Part of the gate.
+Read-only; non-zero on divergence. It verifies:
+- every README→`docs/` link resolves;
+- every in-scope page is reachable from the map, directly or through the links of other reachable pages
+  (so `docs/<area>/README.md` indexes work);
+- links between reachable pages, and relative links in `AGENTS.md` / `CLAUDE.md`, resolve;
+- **every in-scope page has valid frontmatter shape** (`type` in the allowed set, non-empty
+  `title`/`description`).
+
+Missing community-health files are reported as warnings; `--require-health` makes them fail, which a public
+repository's CI should pass. It checks **shape, not prose** — `docs/decisions/` (ADRs) are out of scope.
 
 ## The project surface (community-health files)
 
-Alongside the content, the standard requires the files GitHub recognizes (anchored to GitHub Community
-Standards), enforced by `docs-check`: **mandatory** `README.md` · `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
-(at a GitHub-detectable path — root / `.github/` / `docs/`) · `CHANGELOG.md`; the rest (`CODE_OF_CONDUCT.md`,
-issue/PR templates, `CODEOWNERS`, …) optional.
+Alongside the content, a **public** repository carries the files GitHub recognizes
+([GitHub Community Standards](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/about-community-profiles-for-public-repositories)):
+`README.md` · `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md` (root, `.github/` or `docs/`), with
+`CODE_OF_CONDUCT.md`, issue/PR templates and `CODEOWNERS` recommended. A `CHANGELOG.md`
+([Keep a Changelog](https://keepachangelog.com/en/1.1.0/)) is expected of any released project. `docs-check`
+warns about the missing ones and fails only with `--require-health`: a private or internal repository may
+rightly lack a licence.
 
 ## Keeping it fresh
 
 The **`eunomai-living-docs`** skill refreshes docs toward this standard (human-in-control, never auto-rewrites):
-updates the README map, keeps frontmatter and the index honest, applies the `type` lens, and surfaces knowledge
-that belongs at a higher activation state. In a workspace with nested/multiple repos it surveys first, operates
+updates the README map, keeps frontmatter and the index honest, and applies the `type` lens; the deeper
+lenses (domain coverage, activation routing, profiles) run on request or while docs are established. In a workspace with nested/multiple repos it surveys first, operates
 per **project root**, and reports per repo. Thin/missing docs are recovered via the **structured interview**.
