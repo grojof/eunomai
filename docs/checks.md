@@ -19,13 +19,13 @@ Inside a Claude Code session the skills invoke the CLI via `${CLAUDE_PLUGIN_ROOT
 this repo** and run from your project root:
 
 ```bash
-node <clone>/tools/dist/cli.cjs docs-check          # README↔docs/ links + frontmatter + community-health files
+node <clone>/tools/dist/cli.cjs docs-check          # links, reachability, frontmatter; health files as warnings
 node <clone>/tools/dist/cli.cjs provenance-check    # every skill covered by the audit registry
 ```
 
 | Check | Passes when | Fails on |
 |-------|-------------|----------|
-| **`docs-check`** | every README→`docs/` link resolves, every in-scope page is indexed with valid frontmatter, and the mandatory community-health files are present | broken links · orphaned pages · invalid/missing frontmatter · missing health files |
+| **`docs-check`** | every README link into `docs/`, every link between reachable pages, and every relative link in `AGENTS.md`/`CLAUDE.md` resolves; every in-scope page is reachable from the README (directly or through other pages) with valid frontmatter | broken links · unreachable pages · invalid/missing frontmatter · missing health files only with `--require-health` (a warning otherwise) |
 | **`provenance-check`** | every skill under `skills/` (and `.claude/skills/`) has a registry entry | uncovered skills · invalid registry (warns on gaps like `unpinned`) |
 
 Both run with plain `node` and no `node_modules` (dependencies are inlined into the committed bundle).
@@ -44,16 +44,23 @@ project root (GitHub Actions shown; any CI translates directly):
     ref: v0.5.0                             # pin a released tag (or a commit SHA)
     path: .eunomai
 - run: |
-    node .eunomai/tools/dist/cli.cjs docs-check
+    node .eunomai/tools/dist/cli.cjs docs-check --require-health   # drop the flag for a private repo
     node .eunomai/tools/dist/cli.cjs provenance-check
 ```
 
-This is the same gate eunomai runs on itself (from its own root: `node tools/dist/cli.cjs docs-check`).
+This is the same gate eunomai runs on itself (from its own root: `node tools/dist/cli.cjs docs-check
+--require-health`).
 
 ## Fixing failures
 
-- **`docs-check`** → add the missing README link (or remove the dead one), or fix a page's frontmatter; see
-  [refresh-living-docs](refresh-living-docs.md).
+- **`docs-check`** →
+  - an unreachable page: link it from the README or from a page the README reaches, such as a folder index;
+  - a broken link in the README, in a page or in `AGENTS.md` / `CLAUDE.md`: fix or remove it (examples belong
+    in code spans or fences, which the check ignores);
+  - a frontmatter issue: fix the page's frontmatter;
+  - a missing community-health file: add it, or drop `--require-health` for a private repository.
+
+  See [refresh-living-docs](refresh-living-docs.md).
 - **`provenance-check`** → record the skill in `eunomai-skills-audit.md` with its real SHA; see
   [manage-skills](manage-skills.md).
 

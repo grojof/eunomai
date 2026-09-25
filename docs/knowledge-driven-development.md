@@ -37,7 +37,7 @@ state*:
 | Kind of knowledge | Where it lives in eunomai | Activation state |
 |-------------------|---------------------------|------------------|
 | Explanatory / reference (project) | [living-docs](living-docs.md) (Diátaxis) | 🟢 **passive** — a human reads it |
-| Normative / conventions | `CLAUDE.md`, `openspec/config.yaml`, permissions | 🟡 **semi-active** — injected as agent context |
+| Normative / conventions | `AGENTS.md`, `openspec/config.yaml`, permissions | 🟡 **semi-active** — injected as agent context |
 | Requirements / change decisions | [OpenSpec specs](sdd.md) + ADRs (`decisions/`) | 🟡 **semi-active** — traceable specs |
 | Procedural / know-how | [skills](skill-finder.md) (+ [base-skills](base-skills.md)) | 🔴 **active** — an agent executes it |
 | Operational / policy | [safe-controls](safe-controls.md) hooks | 🔴 **enforced** — at runtime |
@@ -61,7 +61,7 @@ living, versioned, actionable context"* held as **minimal sufficient information
 |--------|------------------|----------------|
 | **business** | needs, objectives, rules, constraints, processes, priorities | `explanation` docs, glossary |
 | **product** | what's being built, scope, roadmap, acceptance criteria | `explanation`/`reference` docs, OpenSpec specs |
-| **technical** | architecture, integrations, patterns, conventions, ADRs, contracts | `reference` docs, `CLAUDE.md`, ADRs |
+| **technical** | architecture, integrations, patterns, conventions, ADRs, contracts | `reference` docs, `AGENTS.md`, ADRs |
 | **operational** | deploy, monitoring, observability, security, ownership, support | `how-to`/`reference` docs, safe-controls |
 | **historical** | past decisions, trade-offs, lessons learned (the most overlooked) | ADRs, agent memory |
 | **AI-ready** | context curated and kept fresh specifically for agents | the routable substrate as a whole |
@@ -87,7 +87,7 @@ Some of KDD-the-methodology's ideas already appear in eunomai, organically and l
   OpenSpec change as a unit of change-knowledge.
 - **Industry → enterprise → project hierarchy** ↔ the gradient from **base skills** (universal,
   standards-anchored) → **skill-finder + project rules** (project-specific).
-- **Single source of truth** ↔ the single authored `CLAUDE.md` (Claude-only; no generated copies).
+- **Single source of truth** ↔ the single authored `AGENTS.md` (no generated copies).
 
 ## What eunomai deliberately does *not* adopt
 

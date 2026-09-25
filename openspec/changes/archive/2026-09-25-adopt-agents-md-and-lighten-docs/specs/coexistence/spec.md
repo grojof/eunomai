@@ -1,10 +1,6 @@
-# coexistence Specification
+# Spec Delta
 
-## Purpose
-Keep eunomai a removable complement: it adds to an existing personal or organisation layer without
-replacing it, lets the incumbent win on conflict, and feeds the project's own rules into every gate.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Coexistence contract
 
@@ -36,18 +32,3 @@ format or manifest SHALL be introduced.
 #### Scenario: A gate consumes org input
 - **WHEN** a gate needs org-trusted sources or org policy
 - **THEN** it reads them from the project's `AGENTS.md` (or the `CLAUDE.md` it keeps) / settings permissions, and cites where it found them
-
-### Requirement: Org adoption mechanics are documented
-
-The docs SHALL include an org-adoption how-to page, indexed in the README map, that answers an evaluator's
-core questions with Claude Code native mechanics: coexistence facts (plugin-namespaced skills cannot
-collide; PreToolUse decisions merge most-restrictive-wins; the guard never emits `allow`, so it can only
-tighten other governance), org-wide rollout (managed settings, marketplace allowlisting, private mirrors),
-version pinning and the update flow, the sanctioned extension seams (own hooks/permissions, the safety-gate
-env overrides, org marketplaces vetted through the skill gate), and removal (what uninstalling leaves
-behind: the project's own files, working).
-
-#### Scenario: Evaluator answers without reading code
-- **WHEN** an org evaluator reads the org-adoption page
-- **THEN** they can determine how to install org-wide, pin a version, extend the controls without forking,
-  and what removal leaves behind

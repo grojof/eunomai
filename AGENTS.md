@@ -1,11 +1,12 @@
-# eunomai — AI Agent Guide (CLAUDE.md)
+# eunomai — AI Agent Guide (AGENTS.md)
 
 A focused, **Claude-only AI workspace**, packaged as a Claude Code plugin, built on existing tools (Claude
 Code native + OpenSpec) — not reinventing them. Four pillars: SDD/SPDD, living docs, safe controls, and
 trust-gated skills. See `docs/vision.md` for the charter.
 
 This file is the **single authored source of truth** for AI agents working *on* eunomai — edit rules here.
-Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-tool projection.
+Claude Code (2.1.277 or later) and other agents read `AGENTS.md`; there is no `CLAUDE.md` copy and no
+cross-tool projection (ADR-0007).
 
 ## Conventions
 - Files are UTF-8, newlines are LF, with a final newline at EOF.
@@ -19,7 +20,8 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 - **Claude-only** — Claude Code is the only host; **OpenSpec** is the sole external dependency (the SDD engine
   and the historical record of decisions and development). No cross-tool projection (see ADR-0004).
 - **Low maintenance over reach.** Trust-gated skills are a *criteria* gate, never a hand-curated registry.
-- **`CLAUDE.md` is the single authored instruction file** (zero lock-in) — no generated copies, no projection.
+- **`AGENTS.md` is the single authored instruction file** (zero lock-in; ADR-0007) — no generated copies, no
+  projection.
 - **Open substrate** — knowledge is plain Markdown + frontmatter (see ADR-0003); Claude-only is the host, not
   lock-in.
 - **Coexist, don't supplant** — a removable complement: additive next to an existing personal/org layer; on
@@ -54,20 +56,18 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
   `docs/safe-controls.md`.
 
 ## Living docs
-- **Two layers, both standardized.** *Content* — project-docs as a **routable substrate** (living-docs v2):
-  flat `docs/*.md` with required frontmatter (`type`/`title`/`description`), Diátaxis as a `type` lens (not
-  folders), a product-shaped README **map**; `decisions/` ADRs are dev-facing, out of the map. *Project
-  surface* — the **community-health files** GitHub
-  recognizes (anchored to GitHub Community Standards): mandatory `LICENSE` · `SECURITY.md` · `CONTRIBUTING.md`
-  (at a GitHub-detectable path) · `CHANGELOG.md`; the rest optional. See `docs/living-docs.md`.
+- **The standard's core** (`docs/living-docs.md`): frontmatter on every `docs/` page (`type` as the Diátaxis
+  lens, `title`, `description`), the README as the map every page is reachable from, one fact one home,
+  relative links, timeless prose. `decisions/` ADRs are dev-facing, out of the map. eunomai, as a public
+  repository, also carries the community-health files.
 - Refresh on demand with the **`eunomai-living-docs`** skill (human-in-control, never auto-rewrites). In a
   workspace with nested/multiple repos it surveys first, operates on a chosen **project root** (checks run from
   there), and reports per repo — never assuming the workspace root is the project. Thin/missing docs are
   recovered via the same **structured interview** onboard uses (one question at a time · recommend a default ·
   explore-first).
-- **`node tools/dist/cli.cjs docs-check`** — read-only: verifies every README→`docs/` link resolves,
-  every in-scope page is indexed, and the mandatory community-health files are present (exit 1 on drift). Part
-  of the gate; enforces structure, not prose.
+- **`node tools/dist/cli.cjs docs-check --require-health`** — read-only: links (README, pages, `AGENTS.md`),
+  reachability, frontmatter shape, and here the community-health files too (exit 1 on drift). Part of the
+  gate; enforces structure, not prose.
 
 ## Skills
 - **Own skills only.** `eunomai-skill-finder` is the trust-gated steward: discover → gate → adopt / improve /
@@ -95,11 +95,11 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
   `workspace-survey` subagent maps repos root + nested, the user confirms scope — *detect, don't assume*) →
   per confirmed **project root**: gather input via a **structured interview** (one question at a time ·
   recommend a default · explore-first; from-scratch docs crystallize into ADRs + a glossary) → establish docs
-  (living-docs standard) → seed conventions (lean `CLAUDE.md`
+  (living-docs standard) → seed conventions (lean `AGENTS.md`
   declaring the project's boundary + paths, `openspec/config.yaml`, permissions, hooks) → audit skills via
   skill-finder → drive `docs-check` + `provenance-check` green (run from the project root) → step aside. The
   layer anchors **per project root, never the workspace root by default**; multirepo onboards each project
-  independently; scope rides on hierarchical `CLAUDE.md` (no manifest). See
+  independently; scope rides on hierarchical `AGENTS.md` (no manifest). See
   `docs/onboard.md`.
 - **Establish, don't maintain** (the pillars maintain); **orchestrate, don't reimplement**; **one-shot &
   dispensable** (seeds live in the project; zero lock-in). No new check, no conformance engine — "onboarded"

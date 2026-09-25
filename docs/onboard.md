@@ -27,19 +27,21 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
                existing governance (hooks · permissions · skills · registries);
                proposes env vs project; USER confirms scope + where the layer anchors
     1. analyze (stack, docs, skills) + gather input via a structured interview — per confirmed project root
-    2. coexist → classify each surface (CLAUDE.md · docs standard · SDD · permissions · hooks · skills)
+    2. coexist → classify each surface (AGENTS.md · docs standard · SDD · permissions · hooks · skills)
                as absent / compatible / conflicting; conflicts go through the interview,
                "adapt to what exists" recommended; declined seeds are skipped
     3. docs   → living-docs standard: content tree (Diátaxis) + project surface
-               (the mandatory community-health files), restructured or created from scratch;
+               (community-health files; warnings unless the repo is public), restructured or created;
                from-scratch interviews crystallize into ADRs + a glossary explanation page
-    4. seed   → lean CLAUDE.md (merged into if one exists) · openspec/config.yaml (only where
-               no SDD process exists) · permissions baseline · hooks wiring — each skippable
+    4. seed   → lean AGENTS.md (merged into if one exists; an existing CLAUDE.md offered a rename)
+               · openspec/config.yaml (only where no SDD process exists) · permissions baseline
+               · the guard's settings + attribution policy (eunomai-safe-controls; the hooks
+               come from the installed plugin, never copied) — each skippable
     5. skills → invoke eunomai-skill-finder (audit)
     6. drive docs-check + provenance-check to green  — run from the project root
     7. hand off to the steady-state pillars → step aside
        (multirepo: steps 1–7 run independently per project; env root gets at most a
-        minimal delegating CLAUDE.md, with consent)
+        minimal delegating AGENTS.md, with consent)
 ```
 
 ## The structured interview
@@ -65,17 +67,17 @@ standard — non-trivial choices become **ADRs** (`docs/decisions/`) and the dom
 
 ## The seed
 
-The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `CLAUDE.md`,
+The conventions onboard drops in are **derived from eunomai's own live, dogfooded files** (its `AGENTS.md`,
 `openspec/config.yaml`, `docs/safe-controls.md`) and adapted to the target — not copies that could drift.
 
 ## The activator block (the behavioural seed)
 
-The seeded `CLAUDE.md` has two halves: the **structural** half (boundary + paths) and the **behavioural**
-half — a plain-language **activator block** that makes any agent follow the base. In KDD terms `CLAUDE.md` is
+The seeded `AGENTS.md` has two halves: the **structural** half (boundary + paths) and the **behavioural**
+half — a plain-language **activator block** that makes any agent follow the base. In KDD terms `AGENTS.md` is
 the *semi-active* layer; the block **activates** the base by pointing at the skills. The canonical block
 lives **inside the `eunomai-onboard` skill** (so it ships with the plugin and resolves wherever the skill
 runs); onboard **adapts** it to the project — it does not paste it verbatim. When the project already has a
-`CLAUDE.md`, the block is **appended under its own heading** and the existing content is preserved.
+`AGENTS.md`, the block is **appended under its own heading** and the existing content is preserved.
 
 Three invariants keep it honest:
 

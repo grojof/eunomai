@@ -18,7 +18,7 @@ context: |
   - Don't reinvent — stand on existing tools; build only the tailored glue.
   - Claude-only — Claude Code is the only host; OpenSpec is the sole external dependency (ADR-0004).
   - Low maintenance over reach; trust-gated skills are a criteria gate, never a hand-curated registry.
-  - CLAUDE.md is the single authored source (zero lock-in); no cross-tool projection.
+  - AGENTS.md is the single authored source (zero lock-in; ADR-0007); no cross-tool projection.
 
   Conventions:
   - Commits: Conventional Commits, imperative mood, one logical change per commit, no AI co-author

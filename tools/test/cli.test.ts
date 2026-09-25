@@ -1,4 +1,6 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CLI_VERSION, run } from "../src/run.js";
 
@@ -28,5 +30,35 @@ describe("run", () => {
     const help = String(log.mock.calls[0]?.[0]);
     expect(help).toContain(pkg.version);
     expect(help).toContain("--version");
+  });
+});
+
+describe("docs-check community-health files", () => {
+  const repo = (): string => {
+    const dir = mkdtempSync(join(tmpdir(), "eunomai-cli-"));
+    mkdirSync(join(dir, "docs"));
+    writeFileSync(join(dir, "README.md"), "# P\n\n- [Guide](docs/guide.md)\n");
+    writeFileSync(
+      join(dir, "docs", "guide.md"),
+      "---\ntype: how-to\ntitle: G\ndescription: D\n---\n",
+    );
+    return dir;
+  };
+
+  it("warns about a missing LICENSE and passes", () => {
+    const dir = repo();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    expect(run(["node", "cli", "docs-check"], dir)).toBe(0);
+    expect(warn.mock.calls.flat().join("\n")).toMatch(/LICENSE/);
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("fails on a missing LICENSE with --require-health", () => {
+    const dir = repo();
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(run(["node", "cli", "docs-check", "--require-health"], dir)).toBe(1);
+    expect(error.mock.calls.flat().join("\n")).toMatch(/missing community-health file: LICENSE/);
+    rmSync(dir, { recursive: true, force: true });
   });
 });

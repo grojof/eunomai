@@ -28,7 +28,7 @@ flowchart TB
     Plugin ==>|seeds once, then steps aside| Project
 
     subgraph Project["any project — dispensable, zero lock-in"]
-        CLAUDEmd["CLAUDE.md — authored source + activator block"]
+        CLAUDEmd["AGENTS.md — authored source + activator block"]
         Docs["docs/ — routable: frontmatter + a product-shaped map"]
         Specs["openspec/ — specs + change history"]
     end
@@ -73,7 +73,8 @@ Full walkthrough → **[Getting started](docs/getting-started.md)**.
   eunomai as a knowledge-activation spectrum (passive docs → active skills/hooks).
 
 **Decisions** → **[docs/decisions/](docs/decisions/)** — the ADR series (OpenSpec · KDD · OKF · Claude-only ·
-living-docs v2 · docs single source of truth).
+living-docs v2 · docs single source of truth ·
+AGENTS.md as the instruction file).
 
 ## One principle above all
 

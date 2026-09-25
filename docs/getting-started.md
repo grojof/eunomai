@@ -71,8 +71,8 @@ It will, with you in control:
 1. **Analyze** the stack, existing docs, and skills, and ask about the project's purpose/domain/audience.
 2. **Docs** → establish the living-docs structure: a lean `README.md` index + `docs/` topic pages (or create
    them from scratch when none exist).
-3. **Seed** conventions adapted to the project: a lean `CLAUDE.md`, an `openspec/config.yaml` layer, the
-   permissions baseline, and the hooks wiring.
+3. **Seed** conventions adapted to the project: a lean `AGENTS.md`, an `openspec/config.yaml` layer, the
+   permissions baseline, and the guard's settings and AI-attribution policy (the hooks come from the plugin).
 4. **Skills** → audit any existing skills via `eunomai-skill-finder` and record provenance.
 5. **Hand off** to the steady-state pillars. eunomai is dispensable from here — everything it seeded lives in
    your project's own files (zero lock-in).
@@ -95,5 +95,6 @@ It will, with you in control:
 
 ## Authoring note
 
-`CLAUDE.md` is the single authored source of truth. Claude-only (see ADR-0004): there are no generated
-instruction files and no cross-tool projection — edit `CLAUDE.md` directly.
+`AGENTS.md` is the single authored source of truth, and Claude Code reads it natively from 2.1.277 (ADR-0007;
+for an older Claude Code, a one-line `CLAUDE.md` holding `@AGENTS.md` bridges it). There are no generated
+instruction files and no cross-tool projection — edit `AGENTS.md` directly.

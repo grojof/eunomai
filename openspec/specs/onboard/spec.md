@@ -6,7 +6,9 @@ a new or existing project — survey the workspace and confirm scope, analyze an
 root, establish living-docs, seed conventions, audit skills via skill-finder, drive the checks green, then hand
 off. It anchors per project root (never the workspace root by default), gathers input through a structured
 interview, and orchestrates the pillars without reimplementing them (establish, don't maintain).
+
 ## Requirements
+
 ### Requirement: Analyze project and gather author input
 
 The onboard skill SHALL, **for each confirmed project root**, survey that project (stack, existing docs,
@@ -36,24 +38,33 @@ After onboarding, `docs-check` SHALL pass on the project.
 
 ### Requirement: Seed eunomai conventions
 
-The onboard skill SHALL seed the project's conventions by **adapting** templates — a lean `CLAUDE.md`, an
-`openspec/config.yaml` layer, the permissions baseline, and the hooks wiring (`.claude/settings.json`) — to
-the project, not dropping them verbatim. Each seed SHALL be **individually skippable** based on the
+The onboard skill SHALL seed the project's conventions by **adapting** templates — a lean `AGENTS.md`, an
+`openspec/config.yaml` layer, the permissions baseline, and the guard's project settings with the project's
+AI-attribution policy (through the `eunomai-safe-controls` skill) — to the project, not dropping them
+verbatim. The guard's hooks SHALL come from the installed plugin; onboard SHALL NOT copy hook scripts into the
+project, and when eunomai is used from a source clone it SHALL install the plugin from that clone as a local
+marketplace. Each seed SHALL be **individually skippable** based on the
 coexistence assessment: OpenSpec is seeded as the default SDD engine **only where no SDD process exists**;
-the permissions baseline and hooks wiring are offered, not imposed, where governance already exists. An
-existing `CLAUDE.md` SHALL be **merged into** — the activator block appended under its own heading, existing
+the permissions baseline and the guard settings are offered, not imposed, where governance already exists.
+An existing `AGENTS.md` SHALL be **merged into** — the activator block appended under its own heading, existing
 content preserved — never replaced.
 
 #### Scenario: Seed authoring + SDD config
 - **WHEN** onboard seeds scaffolding on a project with no SDD process
-- **THEN** it writes a lean `CLAUDE.md` and an `openspec/config.yaml` adapted to the project
+- **THEN** it writes a lean `AGENTS.md` and an `openspec/config.yaml` adapted to the project
 
 #### Scenario: Seed safe controls
 - **WHEN** onboard seeds safe-controls on a project with no existing hooks/permissions governance
-- **THEN** it adds the permissions baseline and wires the hooks via `.claude/settings.json`
+- **THEN** it adds the permissions baseline, relies on the installed plugin for the hooks (copying no hook
+  script), and proposes the guard settings and attribution policy through `eunomai-safe-controls`
 
 #### Scenario: Existing CLAUDE.md is merged, not replaced
-- **WHEN** the project already has a `CLAUDE.md` with its own rules
+- **WHEN** the project keeps its rules in `CLAUDE.md` and the author declines the migration to `AGENTS.md`
+- **THEN** onboard appends the adapted activator block to that `CLAUDE.md` under its own heading and changes no
+  existing content without the author's explicit choice
+
+#### Scenario: Existing AGENTS.md is merged, not replaced
+- **WHEN** the project already has an `AGENTS.md` with its own rules
 - **THEN** onboard appends the adapted activator block under its own heading and changes no existing content
   without the author's explicit choice
 
@@ -101,7 +112,7 @@ SHALL leave a working project — everything it seeds lives in the generated out
 
 The onboard skill SHALL, before analyzing or changing any project, perform a read-only **workspace survey**
 (delegated to a subagent) that discovers all git repositories (the root and any nested) and their remotes and
-detects code manifests and existing `CLAUDE.md`/`AGENTS.md`. The survey SHALL also **enumerate existing
+detects code manifests and existing `AGENTS.md`/`CLAUDE.md`. The survey SHALL also **enumerate existing
 governance** per repository — hooks and `permissions` blocks in `.claude/settings.json`, skills under
 `.claude/skills/`, an existing `eunomai-skills-audit.md` registry, and other installed plugins' visible
 markers — as facts (presence + location), without assessing them. It SHALL classify each repository as
@@ -127,33 +138,33 @@ decide scope silently, and the survey SHALL change nothing.
 
 ### Requirement: Anchor the eunomai layer at each project root
 
-The onboard skill SHALL seed the eunomai layer (a lean `CLAUDE.md`, `openspec/`, `docs/`, the permissions
-baseline, and the hooks wiring) at each confirmed **project root**, and SHALL NOT seed it at the workspace
+The onboard skill SHALL seed the eunomai layer (a lean `AGENTS.md`, `openspec/`, `docs/`, the permissions
+baseline, and the guard settings) at each confirmed **project root**, and SHALL NOT seed it at the workspace
 root by default. A repository classified as environment SHALL receive at most a minimal delegating
-`CLAUDE.md`, and only with the user's consent.
+`AGENTS.md`, and only with the user's consent.
 
 #### Scenario: Seed at the project subfolder
 - **WHEN** the user confirms a nested subfolder as the project root
-- **THEN** onboard anchors `openspec/`, `docs/`, and `CLAUDE.md` there, not at the workspace root
+- **THEN** onboard anchors `openspec/`, `docs/`, and `AGENTS.md` there, not at the workspace root
 
 #### Scenario: Environment root is not seeded as a project
 - **WHEN** the workspace root is classified as environment
-- **THEN** onboard does not seed the eunomai layer there, offering at most a minimal delegating `CLAUDE.md` with consent
+- **THEN** onboard does not seed the eunomai layer there, offering at most a minimal delegating `AGENTS.md` with consent
 
-### Requirement: Declare boundaries via hierarchical CLAUDE.md
+### Requirement: Declare boundaries via hierarchical AGENTS.md
 
-Each onboarded project's `CLAUDE.md` SHALL declare its own boundary and key paths (the `openspec/` and `docs/`
+Each onboarded project's `AGENTS.md` SHALL declare its own boundary and key paths (the `openspec/` and `docs/`
 locations and what is tracked) so that config and agents operate within that project. Any workspace-root
-`CLAUDE.md` SHALL only delegate — pointing at the project directories and marking the root as environment —
+`AGENTS.md` SHALL only delegate — pointing at the project directories and marking the root as environment —
 and SHALL carry no per-project conventions. No new manifest file SHALL be introduced; scope SHALL be expressed
-through Claude Code's native hierarchical `CLAUDE.md` discovery.
+through Claude Code's native hierarchical `AGENTS.md` discovery.
 
 #### Scenario: Project declares its own boundary
 - **WHEN** onboard seeds a project root
-- **THEN** that project's `CLAUDE.md` states its boundary and the `openspec/`/`docs/` paths it owns
+- **THEN** that project's `AGENTS.md` states its boundary and the `openspec/`/`docs/` paths it owns
 
 #### Scenario: Workspace root only delegates
-- **WHEN** onboard writes a workspace-root `CLAUDE.md`
+- **WHEN** onboard writes a workspace-root `AGENTS.md`
 - **THEN** it only points to the project directories and marks the root as environment, with no per-project conventions
 
 ### Requirement: Onboard multiple project repos independently
@@ -200,9 +211,9 @@ page for the domain language.
 - **WHEN** the interview surfaces the project's domain vocabulary
 - **THEN** onboard captures it as a glossary explanation page indexed in the README
 
-### Requirement: Seed a self-sufficient activator block in CLAUDE.md
+### Requirement: Seed a self-sufficient activator block in AGENTS.md
 
-When seeding a project root, the onboard skill SHALL write into the project's `CLAUDE.md` a natural-language
+When seeding a project root, the onboard skill SHALL write into the project's `AGENTS.md` a natural-language
 **activator block** that states eunomai's base disciplines at the level of **principle** (spec-first change,
 honest docs, vetting third-party skills/tools before adoption, secure-by-default, deliberate dependency
 changes, pausing on irreversible/sensitive actions). The block SHALL name the relevant skills only as
@@ -215,8 +226,12 @@ onboard SHALL adapt the canonical block to the project rather than copying it ve
 check.
 
 #### Scenario: The seeded CLAUDE.md carries the activator block
+- **WHEN** onboard seeds a project root that keeps its instructions in `CLAUDE.md` (migration declined)
+- **THEN** that `CLAUDE.md` contains the activator block stating the base disciplines as principles
+
+#### Scenario: The seeded AGENTS.md carries the activator block
 - **WHEN** onboard seeds a confirmed project root
-- **THEN** the project's `CLAUDE.md` contains the activator block stating the base disciplines as principles
+- **THEN** the project's `AGENTS.md` contains the activator block stating the base disciplines as principles
 
 #### Scenario: Self-sufficient — survives skill removal
 - **WHEN** the eunomai skills are not installed in a collaborator's environment
@@ -306,7 +321,7 @@ recommend action — the calling skill's lens does.
 ### Requirement: Coexistence assessment before seeding
 
 After the analyze step and before establishing docs or seeding conventions, the onboard skill SHALL run a
-**coexistence assessment** per confirmed project root: classify each surface — `CLAUDE.md` · docs standard ·
+**coexistence assessment** per confirmed project root: classify each surface — `AGENTS.md` · docs standard ·
 SDD process · permissions · hooks · skills — as **absent**, **present-compatible**, or
 **present-conflicting**. Absent surfaces are seeded normally; present-compatible surfaces are left in place
 and referenced; present-conflicting surfaces SHALL go through the structured interview with **"adapt to what
@@ -322,7 +337,7 @@ skipped when the survey reports any existing governance.
 #### Scenario: Project already runs another SDD process
 - **WHEN** the target project has an established change/spec process that is not OpenSpec
 - **THEN** onboard does not seed `openspec/`, records the incumbent process as the project's SDD in
-  `CLAUDE.md`, and offers OpenSpec only as an opt-in
+  `AGENTS.md`, and offers OpenSpec only as an opt-in
 
 #### Scenario: Nothing exists
 - **WHEN** all six surfaces are absent
@@ -351,3 +366,26 @@ non-trivial profile decision MAY crystallize into an ADR via the existing interv
 - **THEN** onboard records the decision as an ADR under `docs/decisions/` like other non-trivial interview
   outcomes
 
+### Requirement: AGENTS.md is the instruction file, and existing CLAUDE.md files are migrated
+
+The instruction file onboard seeds and the living-docs standard refers to SHALL be `AGENTS.md`, which Claude
+Code reads natively (from 2.1.277), hierarchically as it reads `CLAUDE.md`, and which other agents read too.
+When a project root has a `CLAUDE.md` and no `AGENTS.md`, onboard SHALL offer to migrate it: rename it to
+`AGENTS.md` with its content unchanged. When both exist, onboard SHALL warn that Claude Code reads only
+`CLAUDE.md` in that directory, and SHALL propose merging them into `AGENTS.md` — unless that `CLAUDE.md` is
+only the `@AGENTS.md` bridge, which is the intended setup. A `CLAUDE.local.md` SHALL stay
+as it is, because it has no `AGENTS.md` equivalent. For users on an older Claude Code, onboard SHALL offer a
+one-line `CLAUDE.md` holding `@AGENTS.md` as a bridge, never a second copy of the instructions. Nothing SHALL be
+renamed, merged or written without the author's confirmation.
+
+#### Scenario: A project with only CLAUDE.md
+- **WHEN** onboard reaches a project root whose instructions live in `CLAUDE.md`
+- **THEN** it proposes renaming the file to `AGENTS.md`, content unchanged, and renames it only on confirmation
+
+#### Scenario: Both files exist
+- **WHEN** a project root has both `CLAUDE.md` and `AGENTS.md`, and the `CLAUDE.md` is more than the `@AGENTS.md` bridge
+- **THEN** onboard explains that Claude Code reads only `CLAUDE.md` there and proposes merging the two into `AGENTS.md`
+
+#### Scenario: An older Claude Code
+- **WHEN** the author uses a Claude Code older than 2.1.277
+- **THEN** onboard offers a `CLAUDE.md` whose only content is `@AGENTS.md`, so the instructions exist once

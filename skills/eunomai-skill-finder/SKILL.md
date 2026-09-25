@@ -33,7 +33,7 @@ A hard veto first, then weighed judgment — mirroring safe-controls (one hard b
 - **Usage** — adoption/activity signals (not numeric thresholds — signals).
 - **Quality** — does it do one thing well and fit the need? Make this **objective** where possible by running
   **skill-creator's eval/benchmark** (pass-rate, token efficiency).
-- **Org trust as input** — before gating, check the project's rules (its `CLAUDE.md` + settings permissions)
+- **Org trust as input** — before gating, check the project's rules (its `AGENTS.md`, or the `CLAUDE.md` it keeps, + settings permissions)
   for **org-trusted sources**. Trust declared there weighs into authorship/provenance (an internal
   marketplace or repository id is an acceptable `origin`), and the entry's rubric records that org trust was
   relied on. It **never bypasses the veto** — a dangerous org-sourced skill is still rejected, and the
@@ -92,7 +92,7 @@ skill not covered by the registry, and lists trust gaps to act on.
 - **Not a sandbox/scanner.** The veto is a read, not a guarantee; pair with safe-controls at runtime.
 - **No *central* registry.** Judge fresh each time; the `eunomai-skills-audit.md` is a per-project, generated
   audit — not a global curated allowlist. Org-trusted sources are declared in the project's **rules** (its
-  `CLAUDE.md` + settings permissions) and consumed by the gate as input — see above.
+  `AGENTS.md` or kept `CLAUDE.md` + settings permissions) and consumed by the gate as input — see above.
 - **Plugin-delivered skills are outside the registry's scope.** Skills that arrive via installed plugins are
   trusted at the plugin/marketplace level; `provenance-check` scans only `.claude/skills/` and `skills/`.
   Say so in every audit report — never imply coverage the registry doesn't have.
