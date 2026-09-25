@@ -3,7 +3,7 @@ type: reference
 title: "Skill finder"
 description: "The skill trust gate, provenance, and provenance-check."
 tags: [skills, trust, provenance]
-updated: 2026-07-01
+updated: 2026-09-25
 ---
 
 # Skill finder
@@ -26,6 +26,24 @@ Two modes, sharing one gate:
 ## The trust gate
 
 A hard veto, then weighed judgment (mirroring safe-controls: one hard bar, the rest judgment).
+
+```mermaid
+flowchart LR
+    C([Candidate or<br/>installed skill]) --> V{Veto<br/>dangerous code?<br/>pinnable origin?}
+    V -- fails --> X([Reject, or<br/>flag-for-removal])
+    V -- passes --> J{Judgment<br/>authorship · usage<br/>· quality · org trust}
+    J --> A[Acquire: adopt ·<br/>adopt-and-improve · create]
+    J --> K[Audit: keep ·<br/>keep-with-gaps]
+    A & K --> R[(Provenance<br/>registry)]
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef ask fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef stop fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    classDef data fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    class C,A,K step
+    class V,J ask
+    class X stop
+    class R data
+```
 
 | Stage | What | Result |
 |-------|------|--------|

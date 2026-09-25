@@ -46,7 +46,8 @@ to the story**, and keep each one simple (one idea per diagram):
 
 - **flowchart** — a process or decision logic.
 - **sequence** — interactions between components over time (API calls, message flow).
-- **C4** — software **architecture**, at the right zoom: Context → Container → Component (don't go to Code).
+- **C4** — software **architecture**, at the right zoom: Context → Container → Component (don't go to Code),
+  drawn as a flowchart with subgraphs; Mermaid's own C4 syntax is still experimental.
 - **class / erDiagram** — code or data structure.
 - **stateDiagram** — status changes / lifecycles.
 
