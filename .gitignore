@@ -7,3 +7,6 @@ coverage/
 !tools/dist/
 tools/dist/*
 !tools/dist/cli.cjs
+
+# eunomai safe-controls: personal, per-clone overrides
+.claude/eunomai.local.json
