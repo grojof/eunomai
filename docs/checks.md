@@ -41,7 +41,7 @@ project root (GitHub Actions shown; any CI translates directly):
 - uses: actions/checkout@v4                 # a pinned clone of eunomai
   with:
     repository: grojof/eunomai
-    ref: v0.6.0                             # pin a released tag (or a commit SHA)
+    ref: v0.6.1                             # pin a released tag (or a commit SHA)
     path: .eunomai
 - run: |
     node .eunomai/tools/dist/cli.cjs docs-check --require-health   # drop the flag for a private repo
