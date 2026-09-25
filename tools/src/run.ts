@@ -11,13 +11,15 @@ export const CLI_VERSION: string =
 const HELP = `eunomai ${CLI_VERSION} — read-only checks for a Claude Code AI workspace
 
 Usage:
-  eunomai docs-check           Read-only: verify README<->docs/ links, index coverage, community-health files.
+  eunomai docs-check           Read-only: verify README<->docs/ links, that every docs page is reachable from
+                               the README, links in AGENTS.md / CLAUDE.md, and frontmatter shape. Missing
+                               community-health files are warnings; add --require-health to fail on them.
   eunomai provenance-check     Read-only: verify every skill is covered by the skills-audit registry.
   eunomai --version            Print the CLI version.
   eunomai --help               Show this help.`;
 
 /** Runs the CLI and returns a process exit code (does not call process.exit). */
-export function run(argv: string[]): number {
+export function run(argv: string[], cwd: string = process.cwd()): number {
   const args = argv.slice(2);
 
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
@@ -33,29 +35,42 @@ export function run(argv: string[]): number {
   const [cmd] = args;
 
   if (cmd === "docs-check") {
-    const { broken, orphaned, missingHealth, frontmatterIssues, checkedLinks, scannedPages } =
-      checkDocs();
+    const requireHealth = args.includes("--require-health");
+    const r = checkDocs(cwd);
+    const healthFails = requireHealth && r.missingHealth.length > 0;
+    if (!requireHealth)
+      for (const h of r.missingHealth) console.warn(`  warning: no ${h} (community-health file)`);
     if (
-      broken.length > 0 ||
-      orphaned.length > 0 ||
-      missingHealth.length > 0 ||
-      frontmatterIssues.length > 0
+      r.broken.length > 0 ||
+      r.brokenInPages.length > 0 ||
+      r.brokenInstructions.length > 0 ||
+      r.orphaned.length > 0 ||
+      r.frontmatterIssues.length > 0 ||
+      healthFails
     ) {
       console.error("docs-check failed:");
-      for (const b of broken) console.error(`  broken README link -> ${b}`);
-      for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
-      for (const h of missingHealth) console.error(`  missing community-health file: ${h}`);
-      for (const f of frontmatterIssues) console.error(`  frontmatter: ${f}`);
+      for (const b of r.broken) console.error(`  broken README link -> ${b}`);
+      for (const b of r.brokenInPages) console.error(`  broken link in ${b}`);
+      for (const b of r.brokenInstructions) console.error(`  broken link in ${b}`);
+      for (const o of r.orphaned)
+        console.error(`  orphaned page (not reachable from the README): ${o}`);
+      if (healthFails)
+        for (const h of r.missingHealth) console.error(`  missing community-health file: ${h}`);
+      for (const f of r.frontmatterIssues) console.error(`  frontmatter: ${f}`);
       return 1;
     }
+    const health =
+      r.missingHealth.length === 0
+        ? "community-health files present"
+        : `${r.missingHealth.length} community-health file(s) missing (warning)`;
     console.log(
-      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed + frontmatter valid, community-health files present.`,
+      `docs-check: ${r.checkedLinks} README link(s) resolve, ${r.scannedPages} page(s) reachable + frontmatter valid, ${health}.`,
     );
     return 0;
   }
 
   if (cmd === "provenance-check") {
-    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit();
+    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit(cwd);
     for (const g of gaps) console.warn(`  gap (review): ${g}`);
     if (uncovered.length > 0 || invalid.length > 0) {
       console.error("provenance-check failed:");

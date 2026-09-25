@@ -116,6 +116,94 @@ describe("checkDocs", () => {
     expect(r.orphaned).toEqual(["docs/extra.md"]);
   });
 
+  it("counts a page as indexed when it is reachable from the README through other docs pages", () => {
+    write("README.md", "# P\n\n- [Migration](docs/migration/README.md)\n");
+    write(
+      "docs/migration/README.md",
+      page("explanation", "Migration") + "\n- [Running](running.md)\n",
+    );
+    write(
+      "docs/migration/running.md",
+      page("how-to", "Running") + "\n[Back](../migration/README.md)\n",
+    );
+    const r = checkDocs(dir);
+    expect(r.orphaned).toEqual([]);
+    expect(r.checkedLinks).toBe(1);
+  });
+
+  it("follows a link to a docs folder to its README.md or index.md", () => {
+    write("README.md", "# P\n\n- [Guides](docs/guides/)\n");
+    write("docs/guides/index.md", page("reference", "Guides") + "\n- [One](one.md)\n");
+    write("docs/guides/one.md", page("how-to", "One"));
+    const r = checkDocs(dir);
+    expect(r.broken).toEqual([]);
+    expect(r.orphaned).toEqual([]);
+  });
+
+  it("reports a broken link inside a reachable docs page", () => {
+    write("README.md", "# P\n\n- [Guide](docs/guide.md)\n");
+    write(
+      "docs/guide.md",
+      page("how-to", "Guide") + "\n[Gone](gone.md) [Web](https://x.dev) [Here](#top)\n",
+    );
+    const r = checkDocs(dir);
+    expect(r.brokenInPages).toEqual(["docs/guide.md -> docs/gone.md"]);
+  });
+
+  it("reports broken relative links in AGENTS.md and CLAUDE.md", () => {
+    write("README.md", "# P\n");
+    write("AGENTS.md", "# Agents\n\nSee [roadmap](docs/roadmap.md) and [site](https://x.dev).\n");
+    write("CLAUDE.md", "# Claude\n\n[Contrib](CONTRIBUTING.md)\n");
+    write("CONTRIBUTING.md", "# C\n");
+    const r = checkDocs(dir);
+    expect(r.brokenInstructions).toEqual(["AGENTS.md -> docs/roadmap.md"]);
+  });
+
+  it("does not read examples as links: inline code, HTML comments, indented fences", () => {
+    write(
+      "README.md",
+      "# P\n\n- [Guide](docs/guide.md)\n\nCite as `[ADR](docs/decisions/NNNN.md)`.\n",
+    );
+    write(
+      "docs/guide.md",
+      page("how-to", "Guide") +
+        "\nWrite `[text](other.md)`.\n<!-- [old](old.md) -->\n\n- Example:\n\n  ```md\n  [x](missing.md)\n  ```\n",
+    );
+    write("AGENTS.md", "# A\n\nCite ADRs as ``[ADR-NNNN](docs/decisions/NNNN/DECISION.md)``.\n");
+    const r = checkDocs(dir);
+    expect(r.broken).toEqual([]);
+    expect(r.brokenInPages).toEqual([]);
+    expect(r.brokenInstructions).toEqual([]);
+  });
+
+  it("follows reference-style, HTML, root-absolute and bracketed links, and titles with parentheses", () => {
+    write(
+      "README.md",
+      [
+        "# P",
+        "- [Ref][r]",
+        '- <a href="docs/html.md">HTML</a>',
+        "- [Root](/docs/root.md)",
+        "- [The [beta] guide](docs/beta.md)",
+        '- [Titled](docs/titled.md "Guide (v2)")',
+        "",
+        "[r]: docs/ref.md",
+      ].join("\n"),
+    );
+    for (const f of ["ref", "html", "root", "beta", "titled"])
+      write(`docs/${f}.md`, page("reference", f));
+    const r = checkDocs(dir);
+    expect(r.orphaned).toEqual([]);
+    expect(r.broken).toEqual([]);
+  });
+
+  it("recognises a folder index whatever its case", () => {
+    write("README.md", "# P\n\n- [Area](docs/area/)\n");
+    write("docs/area/readme.md", page("explanation", "Area"));
+    const r = checkDocs(dir);
+    expect(r.orphaned).toEqual([]);
+  });
+
   it("does not flag dev-docs (docs/decisions, ADRs) when unindexed", () => {
     write("README.md", "# P\n\n- [Guide](docs/guides/getting-started.md)\n");
     write("docs/guides/getting-started.md", "# Guide\n");

@@ -7366,21 +7366,32 @@ var DEV_DOC_DIRS = ["docs/decisions"];
 var DOC_TYPES = /* @__PURE__ */ new Set(["tutorial", "how-to", "reference", "explanation", "decision"]);
 var FRONTMATTER = /^---\r?\n([\s\S]*?)\r?\n---/;
 var HEALTH_FILES = [
-  { name: "LICENSE", candidates: ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", ".github/LICENSE", "docs/LICENSE"] },
+  {
+    name: "LICENSE",
+    candidates: [
+      "LICENSE",
+      "LICENSE.md",
+      "LICENSE.txt",
+      "COPYING",
+      ".github/LICENSE",
+      "docs/LICENSE"
+    ]
+  },
   { name: "SECURITY.md", candidates: ["SECURITY.md", ".github/SECURITY.md", "docs/SECURITY.md"] },
-  { name: "CONTRIBUTING.md", candidates: ["CONTRIBUTING.md", ".github/CONTRIBUTING.md", "docs/CONTRIBUTING.md"] },
+  {
+    name: "CONTRIBUTING.md",
+    candidates: ["CONTRIBUTING.md", ".github/CONTRIBUTING.md", "docs/CONTRIBUTING.md"]
+  },
   { name: "CHANGELOG.md", candidates: ["CHANGELOG.md", "docs/CHANGELOG.md"] }
 ];
 var DocsError = class extends Error {
 };
-var MD_LINK = /\[[^\]]*\]\(([^)]+)\)/g;
+var MD_LINK = /\[(?:[^[\]\n]|\[[^\]\n]*\])*\]\(\s*(<[^>\n]*>|[^\s()]+(?:\([^\s()]*\)[^\s()]*)*)(?:\s+(?:"[^"\n]*"|'[^'\n]*'|\([^)\n]*\)))?\s*\)/g;
+var MD_REF_DEF = /^[ \t]{0,3}\[[^\]\n]+\]:[ \t]*(<[^>\n]*>|\S+)/gm;
+var HTML_HREF = /<a\s[^>]*?href\s*=\s*["']([^"']+)["']/gi;
 var toPosix = (p) => p.split("\\").join("/");
 var readText = (abs) => (0, import_node_fs.readFileSync)(abs, "utf8").replace(/^\uFEFF/, "");
 var isDevDoc = (relPosix) => DEV_DOC_DIRS.some((d) => relPosix === d || relPosix.startsWith(`${d}/`));
-function stripLinkTitle(target) {
-  const match = /^(<[^>]*>|\S+)\s+("[^"]*"|'[^']*')$/.exec(target);
-  return match?.[1] ?? target;
-}
 function decodeTarget(target) {
   try {
     return decodeURIComponent(target);
@@ -7388,19 +7399,43 @@ function decodeTarget(target) {
     return target;
   }
 }
-function docsLinks(readme) {
-  const targets = [];
-  for (const match of readme.matchAll(MD_LINK)) {
-    const captured = match[1];
+function withoutExamples(text) {
+  return text.replace(/<!--[\s\S]*?-->/g, "").replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^[ \t]*\2[`~]*[ \t]*$/gm, "").replace(/(`+)[^`\n][\s\S]*?\1/g, "");
+}
+function relativeLinks(text) {
+  const clean = withoutExamples(text);
+  const raw = [
+    ...[...clean.matchAll(MD_LINK)].map((m) => m[1]),
+    ...[...clean.matchAll(MD_REF_DEF)].map((m) => m[1]),
+    ...[...clean.matchAll(HTML_HREF)].map((m) => m[1])
+  ];
+  const links = [];
+  for (const captured of raw) {
     if (captured === void 0) continue;
-    let target = stripLinkTitle(captured.trim()).replace(/^<|>$/g, "");
-    const hash = target.indexOf("#");
-    if (hash >= 0) target = target.slice(0, hash);
-    if (target === "" || /^[a-z]+:/i.test(target)) continue;
-    target = toPosix(decodeTarget(target).replace(/^\.\//, ""));
-    if (target === DOCS_DIR || target.startsWith(`${DOCS_DIR}/`)) targets.push(target);
+    let target = captured.trim().replace(/^<|>$/g, "");
+    const cut = target.search(/[#?]/);
+    if (cut >= 0) target = target.slice(0, cut);
+    if (target === "" || /^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith("//")) continue;
+    const rooted = target.startsWith("/");
+    links.push({ target: toPosix(decodeTarget(rooted ? target.slice(1) : target)), rooted });
   }
-  return targets;
+  return links;
+}
+var inDocs = (rel) => rel === DOCS_DIR || rel.startsWith(`${DOCS_DIR}/`);
+function docsLinks(readme) {
+  return relativeLinks(readme).map((l) => import_node_path.posix.normalize(l.target).replace(/\/+$/, "")).filter(inDocs);
+}
+function pageOf(cwd, rel) {
+  const abs = (0, import_node_path.resolve)(cwd, rel);
+  const stat = (0, import_node_fs.statSync)(abs, { throwIfNoEntry: false });
+  if (stat === void 0) return null;
+  if (stat.isFile()) return rel.toLowerCase().endsWith(".md") ? rel : null;
+  const entries = (0, import_node_fs.readdirSync)(abs);
+  for (const wanted of ["readme.md", "index.md"]) {
+    const found = entries.find((e) => e.toLowerCase() === wanted);
+    if (found !== void 0) return import_node_path.posix.join(rel, found);
+  }
+  return null;
 }
 function inScopePages(cwd) {
   const root = (0, import_node_path.resolve)(cwd, DOCS_DIR);
@@ -7452,13 +7487,42 @@ function checkDocs(cwd = process.cwd()) {
   if (!(0, import_node_fs.existsSync)(readmePath)) throw new DocsError(`No README.md found at ${cwd}.`);
   const links = docsLinks(readText(readmePath));
   const broken = [];
-  const referenced = /* @__PURE__ */ new Set();
+  const brokenInPages = [];
+  const reached = /* @__PURE__ */ new Set();
+  const queue = [];
+  const reach = (rel) => {
+    const target = pageOf(cwd, rel);
+    if (target !== null && !reached.has(target)) {
+      reached.add(target);
+      queue.push(target);
+    }
+  };
   for (const target of links) {
-    if ((0, import_node_fs.existsSync)((0, import_node_path.resolve)(cwd, target))) referenced.add(target);
+    if ((0, import_node_fs.existsSync)((0, import_node_path.resolve)(cwd, target))) reach(target);
     else broken.push(target);
   }
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (isDevDoc(current)) continue;
+    for (const link of relativeLinks(readText((0, import_node_path.resolve)(cwd, current)))) {
+      const from = link.rooted ? link.target : import_node_path.posix.join(import_node_path.posix.dirname(current), link.target);
+      const target = import_node_path.posix.normalize(from).replace(/\/+$/, "");
+      if (!inDocs(target)) continue;
+      if ((0, import_node_fs.existsSync)((0, import_node_path.resolve)(cwd, target))) reach(target);
+      else brokenInPages.push(`${current} -> ${target}`);
+    }
+  }
+  const brokenInstructions = [];
+  for (const file of ["AGENTS.md", "CLAUDE.md"]) {
+    const abs = (0, import_node_path.resolve)(cwd, file);
+    if (!(0, import_node_fs.existsSync)(abs)) continue;
+    for (const link of relativeLinks(readText(abs))) {
+      const target = import_node_path.posix.normalize(link.target).replace(/\/+$/, "");
+      if (!(0, import_node_fs.existsSync)((0, import_node_path.resolve)(cwd, target))) brokenInstructions.push(`${file} -> ${target}`);
+    }
+  }
   const pages = inScopePages(cwd);
-  const orphaned = pages.filter((p) => !referenced.has(p)).sort();
+  const orphaned = pages.filter((p) => !reached.has(p)).sort();
   const frontmatterIssues = [];
   for (const page of pages) {
     const issue = frontmatterIssue(readText((0, import_node_path.resolve)(cwd, page)));
@@ -7467,6 +7531,8 @@ function checkDocs(cwd = process.cwd()) {
   frontmatterIssues.sort();
   return {
     broken: [...new Set(broken)].sort(),
+    brokenInPages: [...new Set(brokenInPages)].sort(),
+    brokenInstructions: [...new Set(brokenInstructions)].sort(),
     orphaned,
     missingHealth: missingHealthFiles(cwd),
     frontmatterIssues,
@@ -11615,11 +11681,13 @@ var CLI_VERSION = true ? "0.5.0" : "0.0.0-dev";
 var HELP = `eunomai ${CLI_VERSION} \u2014 read-only checks for a Claude Code AI workspace
 
 Usage:
-  eunomai docs-check           Read-only: verify README<->docs/ links, index coverage, community-health files.
+  eunomai docs-check           Read-only: verify README<->docs/ links, that every docs page is reachable from
+                               the README, links in AGENTS.md / CLAUDE.md, and frontmatter shape. Missing
+                               community-health files are warnings; add --require-health to fail on them.
   eunomai provenance-check     Read-only: verify every skill is covered by the skills-audit registry.
   eunomai --version            Print the CLI version.
   eunomai --help               Show this help.`;
-function run(argv) {
+function run(argv, cwd = process.cwd()) {
   const args = argv.slice(2);
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
     console.log(HELP);
@@ -11631,22 +11699,31 @@ function run(argv) {
   }
   const [cmd] = args;
   if (cmd === "docs-check") {
-    const { broken, orphaned, missingHealth, frontmatterIssues, checkedLinks, scannedPages } = checkDocs();
-    if (broken.length > 0 || orphaned.length > 0 || missingHealth.length > 0 || frontmatterIssues.length > 0) {
+    const requireHealth = args.includes("--require-health");
+    const r = checkDocs(cwd);
+    const healthFails = requireHealth && r.missingHealth.length > 0;
+    if (!requireHealth)
+      for (const h of r.missingHealth) console.warn(`  warning: no ${h} (community-health file)`);
+    if (r.broken.length > 0 || r.brokenInPages.length > 0 || r.brokenInstructions.length > 0 || r.orphaned.length > 0 || r.frontmatterIssues.length > 0 || healthFails) {
       console.error("docs-check failed:");
-      for (const b of broken) console.error(`  broken README link -> ${b}`);
-      for (const o of orphaned) console.error(`  orphaned page (not in README index): ${o}`);
-      for (const h of missingHealth) console.error(`  missing community-health file: ${h}`);
-      for (const f of frontmatterIssues) console.error(`  frontmatter: ${f}`);
+      for (const b of r.broken) console.error(`  broken README link -> ${b}`);
+      for (const b of r.brokenInPages) console.error(`  broken link in ${b}`);
+      for (const b of r.brokenInstructions) console.error(`  broken link in ${b}`);
+      for (const o of r.orphaned)
+        console.error(`  orphaned page (not reachable from the README): ${o}`);
+      if (healthFails)
+        for (const h of r.missingHealth) console.error(`  missing community-health file: ${h}`);
+      for (const f of r.frontmatterIssues) console.error(`  frontmatter: ${f}`);
       return 1;
     }
+    const health = r.missingHealth.length === 0 ? "community-health files present" : `${r.missingHealth.length} community-health file(s) missing (warning)`;
     console.log(
-      `docs-check: ${checkedLinks} link(s) resolve, ${scannedPages} page(s) indexed + frontmatter valid, community-health files present.`
+      `docs-check: ${r.checkedLinks} README link(s) resolve, ${r.scannedPages} page(s) reachable + frontmatter valid, ${health}.`
     );
     return 0;
   }
   if (cmd === "provenance-check") {
-    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit();
+    const { uncovered, invalid, gaps, checked, roots } = checkSkillsAudit(cwd);
     for (const g of gaps) console.warn(`  gap (review): ${g}`);
     if (uncovered.length > 0 || invalid.length > 0) {
       console.error("provenance-check failed:");
