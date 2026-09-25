@@ -21,8 +21,9 @@ context: |
   - CLAUDE.md is the single authored source (zero lock-in); no cross-tool projection.
 
   Conventions:
-  - Commits: Conventional Commits, imperative mood, one logical change per commit, NO co-author and no
-    AI-attribution trailers. Prepare the commit and ask for approval before committing.
+  - Commits: Conventional Commits, imperative mood, one logical change per commit, no AI co-author
+    trailer; a pull request ends with the one disclosure line `Assisted-by: Claude`. Prepare the commit and
+    ask for approval before committing.
   - Safety gate: stop and ask before version bumps, migrations, irreversible/outward-facing actions, or
     touching auth/secrets/permissions.
 

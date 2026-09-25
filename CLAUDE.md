@@ -9,7 +9,8 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 
 ## Conventions
 - Files are UTF-8, newlines are LF, with a final newline at EOF.
-- Conventional Commits in the imperative mood. One logical change per commit. No AI-attribution trailers.
+- Conventional Commits in the imperative mood. One logical change per commit. No AI co-author trailer; a pull
+  request discloses AI assistance with one line, `Assisted-by: Claude`.
 - TypeScript, ESM, Node ≥ 20 (in `tools/`). Match the surrounding code; small functions, early returns.
 - Validate inputs at boundaries; handle errors explicitly. Never weaken validation to "make it work".
 
@@ -43,12 +44,12 @@ Claude Code reads `CLAUDE.md`; there is no separate `AGENTS.md` and no cross-too
 - For the tools CLI: `cd tools && npm run typecheck && npm run lint && npm test && npm run build` before finishing.
 
 ## Safe controls
-- The plugin enforces its conventions via `PreToolUse` hooks (`hooks/hooks.json` → `hooks/guard.mjs`; pure
-  logic in `hooks/decide.mjs`, tested with `node --test "hooks/*.test.mjs"`): a **commit-trailer guard**
-  (deny AI-attribution trailers) and a **safety gate** (ask before force-push / `rm -rf` / version bumps /
-  secret access).
-- **Ask-by-default, fail-open** — only the trailer rule is a hard deny; a hook error never blocks work. It
-  is a floor-raiser, not a security boundary. Claude-only by nature (no cross-tool hook API).
+- One `PreToolUse` hook (`hooks/hooks.json` → `hooks/guard.mjs`): `segments.mjs` reads a command as commands,
+  `decide.mjs` applies the gates, `config.mjs` merges the layers (a committed project file may only
+  tighten). Tested with `node --test "hooks/*.test.mjs"`; a new false positive goes into
+  `hooks/corpus.test.mjs` first. Gates, levels and the attribution policy: `docs/safe-controls.md`.
+- **Quiet by default, fail-open** — the only hard deny is an AI co-author line; a hook error never blocks
+  work. It is a floor-raiser, not a security boundary. Claude-only by nature (no cross-tool hook API).
 - Static path rules (secrets/auth) use the native `permissions` baseline, not hook code — see
   `docs/safe-controls.md`.
 

@@ -53,10 +53,10 @@ Every eunomai flow (onboard, living-docs, skill-finder, safe-controls) honours f
 
 - **Your own rules** → the project's `CLAUDE.md` and permissions (they are the gates' input).
 - **Your own hooks** → ship them in your org plugin; they merge with eunomai's most-restrictive-wins.
-- **The safety gate** → two fail-open env vars (set them in managed settings; see
-  [safe-controls](safe-controls.md)): `EUNOMAI_TRAILER_RULE` (`deny` | `ask` | `off`) tunes the one hard
-  rule, and `EUNOMAI_EXTRA_GATES` (path to a JSON list of `{pattern, reason}`) adds org-specific ask-gates —
-  protected branches, internal secret paths — inside the same prompt flow.
+- **The guard** → a level for everyone, extra gates (protected branches, internal secret paths) and
+  protected paths, in each project's committed `.claude/eunomai.json`, which may only tighten; or the
+  `EUNOMAI_TRAILER_RULE` / `EUNOMAI_EXTRA_GATES` variables in managed settings. The layers and keys are
+  in [safe-controls](safe-controls.md#configuration).
 - **Your own skills** → vet them once through [skill-finder](skill-finder.md)'s gate; declare org-trusted
   sources in the project's rules and the gate consumes them as provenance context (the security veto still
   applies). Skills delivered by other installed plugins are trusted at the plugin/marketplace level — the
