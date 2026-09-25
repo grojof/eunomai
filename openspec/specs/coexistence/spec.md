@@ -1,7 +1,8 @@
 # coexistence Specification
 
 ## Purpose
-TBD - created by archiving change org-coexistence. Update Purpose after archive.
+Keep eunomai a removable complement: it adds to an existing personal or organisation layer without
+replacing it, lets the incumbent win on conflict, and feeds the project's own rules into every gate.
 ## Requirements
 ### Requirement: Coexistence contract
 
