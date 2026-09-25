@@ -31,6 +31,12 @@ skills:
     verdict: authored
     rubric: Authored in-repo (base skill); universal dependency hygiene anchored to OWASP A03:2025/SLSA, no third-party code.
     gaps: []
+  - name: eunomai-safe-controls
+    origin: authored
+    ref: 0.5.0
+    verdict: authored
+    rubric: Authored in-repo (safe-controls pillar); instructions over the plugin's own guard, no third-party code.
+    gaps: []
 ---
 
 # eunomai skills audit
