@@ -14,7 +14,16 @@ const EntrySchema = z.object({
   name: z.string().min(1),
   origin: z.string().min(1),
   ref: z.string().min(1), // a real commit SHA / version, "authored", or "unpinned"
-  verdict: z.enum(["adopt", "adopt-and-improve", "create", "authored"]),
+  // Acquisition verdicts, the authored marker, and the audit verdicts for installed skills.
+  verdict: z.enum([
+    "adopt",
+    "adopt-and-improve",
+    "create",
+    "authored",
+    "keep",
+    "keep-with-gaps",
+    "flag-for-removal",
+  ]),
   rubric: z.string().min(1),
   gaps: z.array(z.string()).optional().default([]),
 });
