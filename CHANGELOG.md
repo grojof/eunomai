@@ -7,6 +7,37 @@ and the public surface may still change.
 
 ## [Unreleased]
 
+### Added
+
+- **Guard levels and gate ids.** `critical`, `standard` (default) and `strict`, and every gate can be set on
+  its own to `off`, `ask` or `deny`. New gate: `reset-hard`.
+- **Layered configuration.** `/config` options (`level`, `mode`), a committed `.claude/eunomai.json` that
+  may only tighten, and a gitignored `.claude/eunomai.local.json` that may relax anything. `EUNOMAI_*`
+  variables keep working.
+- **`hooks/guard.mjs --check` and `--hits`**, a report-only mode, and a hit log that never stores the
+  command.
+- **An AI-attribution policy.** The guard always refuses an AI co-author line. It asks for a minimal
+  `Assisted-by: <tool>` disclosure where the project wants one (pull requests by default, commits on
+  request), and asks when a disclosure names the model rather than the tool.
+- **The `eunomai-safe-controls` skill.** It shows the effective settings and recent hits, reads a project's
+  contribution rules for its attribution policy, and proposes a configuration and Claude Code's
+  `attribution` setting. It writes nothing until the user confirms.
+
+### Changed
+
+- **The guard reads commands, not text.** Quoted data, heredoc bodies and redirections no longer trigger
+  a gate; `sh -c`, `eval` and friends are still read as code.
+  - Recursive deletes ask only for a scope whose loss cannot be a clean-up: a root, a system or home-level
+    directory, credentials, the whole project, or a protected path.
+  - Secrets ask only when a secret file is read or written.
+  - `--force-with-lease`, version bumps and word-level secret matches move to `strict`.
+  - Replayed over 5,087 real shell calls, prompts and denials fell from 216 to 25.
+- **Every prompt names its gate**, a safer form, and how to stop it asking.
+- **Secrets ask on reading only.** Writing a `.env` leaks nothing, and a `grep` pattern is not a file.
+- **The guard protects itself.** A shell command writing its settings asks, a committed `.local.json` may
+  only tighten, an extra gate that could backtrack for ever is refused, and the hook has a 10-second
+  timeout.
+
 ### Fixed
 
 - **`provenance-check` accepts the audit verdicts** (`keep` · `keep-with-gaps` · `flag-for-removal`) that

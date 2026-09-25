@@ -7,5 +7,28 @@
   },
   "homepage": "https://github.com/grojof/eunomai",
   "repository": "https://github.com/grojof/eunomai",
-  "license": "MIT"
+  "license": "MIT",
+  "userConfig": {
+    "level": {
+      "type": "string",
+      "title": "Safe-controls level",
+      "description": "How much the guard asks: critical (only the co-author deny, force-push and risky deletes), standard (also git clean, reset --hard and reading secret files), strict (also lease pushes, any recursive delete, version bumps and word-level secret mentions).",
+      "default": "standard",
+      "options": [
+        "critical",
+        "standard",
+        "strict"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "title": "Safe-controls mode",
+      "description": "enforce: ask or deny as configured. report: decide nothing, only record what would have fired (see hooks/guard.mjs --hits).",
+      "default": "enforce",
+      "options": [
+        "enforce",
+        "report"
+      ]
+    }
+  }
 }

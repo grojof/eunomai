@@ -81,8 +81,10 @@ It will, with you in control:
 
 - **Spec-driven change (SDD):** `/opsx:explore` → `/opsx:propose <name>` → `/opsx:apply` → `/opsx:archive`
   (artifacts in `openspec/`). See [the ADR](decisions/0001-adopt-openspec/).
-- **Safe controls:** the hooks fire automatically — commit-trailer **deny**, and **ask** before
-  force-push / `rm -rf` / version bumps / secret access. See [safe-controls.md](safe-controls.md).
+- **Safe controls:** the guard fires on its own. It refuses an AI co-author line, and at the default level
+  asks only before a force-push, a recursive delete of a root, system or home-level directory, `git clean`,
+  `reset --hard`, or reading a secret file. To tune it, ask for the `eunomai-safe-controls` skill. See
+  [safe-controls.md](safe-controls.md).
 - **Living docs:** invoke `eunomai-living-docs` to refresh project docs; keep the README index honest. See
   [living-docs.md](living-docs.md).
 - **Skills:** use `eunomai-skill-finder` to adopt/create/audit skills behind the trust gate. See

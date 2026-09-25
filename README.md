@@ -19,9 +19,9 @@ flowchart TB
     CC -->|loads| Plugin
 
     subgraph Plugin["eunomai — Claude Code plugin"]
-        Skills["skills/ — onboard · living-docs · skill-finder<br/>secure-coding · dependency-upgrade"]
+        Skills["skills/ — onboard · living-docs · skill-finder · safe-controls<br/>secure-coding · dependency-upgrade"]
         Agents["agents/ — workspace-survey<br/>codebase-cartographer · coherence-auditor (read-only)"]
-        Hooks["hooks/ — PreToolUse guardrails (deny / ask)"]
+        Hooks["hooks/ — the PreToolUse guard (levels · deny / ask)"]
         Tools["tools/ — docs-check · provenance-check (the gate)"]
     end
 
@@ -60,7 +60,8 @@ Full walkthrough → **[Getting started](docs/getting-started.md)**.
 **The pillars** (reference)
 - **[SDD](docs/sdd.md)** — the spec-driven flow on OpenSpec (explore → propose → apply → archive).
 - **[Living docs](docs/living-docs.md)** — the v2 docs standard (Diátaxis-as-lens + OKF-routable).
-- **[Safe controls](docs/safe-controls.md)** — the `PreToolUse` hooks + the permissions baseline.
+- **[Safe controls](docs/safe-controls.md)** — the `PreToolUse` guard (gates, levels, attribution policy,
+  configuration) + the permissions baseline.
 - **[Skill finder](docs/skill-finder.md)** — the skill trust gate, provenance + `provenance-check`.
 - **[Base skills](docs/base-skills.md)** — the standards-anchored base set + the admission filter.
 - **[Onboard](docs/onboard.md)** — the connector/bootstrap that applies eunomai to a project.

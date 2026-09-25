@@ -12,8 +12,8 @@ restatement of it.
 ## Conventions
 
 - UTF-8, **LF** newlines, final newline at EOF.
-- **Conventional Commits**, imperative mood, **one logical change per commit**. **No AI-attribution trailers**
-  (the commit-trailer hook hard-denies them).
+- **Conventional Commits**, imperative mood, **one logical change per commit**. **No AI co-author trailer**
+  (the guard refuses it); a pull request discloses AI assistance with one line, `Assisted-by: Claude`.
 - TypeScript, ESM, Node ≥ 20 in `tools/`. Match the surrounding code; small functions, early returns.
 - Validate inputs at boundaries; never weaken validation to "make it work".
 
