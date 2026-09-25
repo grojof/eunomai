@@ -19,7 +19,9 @@ and the public surface may still change.
 - **The codebase-cartographer agent is leaner.** It keeps its output contract (the comprehension map,
   per-edge confidence, domain signals, one proposed diagram) and drops the step-by-step reading recipe and
   its fixed manifest list, which missed ecosystems such as Dart or PHP. Its tools are read-only (no
-  shell), and architecture is drawn as C4 levels in a flowchart, because Mermaid's C4 syntax is experimental.
+  shell), and architecture is drawn as C4 levels in a flowchart, because Mermaid's C4 syntax is experimental. It
+  tags an edge it knows only from the project's docs as `documented`, and lists the doc–code differences it
+  meets in passing.
 
 ## [0.6.0] - 2026-09-25
 
