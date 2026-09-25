@@ -167,8 +167,9 @@ one mode per page). *Documentation is a product.*
 
 ## Diagrams (Mermaid + C4)
 
-Use [Mermaid](https://mermaid.js.org/) (GitHub-native), **one idea per diagram**: **C4** for architecture
-(Context → Container), **flowchart** for a process, **sequence** for interactions over time, **class/erDiagram**
+Use [Mermaid](https://mermaid.js.org/) (GitHub-native), **one idea per diagram**: the **C4** model's levels for
+architecture (Context → Container), drawn as a flowchart with subgraphs (Mermaid's own C4 syntax is still
+experimental), **flowchart** for a process, **sequence** for interactions over time, **class/erDiagram**
 for structure, **stateDiagram** for lifecycles. For an unfamiliar project, delegate the read-only derivation to
 the **`codebase-cartographer`** agent and adapt its proposal — you place and confirm it.
 

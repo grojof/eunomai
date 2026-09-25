@@ -23,6 +23,27 @@ body to the command that opened it. Quoted data and heredoc bodies are ignored, 
 shell runs is read as commands again, in its own dialect: `$( … )`, backticks, `sh -c`, `bash -c`, `eval`,
 `pwsh -Command`, `cmd /c`. The reader is best-effort (`hooks/segments.mjs`).
 
+How one shell call is decided:
+
+```mermaid
+flowchart LR
+    C([Shell command]) --> R["Read as commands<br/>quotes, heredocs,<br/>sh -c, $( )"]
+    R --> G{Gates it<br/>matches}
+    G -- none --> A([Allow])
+    G -- some --> L[Action by level,<br/>then config layers]
+    L --> Q{Mode}
+    Q -- report --> H[(Hit log only)]
+    Q -- enforce --> D([Ask or deny,<br/>with why and how to relax])
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef ask fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef guard fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef data fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    class C,R,L step
+    class G,Q ask
+    class A,D guard
+    class H data
+```
+
 ## Gates and levels
 
 Each gate has an id and an action per level. The level is `standard` unless you choose another. Any

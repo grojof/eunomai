@@ -3,7 +3,7 @@ type: reference
 title: "Onboard (connector / bootstrap)"
 description: "The one-shot connector that applies eunomai to a project."
 tags: [onboard, bootstrap]
-updated: 2026-07-01
+updated: 2026-09-25
 ---
 
 # Onboard (connector / bootstrap)
@@ -21,28 +21,40 @@ read-only **workspace survey** and lets the user confirm scope (*detect, don't a
 
 ## What it does
 
+```mermaid
+flowchart LR
+    W([Workspace]) --> SV[Survey repos<br/>and governance] --> C{User confirms<br/>scope}
+    C --> AN[Analyze<br/>+ interview] --> CO{Coexist?<br/>absent · compatible<br/>· conflicting}
+    CO --> DO[Establish docs] --> SE[Seed conventions<br/>each skippable] --> SK[Audit skills] --> CK[docs-check +<br/>provenance-check] --> H([Hand off,<br/>step aside])
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef ask fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef guard fill:#dcfce7,stroke:#16a34a,color:#14532d
+    class W,SV,AN,DO,SE,SK,H step
+    class C,CO ask
+    class CK guard
 ```
-  workspace (may be an env repo + nested project repos, or multirepo)
-    0. survey → workspace-survey subagent maps repos (root + nested), remotes, manifests,
-               existing governance (hooks · permissions · skills · registries);
-               proposes env vs project; USER confirms scope + where the layer anchors
-    1. analyze (stack, docs, skills) + gather input via a structured interview — per confirmed project root
-    2. coexist → classify each surface (AGENTS.md · docs standard · SDD · permissions · hooks · skills)
-               as absent / compatible / conflicting; conflicts go through the interview,
-               "adapt to what exists" recommended; declined seeds are skipped
-    3. docs   → living-docs standard: content tree (Diátaxis) + project surface
-               (community-health files; warnings unless the repo is public), restructured or created;
-               from-scratch interviews crystallize into ADRs + a glossary explanation page
-    4. seed   → lean AGENTS.md (merged into if one exists; an existing CLAUDE.md offered a rename)
-               · openspec/config.yaml (only where no SDD process exists) · permissions baseline
-               · the guard's settings + attribution policy (eunomai-safe-controls; the hooks
-               come from the installed plugin, never copied) — each skippable
-    5. skills → invoke eunomai-skill-finder (audit)
-    6. drive docs-check + provenance-check to green  — run from the project root
-    7. hand off to the steady-state pillars → step aside
-       (multirepo: steps 1–7 run independently per project; env root gets at most a
-        minimal delegating AGENTS.md, with consent)
-```
+
+Per confirmed project root (a multirepo runs each project independently):
+0. **Survey.** The `workspace-survey` subagent maps repos (root and nested), remotes, manifests and existing
+   governance (hooks, permissions, skills, registries), and proposes environment vs project. The user
+   confirms scope and where the layer anchors.
+1. **Analyze** the stack, docs and skills, and gather input through a structured interview.
+2. **Coexist.** Classify each surface — `AGENTS.md`, docs standard, SDD, permissions, hooks, skills — as
+   absent, compatible or conflicting. Conflicts go through the interview, with "adapt to what exists"
+   recommended; declined seeds are skipped.
+3. **Docs.** Apply the living-docs standard, restructuring existing docs or creating them. From-scratch
+   interviews crystallize into ADRs and a glossary page. Community-health files are warnings unless the
+   repository is public.
+4. **Seed**, each skippable:
+   - a lean `AGENTS.md` (merged into if one exists; an existing `CLAUDE.md` is offered a rename);
+   - `openspec/config.yaml`, only where no SDD process exists;
+   - the permissions baseline;
+   - the guard's settings and attribution policy through `eunomai-safe-controls`. The hooks come from the
+     installed plugin and are never copied.
+5. **Skills.** Invoke `eunomai-skill-finder` in audit mode.
+6. **Checks.** Drive `docs-check` and `provenance-check` to green, from the project root.
+7. **Hand off** to the steady-state pillars, and step aside. An environment root gets at most a minimal
+   delegating `AGENTS.md`, with consent.
 
 ## The structured interview
 

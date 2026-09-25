@@ -3,7 +3,7 @@ type: reference
 title: "SDD (spec-driven development)"
 description: "The spec-driven flow on OpenSpec: explore, propose, apply, archive."
 tags: [sdd, openspec]
-updated: 2026-06-25
+updated: 2026-09-25
 ---
 
 # SDD/SPDD (spec-driven development)
@@ -17,6 +17,17 @@ runs on [**OpenSpec**](https://github.com/Fission-AI/OpenSpec) and adds only a t
 Four phases, each a Claude Code command that `openspec init` installs in the project's
 `.claude/commands/opsx/` (they come from OpenSpec, not from the plugin). Artifacts live in
 `openspec/changes/<name>/` and graduate into `openspec/specs/` on archive.
+
+```mermaid
+flowchart LR
+    E[Explore<br/>think it through] --> P[Propose<br/>design, delta specs, tasks] --> A[Apply<br/>work the tasks] --> R[Archive<br/>fold the deltas]
+    R --> S[(openspec/specs/<br/>the current truth)]
+    A -. sync mid-change .-> S
+    classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef data fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    class E,P,A,R step
+    class S data
+```
 
 | Phase | Command | What it produces |
 |-------|---------|------------------|
